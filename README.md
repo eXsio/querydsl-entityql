@@ -15,10 +15,10 @@ It works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in th
 ## How it works
 
 There is a special method ```EntityQL::qEntity``` that uses Reflection to gather all DDL information required to construct 
-QueryDSL metamodel and to sucessfully perform all operations supported by QueryDSL. The scan occurs once per Entity class - 
+QueryDSL meta-model and to sucessfully perform all operations supported by QueryDSL. The scan occurs once per Entity class - 
 the Annotation metadata is cached in memory for further reuse.
 
-The metamodels are also created in memory, there is no code generation during compilation or runtime. The resulting instance
+The meta-models are also created in memory, there is no code generation during compilation or runtime. The resulting instance
 of ```Q``` class contains ```Maps``` containing the mappings between the Entity's field names and the corresponding
 QueryDSL-specific models that are used for constructing SQL Queries.
 
@@ -302,9 +302,9 @@ In order to do that you will need to add additional dependencies:
 
 ## Limitations and restrictions
 
-All the limitations revolve around wheter we have all the data needed to construct the metamodels. 
-Hibernate contains a log of magical features like autogeneration of table and column names, mapping columns to ```Map``` etc.
-To work properly, EntityQL needs to work with well-formatted and completely described Entites.
+All the limitations revolve around wheter we have all the data needed to construct the meta-models. 
+Hibernate contains a lot of magical features like auto-generation of table and column names, mapping columns to ```Map``` etc.
+To work properly, EntityQL needs to work with well-formatted and completely described Entities.
 
  - Entity must have a valid ```@Table``` Annotation containing the Table name and (optionally) Schema name
  - Only fields containing ```@Column``` or ```@JoinColumn``` Annotations will be visible to EntityQL
