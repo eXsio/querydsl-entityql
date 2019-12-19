@@ -1,4 +1,4 @@
-# QueryDSL EntityQL - bridge beteen JPA and Native Queries 
+# QueryDSL EntityQL - bridge between JPA and Native Queries 
 
 [![Build Status](https://travis-ci.org/eXsio/querydsl-entityql.svg?branch=master)](https://travis-ci.org/eXsio/querydsl-entityql)
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
