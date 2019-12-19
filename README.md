@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/eXsio/querydsl-entityql.svg?branch=master)](https://travis-ci.org/eXsio/querydsl-entityql)
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
 
+
 ## Overview
 
 EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-SQL meta models on the fly.
