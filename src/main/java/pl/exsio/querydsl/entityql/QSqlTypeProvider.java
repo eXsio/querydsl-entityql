@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-class QSqlTypeProvider {
+abstract class QSqlTypeProvider {
 
     private static final Map<Class<?>, TypeProvider> sqlTypeProvider = new HashMap<>();
 

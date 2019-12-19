@@ -8,6 +8,7 @@ import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.entity.spec.NoIdSpec
+import pl.exsio.querydsl.entityql.config.entity.spec.NoTableSpec
 import pl.exsio.querydsl.entityql.config.entity.spec.Spec
 import pl.exsio.querydsl.entityql.config.entity.spec.SubSpec
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
@@ -24,25 +25,30 @@ class QSpec extends Specification {
 
     def "should correctly get existing column"() {
         when:
-        Q<Spec> unit = qEntity(Spec)
+        Q<Spec> spec = qEntity(Spec)
 
         then:
-        unit.longNumber("id") instanceof NumberPath<Long>
-        unit.string("string") instanceof StringPath
-        unit.decimalNumber("decimalNumber") instanceof NumberPath<BigDecimal>
-        unit.shortNumber("shortNumber") instanceof NumberPath<Short>
-        unit.date("date") instanceof DatePath<LocalDate>
-        unit.dateTime("dateTime") instanceof DateTimePath<LocalDateTime>
-        unit.<Integer> number("intNumber") instanceof NumberPath<Integer>
-        unit.<LocalDate> column("date") instanceof DatePath<LocalDate>
-        unit.<LocalDate> comparableColumn("date") instanceof DatePath<LocalDate>
+        spec.longNumber("id") instanceof NumberPath<Long>
+        spec.string("string") instanceof StringPath
+        spec.decimalNumber("decimalNumber") instanceof NumberPath<BigDecimal>
+        spec.shortNumber("shortNumber") instanceof NumberPath<Short>
+        spec.doubleNumber("doubleNumber") instanceof NumberPath<Double>
+        spec.floatNumber("floatNumber") instanceof NumberPath<Float>
+        spec.byteNumber("byteNumber") instanceof NumberPath<Byte>
+        spec.intNumber("intNumber") instanceof NumberPath<Integer>
+        spec.bigIntNumber("bigintNumber") instanceof NumberPath<BigInteger>
+        spec.date("date") instanceof DatePath<LocalDate>
+        spec.dateTime("dateTime") instanceof DateTimePath<LocalDateTime>
+        spec.<Integer> number("intNumber") instanceof NumberPath<Integer>
+        spec.<LocalDate> column("date") instanceof DatePath<LocalDate>
+        spec.<LocalDate> comparableColumn("date") instanceof DatePath<LocalDate>
     }
 
     def "should correctly throw exception when non existent column is fetched"() {
         given:
-        Q<Spec<String>> unit = qEntity(Spec)
+        Q<Spec<String>> spec = qEntity(Spec)
         when:
-        unit.longNumber("nonExistentColumn")
+        spec.longNumber("nonExistentColumn")
 
         then:
         thrown InvalidArgumentException
@@ -50,18 +56,18 @@ class QSpec extends Specification {
 
     def "should correctly get existing Foreign Keys"() {
         when:
-        Q<SubSpec> subUnit = qEntity(SubSpec)
+        Q<SubSpec> subSpec = qEntity(SubSpec)
 
         then:
-        subUnit.<Spec<String>> joinColumn("unit") instanceof ForeignKey<Spec>
+        subSpec.<Spec<String>> joinColumn("spec") instanceof ForeignKey<Spec>
     }
 
     def "should correctly throw exception when non existent Foreign Key is fetched"() {
         given:
-        Q<SubSpec> subUnit = qEntity(SubSpec)
+        Q<SubSpec> subSpec = qEntity(SubSpec)
 
         when:
-        subUnit.<Spec<String>> joinColumn("nonExistentFk")
+        subSpec.<Spec<String>> joinColumn("nonExistentFk")
 
         then:
         thrown InvalidArgumentException
@@ -69,10 +75,10 @@ class QSpec extends Specification {
 
     def "should correctly get Primary Key"() {
         when:
-        Q<SubSpec> subUnit = qEntity(SubSpec)
+        Q<SubSpec> subSpec = qEntity(SubSpec)
 
         then:
-        subUnit.primaryKey() instanceof PrimaryKey<SubSpec>
+        subSpec.primaryKey() instanceof PrimaryKey<SubSpec>
     }
 
     def "should correctly throw exception on invalid Primary Key"() {
@@ -81,6 +87,14 @@ class QSpec extends Specification {
 
         then:
         thrown MissingIdException
+    }
+
+    def "should correctly throw exception on missing @Table"() {
+        when:
+        qEntity(NoTableSpec)
+
+        then:
+        thrown InvalidArgumentException
     }
 
     def "should correctly create new instances of QType each time get() is called"() {
@@ -93,5 +107,22 @@ class QSpec extends Specification {
         qEntity(Spec)         | qEntity(SubSpec)      | false
         qEntity(Spec)         | qEntity(Spec, "var1") | false
         qEntity(Spec, "var1") | qEntity(Spec, "var2") | false
+    }
+
+    def "should correctly handle columns"() {
+        when:
+        Q<Spec> spec = qEntity(Spec)
+        Q<SubSpec> subSpec = qEntity(SubSpec)
+
+        then:
+        spec.containsColumn("intNumber")
+        !spec.containsColumn("noNumber")
+
+        subSpec.containsJoinColumn("spec")
+        !subSpec.containsJoinColumn("fk")
+
+        spec.columns().size() == 15
+        subSpec.joinColumns().size() == 1
+
     }
 }

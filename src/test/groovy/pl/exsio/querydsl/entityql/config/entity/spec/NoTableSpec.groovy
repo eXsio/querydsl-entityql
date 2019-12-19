@@ -1,73 +1,21 @@
 package pl.exsio.querydsl.entityql.config.entity.spec
 
-import org.hibernate.annotations.Type
-
-import javax.persistence.*
-import java.sql.Timestamp
-import java.time.Instant
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 @Entity
-@Table(name = "SPECS")
-public class Spec<T> {
+public class NoTableSpec {
 
     @Id
-    @Column(name = "SPEC_ID")
     @GeneratedValue
+    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "STRING")
-    private String string;
-
-    @Column(name = "DEC")
-    private BigDecimal decimalNumber;
-
-    @Column(name = "SHRT")
-    private Short shortNumber;
-
-    @Column(name = "BTE")
-    private Byte byteNumber;
-
-    @Column(name = "DBL")
-    private Double doubleNumber;
-
-    @Column(name = "FLT")
-    private Float floatNumber;
-
-    @Column(name = "BIGINTEGER")
-    private BigInteger bigintNumber;
-
-    @Column(name = "DT")
-    private LocalDate date;
-
-    @Column(name = "DTT")
-    private LocalDateTime dateTime;
-
-    @Column(name = "INST")
-    private Instant instant;
-
-    @Column(name = "TIME")
-    private LocalTime time;
-
-    @Column(name = "TIMESTAMP")
-    private Timestamp timestamp;
-
-    @Column(name = "GEN", columnDefinition = "varchar(15)")
-    @Type(type = "java.lang.String")
-    private T generic;
-
-    @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL)
-    private Set<SubSpec> subSpecs;
-
-    @Column(name = "INT")
-    private Integer intNumber;
-
-
-
-
-    public Spec() {
+    public NoTableSpec() {
     }
 
     Long getId() {

@@ -5,7 +5,7 @@ import javax.persistence.Enumerated;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-class QField {
+abstract class QField {
 
     static Class<?> getType(Field field) {
         Class<?> type = field.getType();

@@ -13,7 +13,7 @@ public class SubSpec {
 
     @OneToOne
     @JoinColumn(name = "SPEC_ID", nullable = true)
-    private Spec unit;
+    private Spec spec;
 
 
     public SubSpec() {
@@ -27,11 +27,11 @@ public class SubSpec {
         this.id = id
     }
 
-    Spec getUnit() {
-        return unit
+    Spec getSpec() {
+        return spec
     }
 
-    void setUnit(Spec unit) {
-        this.unit = unit
+    void setSpec(Spec spec) {
+        this.spec = spec
     }
 }

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-class QPathFactory {
+abstract class QPathFactory {
 
     private static final Map<Class<?>, PathFactory> pathFactory = new HashMap<>();
 

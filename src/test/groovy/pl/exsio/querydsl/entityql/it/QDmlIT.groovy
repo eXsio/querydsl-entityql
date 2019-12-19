@@ -10,6 +10,7 @@ import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.entity.it.Book
 import pl.exsio.querydsl.entityql.config.entity.it.UploadedFile
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 import spock.lang.Specification
 
 import javax.transaction.Transactional
@@ -144,5 +145,39 @@ class QDmlIT extends Specification {
         uploadedFile.data != null
         uploadedFile.data.size() == size
         Arrays.equals(uploadedFile.data, data)
+    }
+
+    def "should throw exception when trying to use odd number of parameters in set()"() {
+        given:
+        Q<Book> book = qEntity(Book)
+
+        when:
+        SQLUpdateClause update = queryFactory.update(book)
+                .where(book.longNumber("id").eq(9L))
+
+        book.set(update,
+                "name", "updatedBook",
+                "price"
+        ).execute()
+
+        then:
+        thrown InvalidArgumentException
+    }
+
+    def "should throw exception when trying to use non-String key in set()"() {
+        given:
+        Q<Book> book = qEntity(Book)
+
+        when:
+        SQLUpdateClause update = queryFactory.update(book)
+                .where(book.longNumber("id").eq(9L))
+
+        book.set(update,
+                "name", "updatedBook",
+                new Object(), BigDecimal.ONE
+        ).execute()
+
+        then:
+        thrown InvalidArgumentException
     }
 }

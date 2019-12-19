@@ -11,24 +11,14 @@ public class EnumPath<T extends Enum<T>> extends LiteralExpression<T> implements
 
     private final PathImpl<T> pathMixin;
 
-    public EnumPath(PathImpl<T> mixin) {
-        super(mixin);
-        this.pathMixin = mixin;
-    }
-
     public EnumPath(Class<? extends T> type, Path<?> parent, String property) {
         this(type, PathMetadataFactory.forProperty(parent, property));
     }
 
-    public EnumPath(Class<? extends T> type, PathMetadata metadata) {
+    private EnumPath(Class<? extends T> type, PathMetadata metadata) {
         super(ExpressionUtils.path(type, metadata));
         this.pathMixin = (PathImpl<T>) mixin;
     }
-
-    public EnumPath(Class<? extends T> type, String var) {
-        this(type, PathMetadataFactory.forVariable(var));
-    }
-
 
     @Override
     public final <R,C> R accept(Visitor<R,C> v, C context) {
