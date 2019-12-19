@@ -141,7 +141,8 @@
                 <configuration>
                     <argLine>${argLine}</argLine>
                     <includes>
-                        <include>**/*Test.java</include>
+                        <include>**/*IT.java</include>
+                        <include>**/*Spec.java</include>
                     </includes>
                 </configuration>
             </plugin>
