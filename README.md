@@ -130,7 +130,7 @@ Q<Book> book = qEntity(Book.class);
 List<BookDto> books = queryFactory.query()
                 .select(
                         constructor(
-                                BookDto,
+                                BookDto.class,
                                 book.longNumber("id"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -149,7 +149,7 @@ List<BookDto> books = queryFactory.query()
 List<BookDto> books = queryFactory.query()
                 .select(
                         constructor(
-                                BookDto,
+                                BookDto.class,
                                 book.longNumber("id"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -172,7 +172,7 @@ List<BookDto> books = queryFactory.query()
 List<BookDto> books = queryFactory.query()
                 .select(
                         constructor(
-                                BookDto,
+                                BookDto.class,
                                 book.longNumber("id"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -191,7 +191,7 @@ List<BookDto> books = queryFactory.query()
 
  List<BookDto> books = queryFactory.query()
                 .select(
-                        dto(BookDto, book.columns("id", "name", "desc", "price"))
+                        dto(BookDto.class, book.columns("id", "name", "desc", "price"))
                 )
                 .from(book)
                 .fetch();
