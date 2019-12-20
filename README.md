@@ -4,11 +4,14 @@
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
 
 
+
 ## TL;DR
 
 Have you ever had a situation where you had to perform a SQL operation that was not supported by JPA? 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
+
+
 
 
 ## Overview
