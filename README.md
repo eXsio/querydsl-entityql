@@ -11,8 +11,30 @@ Have you ever had a situation where you had to perform a SQL operation that was 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
+Quick example:
+
+```java
+ Q<Book> book = qEntity(Book.class);
+ Q<Order> order = qEntity(Order.class);
+ Q<OrderItem> orderItem = qEntity(OrderItem.class);
+
+Long count = queryFactory.select(count())
+                .from(
+                        select(
+                                 book.string("name"), 
+                                 order.longNumber("id")
+                        )
+                        .from(orderItem)
+                        .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                        .innerJoin(orderItem.<Order> joinColumn("order"), order)
+                        .where(book.decimalNumber("price").gt(new BigDecimal("80")))
+                        .groupBy(book.longNumber("category")
+                ).fetchOne();
+
+```
 
 
+Interested? Keep on reading! 
 
 ## Overview
 
@@ -209,6 +231,7 @@ List<BookDto> books = queryFactory.query()
 ```
 
 - nested Select clauses:
+
 ```java
  Q<Book> book = qEntity(Book.class);
  Q<Order> order = qEntity(Order.class);
@@ -216,11 +239,15 @@ List<BookDto> books = queryFactory.query()
 
 Long count = queryFactory.select(count())
                 .from(
-                        select(order.longNumber("user"))
-                                .from(orderItem)
-                                .innerJoin(orderItem.<Book> joinColumn("book"), book)
-                                .innerJoin(orderItem.<Order> joinColumn("order"), order)
-                                .where(book.decimalNumber("price").gt(new BigDecimal("80")))
+                        select(
+                                 book.string("name"), 
+                                 order.longNumber("id")
+                        )
+                        .from(orderItem)
+                        .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                        .innerJoin(orderItem.<Order> joinColumn("order"), order)
+                        .where(book.decimalNumber("price").gt(new BigDecimal("80")))
+                        .groupBy(book.longNumber("category")
                 ).fetchOne();
 
 ```
