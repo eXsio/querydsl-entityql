@@ -109,6 +109,13 @@ There are 2 primary use cases for EntityQL:
     <artifactId>querydsl-entityql</artifactId>
     <version>1.0.0</version>
 </dependency>
+
+<!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
+<dependency>
+    <groupId>org.hibernate.javax.persistence</groupId>
+    <artifactId>hibernate-jpa-2.1-api</artifactId>
+    <version>1.0.2.Final</version>
+</dependency>
 <dependency>
     <groupId>com.querydsl</groupId>
     <artifactId>querydsl-sql</artifactId>
