@@ -368,6 +368,11 @@ To work properly, EntityQL needs to work with well-formatted and completely desc
  - Only fields containing ```@Column``` or ```@JoinColumn``` Annotations will be visible to EntityQL
  - When dealing with bidirectional mappings, only the sides that actually contain columns (```@JoinColumn```) will be supported,
    other sides will be ignored (```@OneToMany``` and the reversed ```@OneToOne```)
+ - In order to use Java Enums in queries, Enum classes have to be registered with QueryDSL's ```Configuration::register```
+   using ```EnumType```. Alternatively you can use the provided ```EntityQlQueryFactory```. It will register all Enums from 
+   the packages you want. 
+ - In order to use UUIDs, you have to register ```UtilUUIDType``` with QueryDSL's ```Configuration::register```
+ - In order to use Booleans you have to register ```BooleanType``` with QueryDSL's ```Configuration::register```
  - ```@JoinTable``` Annotation is not supported. If you want to use EntityQL with ```@ManyToMany``` mapping, 
     you can create an ```@Immutable @Entity``` that matches the table configured in ```@JoinTable```, for example:
     
