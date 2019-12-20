@@ -300,6 +300,7 @@ If you want to see more examples, please explore the integration test suite.
 
 ## Installation
 ```xml
+
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -312,6 +313,12 @@ If you want to see more examples, please explore the integration test suite.
     <artifactId>querydsl-entityql</artifactId>
     <version>1.0.0</version>
 </dependency>
+<dependency>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-sql</artifactId>
+    <version>4.2.2</version>
+</dependency>
+
 ```
 ## Configuration
 
