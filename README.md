@@ -28,7 +28,7 @@ Long count = queryFactory.select(count())
                         .innerJoin(orderItem.<Book> joinColumn("book"), book)
                         .innerJoin(orderItem.<Order> joinColumn("order"), order)
                         .where(book.decimalNumber("price").gt(new BigDecimal("80")))
-                        .groupBy(book.longNumber("category")
+                        .groupBy(book.longNumber("category")) 
                 ).fetchOne();
 
 ```
@@ -247,7 +247,7 @@ Long count = queryFactory.select(count())
                         .innerJoin(orderItem.<Book> joinColumn("book"), book)
                         .innerJoin(orderItem.<Order> joinColumn("order"), order)
                         .where(book.decimalNumber("price").gt(new BigDecimal("80")))
-                        .groupBy(book.longNumber("category")
+                        .groupBy(book.longNumber("category")) 
                 ).fetchOne();
 
 ```
