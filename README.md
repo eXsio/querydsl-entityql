@@ -14,10 +14,13 @@ With EntityQL you can create Native Queries using your own JPA Entities and a be
 Quick example:
 
 ```java
- Q<Book> book = qEntity(Book.class);
+
+ //create ad-hoc QueryDSL Models out of your Entity classes
+ Q<Book> book = qEntity(Book.class); 
  Q<Order> order = qEntity(Order.class);
  Q<OrderItem> orderItem = qEntity(OrderItem.class);
 
+//use them by creating and executing a Native Query using QueryDSL API
 Long count = queryFactory.select(count())
                 .from(
                         select(
