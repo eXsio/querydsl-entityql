@@ -121,11 +121,11 @@ There are 2 primary use cases for EntityQL:
 ## Configuration
 
 There is nothing to be configured especially for EntityQL. All you need to have is configured ```SqlQueryFacotory``` and - 
-inf you want to use Hibernate's schema generation - also configured Hibernate.
+if you want to use Hibernate's schema generation - also configured Hibernate.
 
 You can optionally use the provided ```EntityQlQueryFactory``` that is preconfigured to:
 - work seamlessly with Spring's transaction management - uses ```DataSourceUtils``` to obtain ```Connection``` bound to active Transaction,
-  autocloses the ```Connection``` if no in avtive Transsaction scope
+  autocloses the ```Connection``` if no in active Transsaction scope
 - autoregisters all Enum types with QueryDSL
 - autoregisters Boolean and UUID data types
 
