@@ -93,7 +93,59 @@ There are 2 primary use cases for EntityQL:
 
     EntityQL is just a translation layer between JPA mappings and QueryDSL. QueryDSL is perfectly capable to handle all DML statements.
 
-## Examples
+
+## Installation
+```xml
+
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.eXsio</groupId>
+    <artifactId>querydsl-entityql</artifactId>
+    <version>1.0.0</version>
+</dependency>
+<dependency>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-sql</artifactId>
+    <version>4.2.2</version>
+</dependency>
+
+```
+
+
+## Configuration
+
+There is nothing to be configured especially for EntityQL. All you need to have is configured ```SqlQueryFacotory``` and - 
+inf you want to use Hibernate's schema generation - also configured Hibernate.
+
+You can optionally use the provided ```EntityQlQueryFactory``` that is preconfigured to:
+- work seamlessly with Spring's transaction management - uses ```DataSourceUtils``` to obtain ```Connection``` bound to active Transaction,
+  autocloses the ```Connection``` if no in avtive Transsaction scope
+- autoregisters all Enum types with QueryDSL
+- autoregisters Boolean and UUID data types
+
+In order to do that you will need to add additional dependencies:
+
+```xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>5.2.2.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.reflections</groupId>
+    <artifactId>reflections</artifactId>
+    <version>0.9.11</version>
+</dependency>
+```
+
+
+## More Examples
 
 Using the following Entities:
 
@@ -297,54 +349,6 @@ book.set(update,
 ```
 
 If you want to see more examples, please explore the integration test suite.
-
-## Installation
-```xml
-
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-
-<dependency>
-    <groupId>com.github.eXsio</groupId>
-    <artifactId>querydsl-entityql</artifactId>
-    <version>1.0.0</version>
-</dependency>
-<dependency>
-    <groupId>com.querydsl</groupId>
-    <artifactId>querydsl-sql</artifactId>
-    <version>4.2.2</version>
-</dependency>
-
-```
-## Configuration
-
-There is nothing to be configured especially for EntityQL. All you need to have is configured ```SqlQueryFacotory``` and - 
-inf you want to use Hibernate's schema generation - also configured Hibernate.
-
-You can optionally use the provided ```EntityQlQueryFactory``` that is preconfigured to:
-- work seamlessly with Spring's transaction management - uses ```DataSourceUtils``` to obtain ```Connection``` bound to active Transaction,
-  autocloses the ```Connection``` if no in avtive Transsaction scope
-- autoregisters all Enum types with QueryDSL
-- autoregisters Boolean and UUID data types
-
-In order to do that you will need to add additional dependencies:
-
-```xml
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.2.2.RELEASE</version>
-</dependency>
-<dependency>
-    <groupId>org.reflections</groupId>
-    <artifactId>reflections</artifactId>
-    <version>0.9.11</version>
-</dependency>
-```
 
 
 ## Limitations and restrictions
