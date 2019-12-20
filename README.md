@@ -95,7 +95,7 @@ There are 2 primary use cases for EntityQL:
 
 ## QueryDSL Features
 
-All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#sql_integration
+All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#d0e1067
 
 ## Installation
 ```xml
