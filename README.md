@@ -11,7 +11,7 @@ Have you ever had a situation where you had to perform a SQL operation that was 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
-Quick example:
+#### Quick example:
 
 ```java
 
