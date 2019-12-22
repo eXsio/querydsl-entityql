@@ -1,2 +1,6 @@
+- 1.0.1
+    - small improvements in EntityQlQueryFactory
+    - updated README
+
 - 1.0
     - first release

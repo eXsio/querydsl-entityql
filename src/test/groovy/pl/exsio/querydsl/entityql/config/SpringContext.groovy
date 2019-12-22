@@ -2,6 +2,7 @@ package pl.exsio.querydsl.entityql.config
 
 import com.querydsl.sql.H2Templates
 import com.querydsl.sql.SQLQueryFactory
+import com.querydsl.sql.SQLTemplates
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -52,9 +53,14 @@ public class SpringContext {
     }
 
     @Bean
-    static SQLQueryFactory queryFactory(DataSource dataSource) {
+    SQLTemplates sqlTemplates() {
+        return new H2Templates(); //choose the implementation that matches your database engine
+    }
+
+    @Bean
+    static SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
         return new EntityQlQueryFactory(
-                new com.querydsl.sql.Configuration(new H2Templates()),
+                new com.querydsl.sql.Configuration(sqlTemplates),
                 dataSource, "pl.exsio.querydsl.entityql")
     }
 

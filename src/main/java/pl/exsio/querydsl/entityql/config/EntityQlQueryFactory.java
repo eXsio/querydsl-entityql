@@ -1,11 +1,11 @@
 package pl.exsio.querydsl.entityql.config;
 
 import com.querydsl.sql.*;
+import com.querydsl.sql.spring.SpringExceptionTranslator;
 import com.querydsl.sql.types.BooleanType;
 import com.querydsl.sql.types.UtilUUIDType;
 import org.reflections.Reflections;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import pl.exsio.querydsl.entityql.type.EnumType;
 
 import javax.sql.DataSource;
@@ -19,15 +19,16 @@ public class EntityQlQueryFactory extends SQLQueryFactory {
     public EntityQlQueryFactory(Configuration configuration, DataSource dataSource, String... enumPackages) {
         super(configuration, () -> DataSourceUtils.getConnection(dataSource));
         registerCustomTypes(configuration, enumPackages);
-        closeConnectionIfNoTransaction(configuration);
+        closeConnectionIfNoTransaction(configuration, dataSource);
+        configuration.setExceptionTranslator(new SpringExceptionTranslator());
     }
 
-    private void closeConnectionIfNoTransaction(Configuration configuration) {
+    private void closeConnectionIfNoTransaction(Configuration configuration, DataSource dataSource) {
         configuration.addListener(new SQLBaseListener() {
 
             @Override
             public void end(SQLListenerContext context) {
-                if (!TransactionSynchronizationManager.isActualTransactionActive()) {
+                if (!DataSourceUtils.isConnectionTransactional(context.getConnection(), dataSource)) {
                     SQLCloseListener.DEFAULT.end(context);
                 }
             }

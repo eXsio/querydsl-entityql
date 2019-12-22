@@ -5,7 +5,7 @@
 
     <groupId>pl.exsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -44,6 +44,12 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-sql</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-spring</artifactId>
             <version>${querydsl.version}</version>
             <scope>provided</scope>
         </dependency>

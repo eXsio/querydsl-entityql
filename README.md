@@ -93,9 +93,33 @@ There are 2 primary use cases for EntityQL:
 
     EntityQL is just a translation layer between JPA mappings and QueryDSL. QueryDSL is perfectly capable to handle all DML statements.
 
-## QueryDSL Features
+## QueryDSL SQL Features
 
 All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#d0e1067
+
+## How does the EntityQL differ from...
+
+1) **Hibernate / JPA in general** - EntityQL uses Entities only  as source of DDL information necessary to construct Native SQL that is executed against JDBC Connection. 
+There is no Persistence Context, no Entity Manager, no L1/L2/L3 cache, no Dirty Checking, no Cascades. That makes EntityQL offer less "magic" features, but at the same time
+makes it orders of magnitude faster than Hibernate.
+ 
+2) **Hibernate / JPA Native Queries** - Hibernate offers Native SQL support only in a form of Strings containing full SQL queries. EntityQL offers full fluent QueryDSL Java API
+that is way more safe and convenient to use, not to mention it is fully portable. QueryDSL has its form of Dialects that translates the query built with Java API to the SQL Dialect that matches
+your Database.
+
+3) **QueryDSL-JPA in general** - the JPA module is just an additional layer on top of JPA/Hibernate. All of the queries built with its API are translated into JPQL. 
+Although QueryDSL-JPA API is lightyears ahead of ugly, unreadable Criteria API or error-prone JPQL Strings, it suffers from the same limited SQL operations it can support as the original JPA.
+
+4) **QueryDSL-JPA JpaSqlQuery class** - the JPA module has the ability to construct Native SQL with Java API. The only limitation (at least for some) is that you need to generate both JPA
+Meta Models (Q-classes created from your Entity Mappings) and SQL Meta Models (S-classes created by reverse engineering your Database Schema). EntityQL doesn't require
+any static code generation, the Meta Models are generated on the fly and cached in memory for further reuse. 
+
+5) **vanilla QueryDSL-SQL and/or JOOQ** - both of the frameworks are offering similar feature sets and both rely on generating Static Meta Model by reverse engineering 
+your Schema. That is a big advantage for some developers, but it has its own list of shortcomings. Their workflows demand that you create your Database Schema before your code.
+Most of Java developers (especially ones used to dealing with JPA) like to create their Schema in a form of JPA Entities first, and then export them to Database. Also Static Meta Models, although
+offer more type-safety, are tiresome to generate, especially in a multi-branch project. EntityQL lets you keep your Schema management in Java Code, allows the same level of integration testing 
+as Hibernate (you can still use Hibernate to generate your test in-memory H2 Database) and at the same time offers convenient, fluent Java API that constructs Native Queries 
+and runs them directly on JDBC level, making whole thing extremely fast.
 
 ## Installation
 ```xml
@@ -110,7 +134,7 @@ All of the QueryDSL-SQL features are described here: http://www.querydsl.com/sta
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 <!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
@@ -134,18 +158,17 @@ There is nothing to be configured especially for EntityQL. All you need to have 
 if you want to use Hibernate's schema generation - also configured Hibernate.
 
 You can optionally use the provided ```EntityQlQueryFactory``` that is preconfigured to:
-- work seamlessly with Spring's transaction management - uses ```DataSourceUtils``` to obtain ```Connection``` bound to active Transaction,
-  autocloses the ```Connection``` if no in active Transsaction scope
-- autoregisters all Enum types with QueryDSL
-- autoregisters Boolean and UUID data types
+- work seamlessly with Spring via the ```DataSourceUtils``` and ```SpringExceptionTranslator```
+- auto-registers all Enum types with QueryDSL
+- auto-registers Boolean and UUID data types
 
 In order to do that you will need to add additional dependencies:
 
 ```xml
 <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-jdbc</artifactId>
-    <version>5.2.2.RELEASE</version>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-sql-spring</artifactId>
+    <version>4.2.2</version>
 </dependency>
 <dependency>
     <groupId>org.reflections</groupId>
@@ -154,6 +177,26 @@ In order to do that you will need to add additional dependencies:
 </dependency>
 ```
 
+## Spring Configuration
+
+1. Use the base and additional maven dependencies from the above section
+2. Configure QueryDSL:
+
+```java
+
+        @Bean
+        public SQLTemplates sqlTemplates() {
+            //choose the implementation that matches your database engine
+            return new H2Templates(); 
+        }
+    
+        @Bean
+        public SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
+            //last param is an optional varargs String with all the java.lang.Enum packages that you use in your Entities
+            return new EntityQlQueryFactory(new Configuration(sqlTemplates), dataSource, "your.enums.package");
+        }
+
+```
 
 ## More Examples
 
