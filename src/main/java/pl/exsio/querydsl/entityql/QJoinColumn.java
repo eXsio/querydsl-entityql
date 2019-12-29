@@ -1,6 +1,5 @@
 package pl.exsio.querydsl.entityql;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.sql.ColumnMetadata;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
@@ -12,7 +11,7 @@ import java.util.Map;
 
 class QJoinColumn {
 
-    private final Path<?> path;
+    private final QPath path;
 
     private final ColumnMetadata metadata;
 
@@ -59,7 +58,7 @@ class QJoinColumn {
         return QSqlTypeProvider.get(QField.getType(field)).map(t -> t.getSqlType(columnDefinition)).orElse(Types.OTHER);
     }
 
-    Path<?> getPath() {
+    QPath getPath() {
         return path;
     }
 

@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class Q<E> extends QBase<E> {
 
-    private final Map<String, Path<?>> columns = new HashMap<>();
+    private final Map<String, QPath> columns = new HashMap<>();
 
     private final Map<String, ForeignKey<?>> joinColumns = new HashMap<>();
 
@@ -39,9 +39,9 @@ public class Q<E> extends QBase<E> {
     void addColumn(Field field, Column column, int idx, boolean primaryKey) {
         QColumn qColumn = new QColumn(this, field, column, idx);
         this.columns.put(field.getName(), qColumn.getPath());
-        addMetadata(qColumn.getPath(), qColumn.getMetadata());
+        addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
         if (primaryKey) {
-            this.id = createPrimaryKey(qColumn.getPath());
+            this.id = createPrimaryKey(qColumn.getPath().get());
             this.idColumn = new QColumnDefinition(field, column);
         }
     }
@@ -49,8 +49,8 @@ public class Q<E> extends QBase<E> {
     void addJoinColumn(Field field, JoinColumn column, int idx) {
         QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx);
         this.columns.put(field.getName(), qColumn.getPath());
-        addMetadata(qColumn.getPath(), qColumn.getMetadata());
-        this.joinColumns.put(field.getName(), createForeignKey(qColumn.getPath(), qColumn.getForeignColumnName()));
+        addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
+        this.joinColumns.put(field.getName(), createForeignKey(qColumn.getPath().get(), qColumn.getForeignColumnName()));
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -64,7 +64,7 @@ public class Q<E> extends QBase<E> {
             if (!(key instanceof String)) {
                 throw new InvalidArgumentException("Param key has to be String");
             }
-            clause.set((Path<Object>) columns.get(key), value);
+            clause.set((Path<Object>) columns.get(key).get(), value);
         }
         return clause;
     }
@@ -73,7 +73,7 @@ public class Q<E> extends QBase<E> {
         List<Expression<?>> expressions = new LinkedList<>();
         for (String column : columns) {
             checkIfColumnExists(column);
-            expressions.add(this.columns.get(column));
+            expressions.add(this.columns.get(column).get());
         }
         return expressions;
     }
@@ -81,100 +81,100 @@ public class Q<E> extends QBase<E> {
     @SuppressWarnings(value = "unchecked")
     public <T extends Enum<T>> EnumPath<T> enumerated(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (EnumPath<T>) this.columns.get(fieldName);
+        return (EnumPath<T>) this.columns.get(fieldName).get();
     }
 
     public UuidPath uuid(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (UuidPath) this.columns.get(fieldName);
+        return (UuidPath) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Long> longNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Long>) this.columns.get(fieldName);
+        return (NumberPath<Long>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Float> floatNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Float>) this.columns.get(fieldName);
+        return (NumberPath<Float>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Integer> intNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Integer>) this.columns.get(fieldName);
+        return (NumberPath<Integer>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Double> doubleNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Double>) this.columns.get(fieldName);
+        return (NumberPath<Double>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Byte> byteNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Byte>) this.columns.get(fieldName);
+        return (NumberPath<Byte>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<Short> shortNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<Short>) this.columns.get(fieldName);
+        return (NumberPath<Short>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<BigDecimal> decimalNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<BigDecimal>) this.columns.get(fieldName);
+        return (NumberPath<BigDecimal>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public NumberPath<BigInteger> bigIntNumber(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<BigInteger>) this.columns.get(fieldName);
+        return (NumberPath<BigInteger>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T extends Number & Comparable<?>> NumberPath<T> number(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (NumberPath<T>) this.columns.get(fieldName);
+        return (NumberPath<T>) this.columns.get(fieldName).get();
     }
 
     public StringPath string(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (StringPath) this.columns.get(fieldName);
+        return (StringPath) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public DatePath<LocalDate> date(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (DatePath<LocalDate>) this.columns.get(fieldName);
+        return (DatePath<LocalDate>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T> ArrayPath<T, T> array(String fieldName) {
-        return (ArrayPath<T, T>) this.columns.get(fieldName);
+        return (ArrayPath<T, T>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public DateTimePath<LocalDateTime> dateTime(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (DateTimePath<LocalDateTime>) this.columns.get(fieldName);
+        return (DateTimePath<LocalDateTime>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T extends Comparable> ComparableExpressionBase<T> comparableColumn(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (ComparableExpressionBase<T>) this.columns.get(fieldName);
+        return (ComparableExpressionBase<T>) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T extends Comparable> Path<T> column(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (Path<T>) this.columns.get(fieldName);
+        return (Path<T>) this.columns.get(fieldName).get();
     }
 
     private void checkIfColumnExists(String fieldName) {
@@ -199,7 +199,7 @@ public class Q<E> extends QBase<E> {
         return joinColumns.containsKey(fieldName);
     }
 
-    public Map<String, Path<?>> columns() {
+    public Map<String, QPath> columns() {
         return columns;
     }
 

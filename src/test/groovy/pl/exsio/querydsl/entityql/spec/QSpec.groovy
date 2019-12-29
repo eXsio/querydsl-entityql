@@ -125,5 +125,11 @@ class QSpec extends Specification {
         spec.columns().size() == 15
         subSpec.joinColumns().size() == 1
 
+        spec.columns().forEach{name, path ->
+            println(name)
+            println(path.get().getClass().getName())
+            println(path.isParametrized() ? path.parametrizedType : null)
+        }
+
     }
 }

@@ -1,18 +1,14 @@
 package pl.exsio.querydsl.entityql;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.sql.ColumnMetadata;
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 import java.lang.reflect.Field;
 import java.sql.Types;
-import java.util.Map;
 
 class QColumn {
 
-    private final Path<?> path;
+    private final QPath path;
 
     private final ColumnMetadata metadata;
 
@@ -32,7 +28,7 @@ class QColumn {
         return QSqlTypeProvider.get(QField.getType(field)).map(t -> t.getSqlType(columnDefinition)).orElse(Types.OTHER);
     }
 
-    Path<?> getPath() {
+    QPath getPath() {
         return path;
     }
 
