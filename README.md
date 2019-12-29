@@ -284,68 +284,6 @@ public class UserGroup implements Serializable {
 
 ## More Examples
 
-Using the following Entities:
-
-```java
-
-@Entity
-@Table(name = "BOOKS")
-public class Book {
-
-    @Id
-    @Column(name = "BOOK_ID")
-    @GeneratedValue
-    private Long id;
-
-    @Column(name = "NAME", unique = true)
-    private String name;
-
-
-    @Column(name = "DESC", nullable = true, columnDefinition = "CLOB")
-    private String desc;
-
-    @Column(name = "PRICE")
-    private BigDecimal price;
-}
-
-@Entity
-@Table(name = "ORDERS")
-public class Order implements Serializable {
-
-    @Id
-    @Column(name = "ORDER_ID")
-    @GeneratedValue
-    private Long id;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> items = new ArrayList<>();
-}
-
-@Entity
-@Table(name = "ORDER_ITEMS")
-public class OrderItem implements Serializable {
-
-    @Id
-    @Column(name = "ORDER_ITEM_ID")
-    @GeneratedValue
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "BOOK_ID", nullable = false)
-    private Book book;
-
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false)
-    private Order order;
-
-    @Column(name = "QTY", nullable = false)
-    private Long quantity;
-}
-
-```
-
-We can construct execute the following example SQL Queries:
-
 - simple select with projection:
 
 ```java
@@ -534,6 +472,122 @@ List<Group> groups = queryFactory.query()
 If you want to see more examples, please explore the integration test suite.
 
 
+#### Entities used in examples:
+
+```java
+
+@Entity
+@Table(name = "BOOKS")
+public class Book {
+
+    @Id
+    @Column(name = "BOOK_ID")
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "NAME", unique = true)
+    private String name;
+
+
+    @Column(name = "DESC", nullable = true, columnDefinition = "CLOB")
+    private String desc;
+
+    @Column(name = "PRICE")
+    private BigDecimal price;
+}
+
+@Entity
+@Table(name = "ORDERS")
+public class Order implements Serializable {
+
+    @Id
+    @Column(name = "ORDER_ID")
+    @GeneratedValue
+    private Long id;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items = new ArrayList<>();
+}
+
+@Entity
+@Table(name = "ORDER_ITEMS")
+public class OrderItem implements Serializable {
+
+    @Id
+    @Column(name = "ORDER_ITEM_ID")
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "BOOK_ID", nullable = false)
+    private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "ORDER_ID", nullable = false)
+    private Order order;
+
+    @Column(name = "QTY", nullable = false)
+    private Long quantity;
+}
+
+@Entity
+@Table(name = "USERS")
+public class User<T> {
+
+    @Id
+    @Column(name = "USER_ID")
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "NAME")
+    private String name;
+}
+
+@Entity
+@Table(name = "GROUPS")
+public class Group {
+
+    @Id
+    @Column(name = "GROUP_ID")
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "USERS_GROUPS",
+            joinColumns = @JoinColumn(name = "GROUP_ID"),
+            inverseJoinColumns = @JoinColumn(name = "USER_ID")
+    )
+    private Set<User> users;
+
+}
+
+@Entity
+@Immutable
+@Table(name = "USERS_GROUPS")
+public class UserGroup implements Serializable {
+
+    @Id
+    @Column(name = "GROUP_ID", nullable = false, updatable = false, insertable = false)
+    private Long groupId;
+
+    @Id
+    @Column(name = "USER_ID", nullable = false, updatable = false, insertable = false)
+    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+}
+
+```
 
 ## Support
 
