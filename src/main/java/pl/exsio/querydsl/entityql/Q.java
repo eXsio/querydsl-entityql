@@ -26,7 +26,7 @@ public class Q<E> extends QBase<E> {
 
     private final Map<String, QPath> columns = new HashMap<>();
 
-    private final Map<String, ForeignKey<?>> joinColumns = new HashMap<>();
+    private final Map<String, QForeignKey> joinColumns = new HashMap<>();
 
     private PrimaryKey<?> id;
 
@@ -50,7 +50,7 @@ public class Q<E> extends QBase<E> {
         QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx);
         this.columns.put(field.getName(), qColumn.getPath());
         addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
-        this.joinColumns.put(field.getName(), createForeignKey(qColumn.getPath().get(), qColumn.getForeignColumnName()));
+        this.joinColumns.put(field.getName(), new QForeignKey(createForeignKey(qColumn.getPath().get(), qColumn.getForeignColumnName()), field));
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -188,7 +188,7 @@ public class Q<E> extends QBase<E> {
         if (!joinColumns.containsKey(fieldName)) {
             throw new InvalidArgumentException(String.format("No FK with name %s, available FKs: %s", fieldName, joinColumns.keySet()));
         }
-        return (ForeignKey<T>) this.joinColumns.get(fieldName);
+        return (ForeignKey<T>) this.joinColumns.get(fieldName).get();
     }
 
     public boolean containsColumn(String fieldName) {
@@ -203,7 +203,7 @@ public class Q<E> extends QBase<E> {
         return columns;
     }
 
-    public Map<String, ForeignKey<?>> joinColumns() {
+    public Map<String, QForeignKey> joinColumns() {
         return joinColumns;
     }
 
