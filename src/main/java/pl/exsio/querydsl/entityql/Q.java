@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Q<E> extends QBase<E> {
 
@@ -30,27 +31,38 @@ public class Q<E> extends QBase<E> {
 
     private PrimaryKey<?> id;
 
-    QColumnDefinition idColumn;
+    List<QColumnDefinition> idColumns = new LinkedList<>();
 
     Q(Class<E> type, String variable, String schema, String table) {
         super(type, variable, schema, table);
     }
 
-    void addColumn(Field field, Column column, int idx, boolean primaryKey) {
+    void addColumn(Field field, Column column, int idx) {
         QColumn qColumn = new QColumn(this, field, column, idx);
         this.columns.put(field.getName(), qColumn.getPath());
         addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
-        if (primaryKey) {
-            this.id = createPrimaryKey(qColumn.getPath().get());
-            this.idColumn = new QColumnDefinition(field, column);
-        }
     }
 
     void addJoinColumn(Field field, JoinColumn column, int idx) {
         QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx);
-        this.columns.put(field.getName(), qColumn.getPath());
-        addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
-        this.joinColumns.put(field.getName(), new QForeignKey(createForeignKey(qColumn.getPath().get(), qColumn.getForeignColumnName()), field));
+        if(qColumn.getPaths().size() > 1) {
+            throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", field.getName()));
+        }
+        this.columns.put(field.getName(), qColumn.getPaths().getFirst());
+        addMetadata(qColumn.getPaths().getFirst().get(), qColumn.getMetadata().getFirst());
+        List<? extends Path<?>> paths = qColumn.getPaths().stream().map(QPath::get).collect(Collectors.toList());
+        ForeignKey<?> foreignKey = createForeignKey(paths, qColumn.getForeignColumnNames());
+        this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));
+    }
+
+    void addPrimaryKey(Map<Field, Column> ids) {
+        idColumns = ids.entrySet().stream().map(e -> new QColumnDefinition(e.getKey(), e.getValue())).collect(Collectors.toList());
+        List<String> pkColumnNames = ids.keySet().stream().map(Field::getName).collect(Collectors.toList());
+        Path[] pkPaths = this.columns.entrySet().stream()
+                .filter(e -> pkColumnNames.contains(e.getKey()))
+                .map(e -> e.getValue().get())
+                .toArray(Path[]::new);
+        this.id = createPrimaryKey(pkPaths);
     }
 
     @SuppressWarnings(value = "unchecked")

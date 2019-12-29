@@ -20,7 +20,7 @@ class QFactory<E> {
 
     private Map<Field, Map.Entry<Integer, JoinColumn>> joinColumns = new LinkedHashMap<>();
 
-    private Map.Entry<Field, Column> id;
+    private Map<Field, Column> ids = new LinkedHashMap<>();
 
     private static final Map<Class<?>, QFactory<?>> instances = new HashMap<>();
 
@@ -57,7 +57,7 @@ class QFactory<E> {
             }
             prevClass = prevClass.getSuperclass();
         }
-        if (id == null) {
+        if (ids.isEmpty()) {
             throw new MissingIdException(entityClass);
         }
     }
@@ -67,7 +67,7 @@ class QFactory<E> {
         if (column != null) {
             Id id = field.getDeclaredAnnotation(Id.class);
             if (id != null) {
-                this.id = new AbstractMap.SimpleImmutableEntry<>(field, column);
+                this.ids.put(field, column);
             }
             this.columns.put(field, new AbstractMap.SimpleImmutableEntry<>(index, column));
         } else {
@@ -90,10 +90,11 @@ class QFactory<E> {
 
     Q<E> create(String variable, boolean withMappings) {
         Q<E> type = new Q<>(entityClass, variable, table.schema(), table.name());
-        columns.forEach((field, column) -> type.addColumn(field, column.getValue(), column.getKey(), field.equals(this.id.getKey())));
+        columns.forEach((field, column) -> type.addColumn(field, column.getValue(), column.getKey()));
         if (withMappings) {
             joinColumns.forEach((field, column) -> type.addJoinColumn(field, column.getValue(), column.getKey()));
         }
+        type.addPrimaryKey(ids);
         return type;
     }
 

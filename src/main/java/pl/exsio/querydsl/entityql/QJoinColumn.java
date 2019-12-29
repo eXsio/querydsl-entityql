@@ -7,19 +7,30 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import java.lang.reflect.Field;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 class QJoinColumn {
 
-    private final QPath path;
+    private final LinkedList<QPath> paths = new LinkedList<>();
 
-    private final ColumnMetadata metadata;
+    private final LinkedList<ColumnMetadata> metadata = new LinkedList<>();
 
-    private final QColumnDefinition foreignColumn;
+    private final List<QColumnDefinition> foreignColumns;
 
     QJoinColumn(Q<?> parent, Class<?> type, JoinColumn column, int idx) {
-        foreignColumn = getForeignColumn(type, column);
-        path = QPathFactory.create(parent, foreignColumn.getField(), column.name());
+        foreignColumns = getForeignColumn(type, column);
+        foreignColumns.forEach(foreignColumn -> {
+            createPath(parent, column, idx, foreignColumn);
+        });
+
+    }
+
+    private void createPath(Q<?> parent, JoinColumn column, int idx, QColumnDefinition foreignColumn) {
+        paths.add(QPathFactory.create(parent, foreignColumn.getField(), column.name()));
         ColumnMetadata metadata = ColumnMetadata
                 .named(column.name())
                 .withIndex(idx)
@@ -27,23 +38,28 @@ class QJoinColumn {
         if (!column.nullable()) {
             metadata = metadata.notNull();
         }
-        this.metadata = metadata;
+        this.metadata.add(metadata);
     }
 
-    private QColumnDefinition getForeignColumn(Class<?> type, JoinColumn column) {
+    private List<QColumnDefinition> getForeignColumn(Class<?> type, JoinColumn column) {
         Q<?> foreign = EntityQL.qEntityWithoutMappings(type);
-        QColumnDefinition result = foreign.idColumn;
+        List<QColumnDefinition> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
-            Map.Entry<Field, Map.Entry<Integer, Column>> foreignColumn = QFactory.get(type).getColumns()
-                    .entrySet().stream()
-                    .filter(e -> matchesCustomForeignColumnName(column, e))
-                    .findFirst()
-                    .orElseThrow(() ->
-                            new InvalidArgumentException(String.format("Unable to find field mapped to Column '%s' in Entity %s", column.referencedColumnName(), type.getName()))
-                    );
-            result = new QColumnDefinition(foreignColumn.getKey(), foreignColumn.getValue().getValue());
+            result = new ArrayList<>();
+            result.add(createCustomForeignColumn(type, column));
         }
         return result;
+    }
+
+    private QColumnDefinition createCustomForeignColumn(Class<?> type, JoinColumn column) {
+        Map.Entry<Field, Map.Entry<Integer, Column>> foreignColumn = QFactory.get(type).getColumns()
+                .entrySet().stream()
+                .filter(e -> matchesCustomForeignColumnName(column, e))
+                .findFirst()
+                .orElseThrow(() ->
+                        new InvalidArgumentException(String.format("Unable to find field mapped to Column '%s' in Entity %s", column.referencedColumnName(), type.getName()))
+                );
+        return new QColumnDefinition(foreignColumn.getKey(), foreignColumn.getValue().getValue());
     }
 
     private boolean matchesCustomForeignColumnName(JoinColumn column, Map.Entry<Field, Map.Entry<Integer, Column>> e) {
@@ -58,15 +74,15 @@ class QJoinColumn {
         return QSqlTypeProvider.get(QField.getType(field)).map(t -> t.getSqlType(columnDefinition)).orElse(Types.OTHER);
     }
 
-    QPath getPath() {
-        return path;
+    LinkedList<QPath> getPaths() {
+        return paths;
     }
 
-    ColumnMetadata getMetadata() {
+    LinkedList<ColumnMetadata> getMetadata() {
         return metadata;
     }
 
-    String getForeignColumnName() {
-        return foreignColumn.getColumn().name();
+    List<String> getForeignColumnNames() {
+        return foreignColumns.stream().map(fc -> fc.getColumn().name()).collect(Collectors.toList());
     }
 }
