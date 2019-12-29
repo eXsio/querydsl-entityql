@@ -434,7 +434,7 @@ Q<UserGroup> userGroup = qEntity(UserGroup.class);
 List<Group> groups = queryFactory.query()
                 .select(
                         constructor(
-                                Group,
+                                Group.class,
                                 group.longNumber("id"),
                                 group.string("name")
                         ))
@@ -457,7 +457,7 @@ Q<UserGroup> userGroup = qEntity(UserGroup.class);
 List<Group> groups = queryFactory.query()
                 .select(
                         constructor(
-                                Group,
+                                Group.class,
                                 group.longNumber("id"),
                                 group.string("name")
                         ))
