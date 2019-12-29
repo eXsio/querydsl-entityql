@@ -5,32 +5,35 @@ import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import java.lang.reflect.Field;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class QJoinColumn {
 
-    private final LinkedList<QPath> paths = new LinkedList<>();
-
-    private final LinkedList<ColumnMetadata> metadata = new LinkedList<>();
+    private final LinkedHashMap<QPath, ColumnMetadata> paths = new LinkedHashMap<>();
 
     private final List<QColumnDefinition> foreignColumns;
 
     QJoinColumn(Q<?> parent, Class<?> type, JoinColumn column, int idx) {
-        foreignColumns = getForeignColumn(type, column);
-        foreignColumns.forEach(foreignColumn -> {
-            createPath(parent, column, idx, foreignColumn);
-        });
+        foreignColumns = getForeignColumns(type, column);
+        foreignColumns.forEach(foreignColumn -> createPath(parent, column, idx, foreignColumn));
+    }
 
+    QJoinColumn(Q<?> parent, Class<?> type, JoinColumns columns, int idx) {
+        foreignColumns = getForeignColumns(type, columns);
+        if(foreignColumns.size() != columns.value().length) {
+            throw new InvalidArgumentException(String.format("Unable to construct Foreign Columns out of: %s", Arrays.toString(columns.value())));
+        }
+        for (int i = 0; i < foreignColumns.size(); i++) {
+            createPath(parent, columns.value()[i], idx, foreignColumns.get(i));
+        }
     }
 
     private void createPath(Q<?> parent, JoinColumn column, int idx, QColumnDefinition foreignColumn) {
-        paths.add(QPathFactory.create(parent, foreignColumn.getField(), column.name()));
+        QPath qPath = QPathFactory.create(parent, foreignColumn.getField(), column.name());
         ColumnMetadata metadata = ColumnMetadata
                 .named(column.name())
                 .withIndex(idx)
@@ -38,16 +41,27 @@ class QJoinColumn {
         if (!column.nullable()) {
             metadata = metadata.notNull();
         }
-        this.metadata.add(metadata);
+        paths.put(qPath, metadata);
     }
 
-    private List<QColumnDefinition> getForeignColumn(Class<?> type, JoinColumn column) {
+    private List<QColumnDefinition> getForeignColumns(Class<?> type, JoinColumn column) {
         Q<?> foreign = EntityQL.qEntityWithoutMappings(type);
         List<QColumnDefinition> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
             result = new ArrayList<>();
             result.add(createCustomForeignColumn(type, column));
         }
+        return result;
+    }
+
+    private List<QColumnDefinition> getForeignColumns(Class<?> type, JoinColumns columns) {
+        final List<QColumnDefinition> result = new LinkedList<>();
+        Arrays.stream(columns.value()).forEach(column -> {
+            if (!isCustomForeignColumn(column)) {
+               throw new InvalidArgumentException(String.format("Composite FK requires a non-empty referencedColumnName: %s", column.name()));
+            }
+            result.add(createCustomForeignColumn(type, column));
+        });
         return result;
     }
 
@@ -74,15 +88,13 @@ class QJoinColumn {
         return QSqlTypeProvider.get(QField.getType(field)).map(t -> t.getSqlType(columnDefinition)).orElse(Types.OTHER);
     }
 
-    LinkedList<QPath> getPaths() {
+    LinkedHashMap<QPath, ColumnMetadata> getPaths() {
         return paths;
     }
 
-    LinkedList<ColumnMetadata> getMetadata() {
-        return metadata;
-    }
-
-    List<String> getForeignColumnNames() {
-        return foreignColumns.stream().map(fc -> fc.getColumn().name()).collect(Collectors.toList());
+    LinkedList<String> getForeignColumnNames() {
+        return foreignColumns.stream()
+                .map(fc -> fc.getColumn().name())
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 }

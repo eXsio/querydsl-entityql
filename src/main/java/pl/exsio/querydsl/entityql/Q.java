@@ -12,6 +12,7 @@ import pl.exsio.querydsl.entityql.path.UuidPath;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -45,14 +46,28 @@ public class Q<E> extends QBase<E> {
 
     void addJoinColumn(Field field, JoinColumn column, int idx) {
         QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx);
-        if(qColumn.getPaths().size() > 1) {
+        if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", field.getName()));
         }
-        this.columns.put(field.getName(), qColumn.getPaths().getFirst());
-        addMetadata(qColumn.getPaths().getFirst().get(), qColumn.getMetadata().getFirst());
-        List<? extends Path<?>> paths = qColumn.getPaths().stream().map(QPath::get).collect(Collectors.toList());
-        ForeignKey<?> foreignKey = createForeignKey(paths, qColumn.getForeignColumnNames());
+        qColumn.getPaths().forEach((path, metadata) -> {
+            this.columns.put(field.getName(), path);
+            addMetadata(path.get(), metadata);
+            ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
+            this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));
+        });
+    }
+
+    void addJoinColumns(Field field, JoinColumns columns, Integer idx) {
+        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), columns, idx);
+        qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
+        ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
         this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));
+    }
+
+    private List<Path<?>> getPaths( QJoinColumn qColumn) {
+        return qColumn.getPaths().keySet().stream()
+                .map(QPath::get)
+                .collect(Collectors.toList());
     }
 
     void addPrimaryKey(Map<Field, Column> ids) {

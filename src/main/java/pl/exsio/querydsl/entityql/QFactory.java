@@ -20,6 +20,8 @@ class QFactory<E> {
 
     private Map<Field, Map.Entry<Integer, JoinColumn>> joinColumns = new LinkedHashMap<>();
 
+    private Map<Field, Map.Entry<Integer, JoinColumns>> compositeJoinColumns = new LinkedHashMap<>();
+
     private Map<Field, Column> ids = new LinkedHashMap<>();
 
     private static final Map<Class<?>, QFactory<?>> instances = new HashMap<>();
@@ -76,6 +78,13 @@ class QFactory<E> {
                 if (field.getDeclaredAnnotation(OneToMany.class) == null) {
                     this.joinColumns.put(field, new AbstractMap.SimpleImmutableEntry<>(index, joinColumn));
                 }
+            } else {
+                JoinColumns joinColumns = field.getDeclaredAnnotation(JoinColumns.class);
+                if (joinColumns != null) {
+                    if (field.getDeclaredAnnotation(OneToMany.class) == null) {
+                        this.compositeJoinColumns.put(field, new AbstractMap.SimpleImmutableEntry<>(index, joinColumns));
+                    }
+                }
             }
         }
     }
@@ -93,6 +102,7 @@ class QFactory<E> {
         columns.forEach((field, column) -> type.addColumn(field, column.getValue(), column.getKey()));
         if (withMappings) {
             joinColumns.forEach((field, column) -> type.addJoinColumn(field, column.getValue(), column.getKey()));
+            compositeJoinColumns.forEach((field, columns) -> type.addJoinColumns(field, columns.getValue(), columns.getKey()));
         }
         type.addPrimaryKey(ids);
         return type;
