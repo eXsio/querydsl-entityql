@@ -114,7 +114,7 @@ Although QueryDSL-JPA API is lightyears ahead of ugly, unreadable Criteria API o
 Meta Models (Q-classes created from your Entity Mappings) and SQL Meta Models (S-classes created by reverse engineering your Database Schema). EntityQL doesn't require
 any static code generation, the Meta Models are generated on the fly and cached in memory for further reuse. 
 
-5) **vanilla QueryDSL-SQL and/or JOOQ** - both of the frameworks are offering similar feature sets and both rely on generating Static Meta Model by reverse engineering 
+5) **Vanilla QueryDSL-SQL and/or JOOQ** - both of the frameworks are offering similar feature sets and both rely on generating Static Meta Model by reverse engineering 
 your Schema. That is a big advantage for some developers, but it has its own list of shortcomings. Their workflows demand that you create your Database Schema before your code.
 Most of Java developers (especially ones used to dealing with JPA) like to create their Schema in a form of JPA Entities first, and then export them to Database. Also Static Meta Models, although
 offer more type-safety, are tiresome to generate, especially in a multi-branch project. EntityQL lets you keep your Schema management in Java Code, allows the same level of integration testing 
@@ -134,7 +134,7 @@ and runs them directly on JDBC level, making whole thing extremely fast.
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 
 <!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
@@ -197,6 +197,90 @@ In order to do that you will need to add additional dependencies:
         }
 
 ```
+
+## Limitations and restrictions
+
+EntityQL was created with 2 main principles in mind: simplicity and explicitness. 
+All the limitations revolve around whether we have all the data needed to construct the meta-models. 
+
+Hibernate contains a lot of magical features like auto-generation of table and column names, mapping columns to ```Map``` etc.
+To work properly, EntityQL needs to work with well-formatted and completely/explicitly described Entities.
+
+ - Entity must have a valid ```@Table``` Annotation containing the Table name and (optionally) Schema name
+ - Only fields containing ```@Column``` or ```@JoinColumn``` Annotations will be visible to EntityQL
+ - When dealing with bidirectional mappings, only the sides that actually contain columns (```@JoinColumn```) will be supported,
+   other sides will be ignored (```@OneToMany``` and the reversed ```@OneToOne```)
+ - In order to use Java Enums in queries, Enum classes have to be registered with QueryDSL's ```Configuration::register```
+   using ```EnumType```. Alternatively you can use the provided ```EntityQlQueryFactory```. It will register all Enums from 
+   the packages you want. 
+ - In order to use UUIDs, you have to register ```UtilUUIDType``` with QueryDSL's ```Configuration::register```
+ - In order to use Booleans you have to register ```BooleanType``` with QueryDSL's ```Configuration::register```
+ - Unidirectional ```@OneToMany``` is not supported. Even though it contains a ```@JoinColumn``` mapping, that mapping applies to the target Entity,
+   not to the one we're currently using. In such case you have to refactor your Entity to contain a Bidirectional ```@OneToMany```.
+   
+   Mapping like this:
+   
+   ```java
+       @OneToMany
+       @JoinColumn(name = "Y_ID", nullable = true)
+       private Set<X> xSet;
+   ```
+   
+   has to be refactored into:
+   
+   ```java
+      @OneToMany(mappedBy = "y")
+      private Set<X> xSet;
+   ```
+   
+   and then on the other side we need to create a reverse mapping with a ```@JoinColumn``` in the right place:
+   
+   ```java
+       @ManyToOne
+       @JoinColumn(name = "Y_ID")
+       private Y y;
+   ```
+   
+ - ```@JoinTable``` Annotation is not supported. If you want to use EntityQL with ```@ManyToMany``` mapping, 
+    you can create an ```@Immutable @Entity``` that matches the table configured in ```@JoinTable```, for example:
+    
+    
+```java
+    
+    @ManyToMany
+        @JoinTable(
+                name = "USERS_GROUPS",
+                joinColumns = @JoinColumn(name = "GROUP_ID"),
+                inverseJoinColumns = @JoinColumn(name = "USER_ID")
+        )
+        private Set<User> users;
+```
+can be supported by:
+
+```java
+@Entity
+@Immutable
+@Table(name = "USERS_GROUPS")
+public class UserGroup implements Serializable {
+
+    @Id
+    @Column(name = "GROUP_ID", nullable = false, updatable = false, insertable = false)
+    private Long groupId;
+
+    @Id
+    @Column(name = "USER_ID", nullable = false, updatable = false, insertable = false)
+    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+}
+```
+
 
 ## More Examples
 
@@ -401,55 +485,55 @@ book.set(update,
 
 ```
 
+- Many To Many join using ON clause:
+
+```java
+
+Q<Group> group = qEntity(Group.class);
+Q<User> user = qEntity(User.class);
+Q<UserGroup> userGroup = qEntity(UserGroup.class);
+
+List<Group> groups = queryFactory.query()
+                .select(
+                        constructor(
+                                Group,
+                                group.longNumber("id"),
+                                group.string("name")
+                        ))
+                .from(userGroup)
+                .innerJoin(group).on(userGroup.longNumber("groupId").eq(group.longNumber("id")))
+                .innerJoin(user).on(userGroup.longNumber("userId").eq(user.longNumber("id")))
+                .where(user.longNumber("id").eq(2L))
+                .fetch();
+
+```
+
+- Many To Many join using Foreign Keys:
+
+```java
+
+Q<Group> group = qEntity(Group.class);
+Q<User> user = qEntity(User.class);
+Q<UserGroup> userGroup = qEntity(UserGroup.class);
+
+List<Group> groups = queryFactory.query()
+                .select(
+                        constructor(
+                                Group,
+                                group.longNumber("id"),
+                                group.string("name")
+                        ))
+                .from(userGroup)
+                .innerJoin(userGroup.<Group>joinColumn("group"), group)
+                .innerJoin(userGroup.<User>joinColumn("user"), user)
+                .where(user.longNumber("id").eq(2L))
+                .fetch();
+
+```
+
 If you want to see more examples, please explore the integration test suite.
 
 
-## Limitations and restrictions
-
-All the limitations revolve around wheter we have all the data needed to construct the meta-models. 
-Hibernate contains a lot of magical features like auto-generation of table and column names, mapping columns to ```Map``` etc.
-To work properly, EntityQL needs to work with well-formatted and completely described Entities.
-
- - Entity must have a valid ```@Table``` Annotation containing the Table name and (optionally) Schema name
- - Only fields containing ```@Column``` or ```@JoinColumn``` Annotations will be visible to EntityQL
- - When dealing with bidirectional mappings, only the sides that actually contain columns (```@JoinColumn```) will be supported,
-   other sides will be ignored (```@OneToMany``` and the reversed ```@OneToOne```)
- - In order to use Java Enums in queries, Enum classes have to be registered with QueryDSL's ```Configuration::register```
-   using ```EnumType```. Alternatively you can use the provided ```EntityQlQueryFactory```. It will register all Enums from 
-   the packages you want. 
- - In order to use UUIDs, you have to register ```UtilUUIDType``` with QueryDSL's ```Configuration::register```
- - In order to use Booleans you have to register ```BooleanType``` with QueryDSL's ```Configuration::register```
- - ```@JoinTable``` Annotation is not supported. If you want to use EntityQL with ```@ManyToMany``` mapping, 
-    you can create an ```@Immutable @Entity``` that matches the table configured in ```@JoinTable```, for example:
-    
-    
-```java
-    
-    @ManyToMany
-        @JoinTable(
-                name = "USERS_GROUPS",
-                joinColumns = @JoinColumn(name = "GROUP_ID"),
-                inverseJoinColumns = @JoinColumn(name = "USER_ID")
-        )
-        private Set<User> users;
-```
-can be supported by:
-```java
-@Entity
-@Immutable
-@Table(name = "USERS_GROUPS")
-public class UserGroup implements Serializable {
-
-    @Id
-    @Column(name = "GROUP_ID", nullable = false)
-    private Long groupId;
-
-    @Id
-    @Column(name = "USER_ID", nullable = false)
-    private Long userId;
-}
-
-```
 
 ## Support
 

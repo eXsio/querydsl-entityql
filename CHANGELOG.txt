@@ -1,3 +1,7 @@
+- 1.0.2
+    - explicitly ignore @JoinColumn in an unidirectional @OneToMany relation
+    - better example of handling @ManyToMany
+    - updated README
 - 1.0.1
     - small improvements in EntityQlQueryFactory
     - updated README

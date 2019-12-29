@@ -61,6 +61,10 @@ public class Spec<T> {
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL)
     private Set<SubSpec> subSpecs;
 
+    @OneToMany
+    @JoinColumn(name = "SPEC_ID", nullable = true)
+    private Set<SubSpec2> subSpecs2;
+
     @Column(name = "INT")
     private Integer intNumber;
 

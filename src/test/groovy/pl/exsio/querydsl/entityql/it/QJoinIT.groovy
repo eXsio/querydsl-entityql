@@ -137,7 +137,7 @@ class QJoinIT extends Specification {
         }
     }
 
-    def "should get all rows from an Entity based on a Join Table mapping"() {
+    def "should get all rows from an Entity based on a Join Table mapping using ON clause"() {
         given:
         Q<Group> group = qEntity(Group)
         Q<User> user = qEntity(User)
@@ -151,9 +151,37 @@ class QJoinIT extends Specification {
                                 group.longNumber("id"),
                                 group.string("name")
                         ))
-                .from(group)
-                .innerJoin(userGroup).on(group.longNumber("id").eq(userGroup.longNumber("groupId")))
+                .from(userGroup)
+                .innerJoin(group).on(userGroup.longNumber("groupId").eq(group.longNumber("id")))
                 .innerJoin(user).on(userGroup.longNumber("userId").eq(user.longNumber("id")))
+                .where(user.longNumber("id").eq(2L))
+                .fetch()
+
+        then:
+        groups.size() == 1
+        groups.forEach { g ->
+            assert g.id == 1
+            assert g.name == "G1"
+        }
+    }
+
+    def "should get all rows from an Entity based on a Join Table mapping using FK join"() {
+        given:
+        Q<Group> group = qEntity(Group)
+        Q<User> user = qEntity(User)
+        Q<UserGroup> userGroup = qEntity(UserGroup)
+
+        when:
+        List<Group> groups = queryFactory.query()
+                .select(
+                        constructor(
+                                Group,
+                                group.longNumber("id"),
+                                group.string("name")
+                        ))
+                .from(userGroup)
+                .innerJoin(userGroup.<Group>joinColumn("group"), group)
+                .innerJoin(userGroup.<User>joinColumn("user"), user)
                 .where(user.longNumber("id").eq(2L))
                 .fetch()
 

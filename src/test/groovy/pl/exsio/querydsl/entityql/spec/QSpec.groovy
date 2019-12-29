@@ -117,6 +117,7 @@ class QSpec extends Specification {
         then:
         spec.containsColumn("intNumber")
         !spec.containsColumn("noNumber")
+        !spec.containsJoinColumn("subSpecs2")
 
         subSpec.containsJoinColumn("spec")
         !subSpec.containsJoinColumn("fk")

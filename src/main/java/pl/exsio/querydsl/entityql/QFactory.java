@@ -3,10 +3,7 @@ package pl.exsio.querydsl.entityql;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -76,7 +73,9 @@ class QFactory<E> {
         } else {
             JoinColumn joinColumn = field.getDeclaredAnnotation(JoinColumn.class);
             if (joinColumn != null) {
-                this.joinColumns.put(field, new AbstractMap.SimpleImmutableEntry<>(index, joinColumn));
+                if (field.getDeclaredAnnotation(OneToMany.class) == null) {
+                    this.joinColumns.put(field, new AbstractMap.SimpleImmutableEntry<>(index, joinColumn));
+                }
             }
         }
     }

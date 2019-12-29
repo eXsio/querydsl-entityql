@@ -2,10 +2,7 @@ package pl.exsio.querydsl.entityql.config.entity.it
 
 import org.hibernate.annotations.Immutable
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Immutable
@@ -13,10 +10,18 @@ import javax.persistence.Table
 public class UserGroup implements Serializable {
 
     @Id
-    @Column(name = "GROUP_ID", nullable = false)
+    @Column(name = "GROUP_ID", nullable = false, updatable = false, insertable = false)
     private Long groupId;
 
     @Id
-    @Column(name = "USER_ID", nullable = false)
+    @Column(name = "USER_ID", nullable = false, updatable = false, insertable = false)
     private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 }
