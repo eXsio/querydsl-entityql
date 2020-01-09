@@ -19,14 +19,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Q<E> extends QBase<E> {
 
-    private final Map<String, QPath> columns = new HashMap<>();
+    private final Map<String, QPath> columns = new LinkedHashMap<>();
 
-    private final Map<String, QForeignKey> joinColumns = new HashMap<>();
+    private final Map<String, QForeignKey> joinColumns = new LinkedHashMap<>();
 
     private PrimaryKey<?> id;
 
@@ -50,7 +53,7 @@ public class Q<E> extends QBase<E> {
             throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", field.getName()));
         }
         qColumn.getPaths().forEach((path, metadata) -> {
-            this.columns.put(field.getName(), path);
+            this.columns.put(String.format("%sId", field.getName()), path);
             addMetadata(path.get(), metadata);
             ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
             this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));

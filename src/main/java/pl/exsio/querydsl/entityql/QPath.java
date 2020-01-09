@@ -8,13 +8,17 @@ public class QPath {
 
     private final Class<?> parametrizedType;
 
-    QPath(Path<?> path, Class<?> parametrizedType) {
+    private final QPathConfig config;
+
+    QPath(Path<?> path, QPathConfig config, Class<?> parametrizedType) {
         this.path = path;
         this.parametrizedType = parametrizedType;
+        this.config = config;
     }
 
-    QPath(Path<?> path) {
+    QPath(Path<?> path, QPathConfig config) {
         this.path = path;
+        this.config = config;
         this.parametrizedType = null;
     }
 

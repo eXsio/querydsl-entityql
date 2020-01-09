@@ -33,11 +33,13 @@ class QJoinColumn {
     }
 
     private void createPath(Q<?> parent, JoinColumn column, int idx, QColumnDefinition foreignColumn) {
-        QPath qPath = QPathFactory.create(parent, foreignColumn.getField(), column.name());
+        int sqlType = getSqlType(foreignColumn.getField(), column.columnDefinition());
+        QPath qPath = QPathFactory.create(parent, foreignColumn.getField(), column.name(), column.nullable(), idx, sqlType);
+
         ColumnMetadata metadata = ColumnMetadata
                 .named(column.name())
                 .withIndex(idx)
-                .ofType(getSqlType(foreignColumn.getField(), column.columnDefinition()));
+                .ofType(sqlType);
         if (!column.nullable()) {
             metadata = metadata.notNull();
         }

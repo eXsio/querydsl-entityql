@@ -1,25 +1,36 @@
+{% import "macros.twig" as macros %}
 package {{ package }};
 
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import pl.exsio.querydsl.entityql.*;
 import com.querydsl.sql.RelationalPathBase;
 
 public final class {{ className }} extends RelationalPathBase<{{entity}}> {
 
     {% for name, path in q.columns %}
-    public final {{ path.get().class.simpleName }}{% if (path.parametrized) %}<{{path.parametrizedType.name}}>{% endif %} {{ name }};
+    public final {{macros.printColumnType(path)}} {{ name }};
     {% endfor %}
     {% for name, fk in q.joinColumns %}
-    public final {{ fk.get().class.simpleName }}<{{fk.parametrizedType.name}}> {{ name }};
+    public final {{macros.printJoinColumnType(fk)}} {{ name }};
     {% endfor %}
+    public final PrimaryKey<{{entity}}> _primaryKey;
 
     public {{ className }}() {
        this("{{ q.tableName }}");
     }
 
+    @SuppressWarnings(value = "unchecked")
     public {{ className }}(String variable) {
         super({{entity}}, variable, "{{q.schemaName }}", "{{ q.tableName }}");
+
+        {% for name, path in q.columns %}
+            this.{{name}} = ({{macros.printColumnType(path)}}) QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(path)}},{{path.config.fieldType.name}},"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})).get();
+        {% endfor %}
     }
 
-
 }
+
+
+
+

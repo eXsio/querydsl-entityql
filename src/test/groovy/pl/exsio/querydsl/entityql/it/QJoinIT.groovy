@@ -37,8 +37,8 @@ class QJoinIT extends Specification {
                                 book.decimalNumber("price")
                         ))
                 .from(book)
-                .innerJoin(orderItem).on(orderItem.longNumber("book").eq(book.longNumber("id")))
-                .innerJoin(order).on(orderItem.longNumber("order").eq(order.longNumber("id")))
+                .innerJoin(orderItem).on(orderItem.longNumber("bookId").eq(book.longNumber("id")))
+                .innerJoin(order).on(orderItem.longNumber("orderId").eq(order.longNumber("id")))
                 .where(order.longNumber("id").eq(1L))
                 .fetch()
 
@@ -64,8 +64,8 @@ class QJoinIT extends Specification {
                         dto(Book, book.columns("id", "name", "desc", "price"))
                 )
                 .from(book)
-                .innerJoin(orderItem).on(orderItem.longNumber("book").eq(book.longNumber("id")))
-                .innerJoin(order).on(orderItem.longNumber("order").eq(order.longNumber("id")))
+                .innerJoin(orderItem).on(orderItem.longNumber("bookId").eq(book.longNumber("id")))
+                .innerJoin(order).on(orderItem.longNumber("orderId").eq(order.longNumber("id")))
                 .where(order.longNumber("id").eq(1L))
                 .fetch()
 

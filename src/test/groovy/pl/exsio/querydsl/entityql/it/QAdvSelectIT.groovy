@@ -36,11 +36,11 @@ class QAdvSelectIT extends Specification {
                 .select(
                         constructor(
                                 OrderItemBookCountDto,
-                                orderItem.longNumber("order"),
-                                count(orderItem.longNumber("book"))))
+                                orderItem.longNumber("orderId"),
+                                count(orderItem.longNumber("bookId"))))
                 .from(orderItem)
-                .groupBy(orderItem.longNumber("order"))
-                .orderBy(orderItem.longNumber("order").asc())
+                .groupBy(orderItem.longNumber("orderId"))
+                .orderBy(orderItem.longNumber("orderId").asc())
                 .fetch();
 
         then:
@@ -64,7 +64,7 @@ class QAdvSelectIT extends Specification {
         List<String> result = queryFactory.select(user.string("name"))
                 .from(user)
                 .where(user.longNumber("id").in(
-                        select(order.longNumber("user"))
+                        select(order.longNumber("userId"))
                                 .from(orderItem)
                                 .innerJoin(orderItem.<Book> joinColumn("book"), book)
                                 .innerJoin(orderItem.<Order> joinColumn("order"), order)
@@ -85,7 +85,7 @@ class QAdvSelectIT extends Specification {
         when:
         Long result = queryFactory.select(count())
                 .from(
-                        select(order.longNumber("user"))
+                        select(order.longNumber("userId"))
                                 .from(orderItem)
                                 .innerJoin(orderItem.<Book> joinColumn("book"), book)
                                 .innerJoin(orderItem.<Order> joinColumn("order"), order)

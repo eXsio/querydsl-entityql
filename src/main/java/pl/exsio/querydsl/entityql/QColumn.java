@@ -13,11 +13,14 @@ class QColumn {
     private final ColumnMetadata metadata;
 
     QColumn(Q<?> parent, Field field, Column column, int idx) {
-        path = QPathFactory.create(parent, field, column.name());
+        int sqlType = getSqlType(field, column.columnDefinition());
+
+        path = QPathFactory.create(parent, field, column.name(), column.nullable(), idx, sqlType);
+
         ColumnMetadata metadata = ColumnMetadata
                 .named(column.name())
                 .withIndex(idx)
-                .ofType(getSqlType(field, column.columnDefinition()));
+                .ofType(sqlType);
         if (!column.nullable()) {
             metadata = metadata.notNull();
         }
