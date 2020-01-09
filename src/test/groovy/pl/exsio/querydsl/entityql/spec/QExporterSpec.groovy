@@ -2,6 +2,8 @@ package pl.exsio.querydsl.entityql.spec
 
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.QExporter
+import pl.exsio.querydsl.entityql.config.entity.it.CompositeFk
+import pl.exsio.querydsl.entityql.config.entity.it.CompositePk
 import pl.exsio.querydsl.entityql.config.entity.it.UploadedFile
 import pl.exsio.querydsl.entityql.config.entity.it.User
 import pl.exsio.querydsl.entityql.config.entity.spec.Spec
@@ -20,10 +22,14 @@ public class QExporterSpec extends Specification {
         Q<SubSpec> subSpec = qEntity(SubSpec)
         Q<UploadedFile> UploadedFile = qEntity(UploadedFile)
         Q<User> user = qEntity(User)
+        Q<CompositeFk> CompositeFk = qEntity(CompositeFk)
+        Q<CompositePk> CompositePk = qEntity(CompositePk)
         exporter.export(spec, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
         exporter.export(subSpec, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
         exporter.export(UploadedFile, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
         exporter.export(user, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
+        exporter.export(CompositeFk, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
+        exporter.export(CompositePk, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
         then:
         noExceptionThrown()
     }

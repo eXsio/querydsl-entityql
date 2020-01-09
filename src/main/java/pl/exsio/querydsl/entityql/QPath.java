@@ -33,4 +33,8 @@ public class QPath {
     public boolean isParametrized() {
         return parametrizedType != null;
     }
+
+    public QPathConfig getConfig() {
+        return config;
+    }
 }

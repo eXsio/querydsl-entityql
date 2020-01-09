@@ -56,7 +56,7 @@ public class Q<E> extends QBase<E> {
             this.columns.put(String.format("%sId", field.getName()), path);
             addMetadata(path.get(), metadata);
             ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
-            this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));
+            this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field, qColumn.getPaths(), qColumn.getForeignColumnNames()));
         });
     }
 
@@ -64,7 +64,7 @@ public class Q<E> extends QBase<E> {
         QJoinColumn qColumn = new QJoinColumn(this, field.getType(), columns, idx);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
-        this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field));
+        this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field, qColumn.getPaths(), qColumn.getForeignColumnNames()));
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {

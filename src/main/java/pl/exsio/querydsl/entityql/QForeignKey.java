@@ -1,8 +1,11 @@
 package pl.exsio.querydsl.entityql;
 
+import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class QForeignKey {
 
@@ -10,9 +13,17 @@ public class QForeignKey {
 
     private final Class<?> parametrizedType;
 
-    QForeignKey(ForeignKey<?> foreignKey, Field field) {
+    private final LinkedHashMap<QPath, ColumnMetadata> paths;
+
+    private final LinkedList<String> foreignColumnNames;
+
+    QForeignKey(ForeignKey<?> foreignKey, Field field,
+                LinkedHashMap<QPath, ColumnMetadata> paths,
+                LinkedList<String> foreignColumnNames) {
         this.foreignKey = foreignKey;
         this.parametrizedType = field.getType();
+        this.paths = paths;
+        this.foreignColumnNames = foreignColumnNames;
     }
 
     public ForeignKey<?> get() {
@@ -21,5 +32,13 @@ public class QForeignKey {
 
     public Class<?> getParametrizedType() {
         return parametrizedType;
+    }
+
+    public LinkedHashMap<QPath, ColumnMetadata> getPaths() {
+        return paths;
+    }
+
+    public LinkedList<String> getForeignColumnNames() {
+        return foreignColumnNames;
     }
 }
