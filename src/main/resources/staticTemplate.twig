@@ -26,6 +26,7 @@ public final class {{ className }} extends RelationalPathBase<{{entity}}> {
 
         {% for name, path in q.columns %}
             this.{{name}} = ({{macros.printColumnType(path)}}) QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(path)}},{{path.config.fieldType.name}},"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})).get();
+            addMetadata(this.{{name}}, QColumnMetadataFactory.create("{{path.config.name}}",{{path.config.idx}},{{path.config.sqlType}},{{path.config.nullable}}));
         {% endfor %}
     }
 

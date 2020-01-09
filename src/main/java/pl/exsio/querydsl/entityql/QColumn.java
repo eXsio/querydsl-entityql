@@ -14,17 +14,8 @@ class QColumn {
 
     QColumn(Q<?> parent, Field field, Column column, int idx) {
         int sqlType = getSqlType(field, column.columnDefinition());
-
         path = QPathFactory.create(parent, field, column.name(), column.nullable(), idx, sqlType);
-
-        ColumnMetadata metadata = ColumnMetadata
-                .named(column.name())
-                .withIndex(idx)
-                .ofType(sqlType);
-        if (!column.nullable()) {
-            metadata = metadata.notNull();
-        }
-        this.metadata = metadata;
+        metadata = QColumnMetadataFactory.create(column.name(), idx, sqlType, column.nullable());
     }
 
     private int getSqlType(Field field, String columnDefinition) {
