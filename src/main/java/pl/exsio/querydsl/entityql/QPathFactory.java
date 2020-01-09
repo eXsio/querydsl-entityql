@@ -46,7 +46,7 @@ public abstract class QPathFactory {
     }
 
     @SuppressWarnings(value = "unchecked")
-    private static EnumPath<?> createEnumeratedPath(Q<?> q, QPathConfig config) {
+    private static EnumPath<?> createEnumeratedPath(QBase<?> q, QPathConfig config) {
         return new EnumPath(config.getFieldType(), q, config.getName());
     }
 
@@ -60,7 +60,7 @@ public abstract class QPathFactory {
         return (Class<Object>) config.getOriginalFieldType();
     }
 
-    static QPath create(Q q, Field field, String c, boolean nullable, int idx, int sqlType) {
+    static QPath create(Q<?> q, Field field, String c, boolean nullable, int idx, int sqlType) {
         Class<?> fieldType = QField.getType(field);
         if (!pathFactory.containsKey(fieldType)) {
             fieldType = Object.class;
@@ -68,12 +68,12 @@ public abstract class QPathFactory {
         return pathFactory.get(fieldType).createExpression(q, new QPathConfig(field.getType(), fieldType, c, nullable, idx, sqlType));
     }
 
-    public static QPath create(Q q, QPathConfig config) {
+    public static QPath create(QBase<?> q, QPathConfig config) {
         return pathFactory.get(config.getFieldType()).createExpression(q, config);
     }
 
     private interface PathFactory {
 
-        QPath createExpression(Q<?> q, QPathConfig config);
+        QPath createExpression(QBase<?> q, QPathConfig config);
     }
 }

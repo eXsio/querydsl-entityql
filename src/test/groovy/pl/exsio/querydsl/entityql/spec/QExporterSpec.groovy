@@ -1,35 +1,39 @@
 package pl.exsio.querydsl.entityql.spec
 
-import pl.exsio.querydsl.entityql.Q
+
 import pl.exsio.querydsl.entityql.QExporter
-import pl.exsio.querydsl.entityql.config.entity.it.CompositeFk
-import pl.exsio.querydsl.entityql.config.entity.it.CompositePk
-import pl.exsio.querydsl.entityql.config.entity.it.UploadedFile
-import pl.exsio.querydsl.entityql.config.entity.it.User
-import pl.exsio.querydsl.entityql.config.entity.spec.Spec
-import pl.exsio.querydsl.entityql.config.entity.spec.SubSpec
+import pl.exsio.querydsl.entityql.config.entity.it.*
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 public class QExporterSpec extends Specification {
 
+    String pkgName = "pl.exsio.querydsl.entityql.config.entity.it.generated"
+
+    String fileNamePattern = "Q%s.groovy"
+
+    String destinationPath = getClass().getResource(".").getPath().replace("/", "\\").substring(1) + "..\\..\\..\\..\\..\\..\\..\\src\\test\\groovy\\pl\\exsio\\querydsl\\entityql\\config\\entity\\it\\generated"
+
     QExporter exporter = new QExporter();
 
-    def "should export q class tyo static meta model"() {
+    @Ignore
+    def "should export integration q classes to static meta models"() {
         when:
-        Q<Spec> spec = qEntity(Spec)
-        Q<SubSpec> subSpec = qEntity(SubSpec)
-        Q<UploadedFile> UploadedFile = qEntity(UploadedFile)
-        Q<User> user = qEntity(User)
-        Q<CompositeFk> CompositeFk = qEntity(CompositeFk)
-        Q<CompositePk> CompositePk = qEntity(CompositePk)
-        exporter.export(spec, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
-        exporter.export(subSpec, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
-        exporter.export(UploadedFile, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
-        exporter.export(user, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
-        exporter.export(CompositeFk, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
-        exporter.export(CompositePk, "Q%s.java", "pl.exsio.querydsl.entityql.config.entity.spec.generated", "e:\\tmp")
+
+        exporter.export(qEntity(Book), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(CompositePk), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(CompositeFk), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(Group), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(GroupAdmin), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(Order), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(OrderItem), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(SingularPk), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(UploadedFile), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(User), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(UserGroup), fileNamePattern, pkgName, destinationPath)
+
         then:
         noExceptionThrown()
     }

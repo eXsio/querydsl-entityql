@@ -1,3 +1,26 @@
-{% macro printColumnType(path) %}{{ path.get().class.simpleName }}{% if (path.parametrized) %}<{{replace(path.parametrizedType.name, { '$': '.' })}}>{% endif %}{% if (path.config.originalFieldType.array) %}<{{path.config.originalFieldType.componentType}}[], {{path.config.originalFieldType.componentType}}>{% endif %}{% endmacro %}
-{% macro printJoinColumnType(fk) %}{{ fk.get().class.simpleName }}<{{fk.parametrizedType.name}}>{% endmacro %}
-{% macro printOriginalType(path) %}{% if (path.config.originalFieldType.array) %}{{path.config.originalFieldType.componentType}}[].class{% else %}{{path.config.originalFieldType.name}}.class{% endif %}{% endmacro %}
+{% macro printColumnType(path) %}
+    {{ path.get().class.simpleName }}
+    {% if (path.parametrized) %}
+        <{{replace(path.parametrizedType.name, { '$': '.' })}}>
+    {% endif %}
+    {% if (path.config.originalFieldType.array) %}
+        {% if (path.config.originalFieldType.componentType.primitive) %}
+            <{{path.config.originalFieldType.componentType}}[], {{wrapPrimitive(path.config.originalFieldType.componentType).name}}>
+        {% else %}
+            <{{path.config.originalFieldType.componentType}}[], {{path.config.originalFieldType.componentType}}>
+        {% endif %}
+
+    {% endif %}
+{% endmacro %}
+
+{% macro printJoinColumnType(fk) %}
+    {{ fk.get().class.simpleName }}<{{fk.parametrizedType.name}}>
+{% endmacro %}
+
+{% macro printOriginalType(path) %}
+    {% if (path.config.originalFieldType.array) %}
+        {{path.config.originalFieldType.componentType}}[].class
+    {% else %}
+        {{path.config.originalFieldType.name}}.class
+    {% endif %}
+{% endmacro %}
