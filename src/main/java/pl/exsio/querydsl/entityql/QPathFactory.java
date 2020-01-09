@@ -1,8 +1,8 @@
 package pl.exsio.querydsl.entityql;
 
-import pl.exsio.querydsl.entityql.path.EnumPath;
-import pl.exsio.querydsl.entityql.path.ObjectPath;
-import pl.exsio.querydsl.entityql.path.UuidPath;
+import pl.exsio.querydsl.entityql.path.QEnumPath;
+import pl.exsio.querydsl.entityql.path.QObjectPath;
+import pl.exsio.querydsl.entityql.path.QUuidPath;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -40,14 +40,14 @@ public abstract class QPathFactory {
         pathFactory.put(LocalTime.class, (q, config) -> new QPath(q.createTime(config.getName(), LocalTime.class), config, LocalTime.class));
         pathFactory.put(Timestamp.class, (q, config) -> new QPath(q.createDateTime(config.getName(), Timestamp.class), config, Timestamp.class));
         pathFactory.put(Date.class, (q, config) -> new QPath(q.createDate(config.getName(), Date.class), config, Date.class));
-        pathFactory.put(UUID.class, (q, config) -> new QPath(new UuidPath(q, config.getName()), config));
+        pathFactory.put(UUID.class, (q, config) -> new QPath(new QUuidPath(q, config.getName()), config));
         pathFactory.put(Enum.class, (q, config) -> new QPath(createEnumeratedPath(q, config), config, config.getOriginalFieldType()));
-        pathFactory.put(Object.class, (q, config) -> new QPath(new ObjectPath<>(q.createSimple(config.getName(), getType(config))), config, config.getOriginalFieldType()));
+        pathFactory.put(Object.class, (q, config) -> new QPath(new QObjectPath<>(q.createSimple(config.getName(), getType(config))), config, config.getOriginalFieldType()));
     }
 
     @SuppressWarnings(value = "unchecked")
-    private static EnumPath<?> createEnumeratedPath(QBase<?> q, QPathConfig config) {
-        return new EnumPath(config.getFieldType(), q, config.getName());
+    private static QEnumPath<?> createEnumeratedPath(QBase<?> q, QPathConfig config) {
+        return new QEnumPath(config.getFieldType(), q, config.getName());
     }
 
     @SuppressWarnings(value = "unchecked")

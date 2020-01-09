@@ -21,6 +21,6 @@
     {% if (path.config.originalFieldType.array) %}
         {{path.config.originalFieldType.componentType}}[].class
     {% else %}
-        {{path.config.originalFieldType.name}}.class
+        {{replace(path.config.originalFieldType.name, { '$': '.' })}}.class
     {% endif %}
 {% endmacro %}

@@ -7,14 +7,14 @@ import pl.exsio.querydsl.entityql.QBase
 import pl.exsio.querydsl.entityql.QColumnMetadataFactory
 import pl.exsio.querydsl.entityql.QPathConfig
 import pl.exsio.querydsl.entityql.QPathFactory
-import pl.exsio.querydsl.entityql.path.UuidPath
+import pl.exsio.querydsl.entityql.path.QUuidPath
 
 public final class QUploadedFile
     extends QBase<pl.exsio.querydsl.entityql.config.entity.it.UploadedFile> {
 
   public static final QUploadedFile INSTANCE = new QUploadedFile();
 
-  public final UuidPath id;
+  public final QUuidPath id;
 
   public final ArrayPath<byte[], java.lang.Byte> data;
 
@@ -31,7 +31,7 @@ public final class QUploadedFile
     id:
     {
       this.id =
-          ((UuidPath)
+          ((QUuidPath)
               QPathFactory.create(
                       this,
                       new QPathConfig(

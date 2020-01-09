@@ -9,11 +9,11 @@ import com.querydsl.core.types.dsl.SimplePath;
 import javax.annotation.Nullable;
 import java.lang.reflect.AnnotatedElement;
 
-public class ObjectPath<T> extends SimpleExpression<T> implements Path<T> {
+public class QObjectPath<T> extends SimpleExpression<T> implements Path<T> {
 
     private final SimplePath<T> delegatePath;
 
-    public ObjectPath(SimplePath<T> delegatePath) {
+    public QObjectPath(SimplePath<T> delegatePath) {
         super(delegatePath);
         this.delegatePath = delegatePath;
     }

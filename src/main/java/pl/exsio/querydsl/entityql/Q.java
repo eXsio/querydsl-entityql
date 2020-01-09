@@ -8,8 +8,8 @@ import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
-import pl.exsio.querydsl.entityql.path.EnumPath;
-import pl.exsio.querydsl.entityql.path.UuidPath;
+import pl.exsio.querydsl.entityql.path.QEnumPath;
+import pl.exsio.querydsl.entityql.path.QUuidPath;
 
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
@@ -115,14 +115,14 @@ public class Q<E> extends QBase<E> {
     }
 
     @SuppressWarnings(value = "unchecked")
-    public <T extends Enum<T>> EnumPath<T> enumerated(String fieldName) {
+    public <T extends Enum<T>> QEnumPath<T> enumerated(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (EnumPath<T>) this.columns.get(fieldName).get();
+        return (QEnumPath<T>) this.columns.get(fieldName).get();
     }
 
-    public UuidPath uuid(String fieldName) {
+    public QUuidPath uuid(String fieldName) {
         checkIfColumnExists(fieldName);
-        return (UuidPath) this.columns.get(fieldName).get();
+        return (QUuidPath) this.columns.get(fieldName).get();
     }
 
     @SuppressWarnings(value = "unchecked")
