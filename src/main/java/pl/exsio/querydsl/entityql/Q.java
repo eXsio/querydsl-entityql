@@ -4,6 +4,7 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
+import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
@@ -18,10 +19,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Q<E> extends QBase<E> {
@@ -33,6 +31,8 @@ public class Q<E> extends QBase<E> {
     private PrimaryKey<?> id;
 
     List<QColumnDefinition> idColumns = new LinkedList<>();
+
+    private final Map<Path<?>, ColumnMetadata> columnMetadata = new LinkedHashMap<>();
 
     Q(Class<E> type, String variable, String schema, String table) {
         super(type, variable, schema, table);
@@ -78,6 +78,12 @@ public class Q<E> extends QBase<E> {
                 .map(e -> e.getValue().get())
                 .toArray(Path[]::new);
         this.id = createPrimaryKey(pkPaths);
+    }
+
+    @Override
+    protected <P extends Path<?>> P addMetadata(P path, ColumnMetadata metadata) {
+        this.columnMetadata.put(path, metadata);
+        return super.addMetadata(path, metadata);
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -239,5 +245,7 @@ public class Q<E> extends QBase<E> {
         return (PrimaryKey<E>) id;
     }
 
-
+    Map<Path<?>, ColumnMetadata> getColumnMetadata() {
+        return columnMetadata;
+    }
 }

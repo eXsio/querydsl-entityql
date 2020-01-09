@@ -31,6 +31,7 @@
         <h2.version>1.4.200</h2.version>
         <spring-jdbc.version>5.2.2.RELEASE</spring-jdbc.version>
         <reflections.version>0.9.11</reflections.version>
+        <jtwig.version>5.87.0.RELEASE</jtwig.version>
 
     </properties>
 
@@ -67,6 +68,21 @@
             <version>${reflections.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- if you want to export Q classes to Static Meta Models -->
+        <dependency>
+            <groupId>org.jtwig</groupId>
+            <artifactId>jtwig-core</artifactId>
+            <version>${jtwig.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+            <scope>provided</scope>
+        </dependency>
+
 
         <!-- testing -->
         <dependency>

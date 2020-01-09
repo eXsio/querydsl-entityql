@@ -1,0 +1,25 @@
+package {{ package }};
+
+import com.querydsl.core.types.dsl.*;
+import com.querydsl.sql.*;
+import com.querydsl.sql.RelationalPathBase;
+
+public final class {{ className }} extends RelationalPathBase<{{entity}}> {
+
+    {% for name, path in q.columns %}
+    public final {{ path.get().class.simpleName }}{% if (path.parametrized) %}<{{path.parametrizedType.name}}>{% endif %} {{ name }};
+    {% endfor %}
+    {% for name, fk in q.joinColumns %}
+    public final {{ fk.get().class.simpleName }}<{{fk.parametrizedType.name}}> {{ name }};
+    {% endfor %}
+
+    public {{ className }}() {
+       this("{{ q.tableName }}");
+    }
+
+    public {{ className }}(String variable) {
+        super({{entity}}, variable, "{{q.schemaName }}", "{{ q.tableName }}");
+    }
+
+
+}

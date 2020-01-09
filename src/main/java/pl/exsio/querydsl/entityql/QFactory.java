@@ -111,4 +111,6 @@ class QFactory<E> {
     Map<Field, Map.Entry<Integer, Column>> getColumns() {
         return columns;
     }
+
+
 }
