@@ -1,4 +1,4 @@
-package pl.exsio.querydsl.entityql.it
+package pl.exsio.querydsl.entityql.it.generated
 
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,6 +9,9 @@ import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.entity.it.CompositeFk
 import pl.exsio.querydsl.entityql.config.entity.it.CompositePk
 import pl.exsio.querydsl.entityql.config.entity.it.SingularPk
+import pl.exsio.querydsl.entityql.config.entity.it.generated.QCompositeFk
+import pl.exsio.querydsl.entityql.config.entity.it.generated.QCompositePk
+import pl.exsio.querydsl.entityql.config.entity.it.generated.QSingularPk
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
@@ -16,7 +19,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QCompositeFkIT extends Specification {
+class QCompositeFkGeneratedIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
@@ -24,21 +27,21 @@ class QCompositeFkIT extends Specification {
 
     def "should get all rows from an Entity based on a Composite FK Join to Composite PK"() {
         given:
-        Q<CompositePk> compositePk = qEntity(CompositePk)
-        Q<CompositeFk> compositeFk = qEntity(CompositeFk)
+        QCompositePk compositePk = QCompositePk.INSTANCE
+        QCompositeFk compositeFk = QCompositeFk.INSTANCE
 
         when:
         List<CompositePk> pks = queryFactory.query()
                 .select(
                         constructor(
                                 CompositePk,
-                                compositePk.longNumber("id1"),
-                                compositePk.string("id2"),
-                                compositePk.string("desc")
+                                compositePk.id1,
+                                compositePk.id2,
+                                compositePk.desc
                         ))
                 .from(compositeFk)
-                .innerJoin(compositeFk.<CompositePk> joinColumn("compositePk"), compositePk)
-                .where(compositeFk.string("desc").eq("fkd2"))
+                .innerJoin(compositeFk.compositePk, compositePk)
+                .where(compositeFk.desc.eq("fkd2"))
                 .fetch()
 
         then:
@@ -52,21 +55,21 @@ class QCompositeFkIT extends Specification {
 
     def "should get all rows from an Entity based on a Composite FK Join to Singular PK"() {
         given:
-        Q<SingularPk> singularPk = qEntity(SingularPk)
-        Q<CompositeFk> compositeFk = qEntity(CompositeFk)
+        QSingularPk singularPk = QSingularPk.INSTANCE
+        QCompositeFk compositeFk = QCompositeFk.INSTANCE
 
         when:
         List<SingularPk> pks = queryFactory.query()
                 .select(
                         constructor(
                                 SingularPk,
-                                singularPk.longNumber("id1"),
-                                singularPk.string("id2"),
-                                singularPk.string("desc")
+                                singularPk.id1,
+                                singularPk.id2,
+                                singularPk.desc
                         ))
                 .from(compositeFk)
-                .innerJoin(compositeFk.<SingularPk> joinColumn("singularPk"), singularPk)
-                .where(compositeFk.string("desc").eq("fkd2"))
+                .innerJoin(compositeFk.singularPk, singularPk)
+                .where(compositeFk.desc.eq("fkd2"))
                 .fetch()
 
         then:

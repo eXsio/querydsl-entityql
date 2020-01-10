@@ -1,4 +1,4 @@
-package pl.exsio.querydsl.entityql.it
+package pl.exsio.querydsl.entityql.it.dynamic
 
 
 import com.querydsl.sql.SQLQueryFactory
@@ -23,7 +23,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
-class QDmlIT extends Specification {
+class QDmlDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory

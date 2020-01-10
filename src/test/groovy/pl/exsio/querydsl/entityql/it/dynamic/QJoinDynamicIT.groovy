@@ -1,4 +1,4 @@
-package pl.exsio.querydsl.entityql.it
+package pl.exsio.querydsl.entityql.it.dynamic
 
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +16,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QJoinIT extends Specification {
+class QJoinDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
@@ -184,66 +184,6 @@ class QJoinIT extends Specification {
                 .innerJoin(userGroup.<Group>joinColumn("group"), group)
                 .innerJoin(userGroup.<User>joinColumn("user"), user)
                 .where(user.longNumber("id").eq(2L))
-                .fetch()
-
-        then:
-        groups.size() == 1
-        groups.forEach { g ->
-            assert g.id == 1
-            assert g.name == "G1"
-        }
-    }
-
-    def "should get all rows from an Entity based on a Column / ON Join - static meta"() {
-        given:
-        QBook book = QBook.INSTANCE
-        QOrder order = QOrder.INSTANCE
-        QOrderItem orderItem = QOrderItem.INSTANCE
-
-        when:
-        List<Book> books = queryFactory.query()
-                .select(
-                        constructor(
-                                Book,
-                                book.id,
-                                book.name,
-                                book.desc,
-                                book.price
-                        ))
-                .from(book)
-                .innerJoin(orderItem).on(orderItem.bookId.eq(book.id))
-                .innerJoin(order).on(orderItem.orderId.eq(order.id))
-                .where(order.id.eq(1L))
-                .fetch()
-
-        then:
-        books.size() == 3
-        books.forEach { p ->
-            assert p.id != null
-            assert p.name != null
-            assert p.desc != null
-            assert p.price != null
-        }
-    }
-
-    def "should get all rows from an Entity based on a Join Table mapping using FK join - static meta"() {
-        given:
-        QGroup group = QGroup.INSTANCE
-        QUser user = QUser.INSTANCE
-        QUserGroup userGroup = QUserGroup.INSTANCE
-
-        when:
-        List<Group> groups = queryFactory.query()
-                .select(
-                        constructor(
-                                Group,
-                                group.id,
-                                group.name
-                        ))
-                .from(userGroup)
-                .innerJoin(userGroup.group, group)
-                .innerJoin(userGroup.user, user)
-                .where(user.id.eq(2L))
                 .fetch()
 
         then:

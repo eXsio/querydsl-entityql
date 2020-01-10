@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
-public class QExporterSpec extends Specification {
+public class QExporterITSpec extends Specification {
 
     String pkgName = "pl.exsio.querydsl.entityql.config.entity.it.generated"
 
@@ -22,7 +22,6 @@ public class QExporterSpec extends Specification {
     @Ignore
     def "should export integration q classes to static meta models"() {
         when:
-
         exporter.export(qEntity(Book), fileNamePattern, pkgName, destinationPath)
         exporter.export(qEntity(CompositePk), fileNamePattern, pkgName, destinationPath)
         exporter.export(qEntity(CompositeFk), fileNamePattern, pkgName, destinationPath)

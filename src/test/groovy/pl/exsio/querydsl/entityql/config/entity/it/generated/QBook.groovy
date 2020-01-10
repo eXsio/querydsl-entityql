@@ -1,13 +1,13 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.it.generated;
 
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.QBase
-import pl.exsio.querydsl.entityql.QColumnMetadataFactory
-import pl.exsio.querydsl.entityql.QPathConfig
-import pl.exsio.querydsl.entityql.QPathFactory
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.*;
+import com.querydsl.sql.*;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.*;
+import pl.exsio.querydsl.entityql.path.*;
+import pl.exsio.querydsl.entityql.type.*;
 
 public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.it.Book> {
 
@@ -94,5 +94,29 @@ public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.
           ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Book>)
               createPrimaryKey(paths.toArray(new Path[0])));
     }
+  }
+
+  @SuppressWarnings(value = "unchecked")
+  public <C extends StoreClause<C>> StoreClause<C> set(StoreClause<C> clause, Object... params) {
+    if (params.length % 2 != 0) {
+      throw new InvalidArgumentException("Odd number of parameters");
+    }
+    for (int i = 0; i < params.length - 1; i += 2) {
+      Object key = params[i];
+      Object value = params[i + 1];
+      if (!(key instanceof Path)) {
+        throw new InvalidArgumentException("Param key has to be Path");
+      }
+      clause.set((Path<Object>) key, value);
+    }
+    return clause;
+  }
+
+  public Q<pl.exsio.querydsl.entityql.config.entity.it.Book> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Book.class);
+  }
+
+  public Q<pl.exsio.querydsl.entityql.config.entity.it.Book> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Book.class, variable);
   }
 }

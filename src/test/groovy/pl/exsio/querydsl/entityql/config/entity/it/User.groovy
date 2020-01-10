@@ -23,7 +23,7 @@ public class User<T> {
 
     @Column(name = "USER_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type
+    private Type typeStr
 
     @Column(name = "USER_TYPE_ORD", nullable = false)
     @Enumerated(EnumType.ORDINAL)
@@ -72,11 +72,11 @@ public class User<T> {
     }
 
     Type getType() {
-        return type
+        return typeStr
     }
 
     void setType(Type type) {
-        this.type = type
+        this.typeStr = type
         this.typeDef = type
         this.typeOrd = type
     }

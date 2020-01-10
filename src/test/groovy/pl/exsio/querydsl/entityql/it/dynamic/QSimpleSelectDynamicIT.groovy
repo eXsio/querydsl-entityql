@@ -1,4 +1,4 @@
-package pl.exsio.querydsl.entityql.it
+package pl.exsio.querydsl.entityql.it.dynamic
 
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QSimpleSelectIT extends Specification {
+class QSimpleSelectDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
@@ -78,7 +78,7 @@ class QSimpleSelectIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.string("name"))
-                .where(user.<User.Type> enumerated("type").eq(User.Type.ADMIN))
+                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -92,7 +92,7 @@ class QSimpleSelectIT extends Specification {
         when:
         String createdBy = queryFactory.query()
                 .select(user.<String> column("createdBy"))
-                .where(user.<User.Type> enumerated("type").eq(User.Type.ADMIN))
+                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -106,7 +106,7 @@ class QSimpleSelectIT extends Specification {
         when:
         Date createdBy = queryFactory.query()
                 .select(user.<Date> column("createdAt"))
-                .where(user.<User.Type> enumerated("type").eq(User.Type.ADMIN))
+                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
                 .from(user).fetchOne()
 
         then:
