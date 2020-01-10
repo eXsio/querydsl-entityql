@@ -246,7 +246,8 @@ String fileNamePattern = "Q%s.java"; // file/class name pattern
 String packageName = "com.example.yourpackage"; //package of the generated class
 String destinationPath = "/some/destination/path"; //physical location of resulting *.java file
 
-new QExporter().export(qEntity(Spec), fileNamePattern, packageName, destinationPath);
+//this will generate a Java class under "/some/destination/path/QYourEntity.java"
+new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, destinationPath);
 
 ```
 
@@ -369,7 +370,7 @@ A lot of developers are scared anytime they see Java Reflection in use. Even tho
 to scan the Entity classes, the results of the scan are cached in memory, so the actual Reflection is used only during 
 the first creation of the ```Q``` model.
 
-Having that said, there are always cases when a cutting edge performance is required (for example dynamically scaling micro-services with Kubernetes).
+Having that said, there are always cases when a cutting edge performance is required (for example when dynamically scaling micro-services with Kubernetes).
 In such situations we can skip the dynamic models altogether and focus on Static Meta Models.
 
 To find out how much is the Static model faster than the Dynamic one, I've decided to implement couple of simple benchmarks 
