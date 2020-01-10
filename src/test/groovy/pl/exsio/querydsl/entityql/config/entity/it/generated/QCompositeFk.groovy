@@ -64,8 +64,8 @@ public final class QCompositeFk
 
     compositePk:
     {
-      List<Path> paths = new ArrayList();
-      List<Path> foreignColumnNames = new ArrayList();
+      List<Path> paths = new ArrayList<>();
+      List<String> foreignColumnNames = new ArrayList<>();
 
       Path<?> compositePk0 =
           QPathFactory.create(
@@ -91,13 +91,13 @@ public final class QCompositeFk
 
       this.compositePk =
           this.<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>createForeignKey(
-              paths, foreignColumnNames);
+              (List<? extends Path<?>>) paths, foreignColumnNames);
     }
 
     singularPk:
     {
-      List<Path> paths = new ArrayList();
-      List<Path> foreignColumnNames = new ArrayList();
+      List<Path> paths = new ArrayList<>();
+      List<String> foreignColumnNames = new ArrayList<>();
 
       Path<?> singularPk0 =
           QPathFactory.create(
@@ -123,7 +123,7 @@ public final class QCompositeFk
 
       this.singularPk =
           this.<pl.exsio.querydsl.entityql.config.entity.it.SingularPk>createForeignKey(
-              paths, foreignColumnNames);
+              (List<? extends Path<?>>) paths, foreignColumnNames);
     }
 
     _primaryKey:

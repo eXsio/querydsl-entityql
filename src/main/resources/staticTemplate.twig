@@ -54,7 +54,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
                     {% for fcName in fk.foreignColumnNames %}
                         foreignColumnNames.add("{{fcName}}");
                     {% endfor %}
-                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(paths, foreignColumnNames);
+                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey((List<? extends Path<?>>) paths, foreignColumnNames);
                 }
             {% else %}
                 {{name}}: {
