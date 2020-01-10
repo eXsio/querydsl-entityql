@@ -9,6 +9,8 @@ import pl.exsio.querydsl.entityql.path.*;
 import pl.exsio.querydsl.entityql.type.*;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.dml.StoreClause;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class {{ className }} extends QBase<{{entityName}}> {
 
@@ -30,7 +32,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
 
     @SuppressWarnings(value = "unchecked")
     public {{ className }}(String variable) {
-        super({{entityName}}, variable, "{{q.schemaName }}", "{{ q.tableName }}");
+        super({{entityName}}.class, variable, "{{q.schemaName }}", "{{ q.tableName }}");
 
         {% for name, path in q.columns %}
         {{name}}: {
