@@ -255,7 +255,7 @@ Generated classes are fully compatible with Java and Groovy. You can mix and mat
 
 ```java
 
- //create ad-hoc QueryDSL Models out of your Entity classes
+ //mix and match dynamic and static models
  QBook book = QBook.INSTANCE; 
  QOrder order = QOrder.INSTANCE;
  Q<OrderItem> orderItem = qEntity(OrderItem.class);
