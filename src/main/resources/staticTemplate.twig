@@ -40,35 +40,33 @@ public final class {{ className }} extends QBase<{{entityName}}> {
         {% endfor %}
 
         {% for name, fk in q.joinColumns %}
-
             {% if (fk.getPaths().size() > 1) %}
-            {{name}}: {
-                List<Path> paths = new ArrayList();
-                List<Path> foreignColumnNames = new ArrayList();
-                {% for fkPath in fk.getPaths().keySet() %}
-                    Path<?> {{name}}{{loop.index0}}  = QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})).get();
-                    addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create("{{fkPath.config.name}}",{{fkPath.config.idx}},{{fkPath.config.sqlType}},{{fkPath.config.nullable}}));
-                    paths.add({{name}}{{loop.index0}});
-                {% endfor %}
-                {% for fcName in fk.foreignColumnNames %}
-                    foreignColumnNames.add("{{fcName}}");
-                {% endfor %}
-                this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(paths, foreignColumnNames));
-            }
+                {{name}}: {
+                    List<Path> paths = new ArrayList();
+                    List<Path> foreignColumnNames = new ArrayList();
+                    {% for fkPath in fk.getPaths().keySet() %}
+                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})).get();
+                        addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create("{{fkPath.config.name}}",{{fkPath.config.idx}},{{fkPath.config.sqlType}},{{fkPath.config.nullable}}));
+                        paths.add({{name}}{{loop.index0}});
+                    {% endfor %}
+                    {% for fcName in fk.foreignColumnNames %}
+                        foreignColumnNames.add("{{fcName}}");
+                    {% endfor %}
+                    this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(paths, foreignColumnNames));
+                }
             {% else %}
-            {{name}}: {
-                this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}"));
-            }
+                {{name}}: {
+                    this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}"));
+                }
             {% endif %}
-
         {% endfor %}
 
         _primaryKey: {
-         List<Path> paths = new ArrayList();
-         {% for id in q.idColumns %}
-                     paths.add(this.{{id.field.name}});
-         {% endfor %}
-         this._primaryKey = ((PrimaryKey<{{entityName}}>) createPrimaryKey(paths.toArray(new Path[0])));
+             List<Path> paths = new ArrayList();
+             {% for id in q.idColumns %}
+                         paths.add(this.{{id.field.name}});
+             {% endfor %}
+             this._primaryKey = ((PrimaryKey<{{entityName}}>) createPrimaryKey(paths.toArray(new Path[0])));
         }
     }
 
@@ -94,5 +92,5 @@ public final class {{ className }} extends QBase<{{entityName}}> {
 
     public Q<{{entityName}}> dynamic(String variable) {
             return EntityQL.qEntity({{entityName}}.class, variable);
-        }
+    }
 }
