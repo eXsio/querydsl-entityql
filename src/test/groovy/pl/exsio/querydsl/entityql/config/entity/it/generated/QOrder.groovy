@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -27,7 +29,7 @@ public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity
 
   @SuppressWarnings(value = "unchecked")
   public QOrder(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Order, variable, "", "ORDERS");
+    super(pl.exsio.querydsl.entityql.config.entity.it.Order.class, variable, "", "ORDERS");
 
     id:
     {
@@ -56,8 +58,8 @@ public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity
     user:
     {
       this.user =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.User>)
-              createForeignKey(this.userId, "USER_ID"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.User>createForeignKey(
+              this.userId, "USER_ID");
     }
 
     _primaryKey:
@@ -66,9 +68,7 @@ public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Order>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

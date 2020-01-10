@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -26,7 +28,8 @@ public final class QGroupAdmin
 
   @SuppressWarnings(value = "unchecked")
   public QGroupAdmin(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin, variable, "", "GROUP_ADMINS");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin.class, variable, "", "GROUP_ADMINS");
 
     id:
     {
@@ -58,9 +61,7 @@ public final class QGroupAdmin
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

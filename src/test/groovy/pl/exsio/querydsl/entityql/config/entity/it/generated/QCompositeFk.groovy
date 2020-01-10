@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -30,7 +32,11 @@ public final class QCompositeFk
 
   @SuppressWarnings(value = "unchecked")
   public QCompositeFk(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.CompositeFk, variable, "", "COMPOSITE_FK");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.CompositeFk.class,
+        variable,
+        "",
+        "COMPOSITE_FK");
 
     id:
     {
@@ -84,8 +90,8 @@ public final class QCompositeFk
       foreignColumnNames.add("ID_2");
 
       this.compositePk =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>)
-              createForeignKey(paths, foreignColumnNames));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>createForeignKey(
+              paths, foreignColumnNames);
     }
 
     singularPk:
@@ -116,8 +122,8 @@ public final class QCompositeFk
       foreignColumnNames.add("ID_2");
 
       this.singularPk =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.SingularPk>)
-              createForeignKey(paths, foreignColumnNames));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.SingularPk>createForeignKey(
+              paths, foreignColumnNames);
     }
 
     _primaryKey:
@@ -126,9 +132,7 @@ public final class QCompositeFk
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.CompositeFk>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

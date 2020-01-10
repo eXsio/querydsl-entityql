@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -26,7 +28,11 @@ public final class QUploadedFile
 
   @SuppressWarnings(value = "unchecked")
   public QUploadedFile(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.UploadedFile, variable, "", "UPLOADED_FILES");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.UploadedFile.class,
+        variable,
+        "",
+        "UPLOADED_FILES");
 
     id:
     {
@@ -58,9 +64,7 @@ public final class QUploadedFile
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.UploadedFile>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

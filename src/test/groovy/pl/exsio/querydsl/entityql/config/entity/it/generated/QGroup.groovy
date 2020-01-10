@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -29,7 +31,7 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
 
   @SuppressWarnings(value = "unchecked")
   public QGroup(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Group, variable, "", "GROUPS");
+    super(pl.exsio.querydsl.entityql.config.entity.it.Group.class, variable, "", "GROUPS");
 
     id:
     {
@@ -75,8 +77,8 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
     admin:
     {
       this.admin =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin>)
-              createForeignKey(this.adminId, "NAME"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin>createForeignKey(
+              this.adminId, "NAME");
     }
 
     _primaryKey:
@@ -85,9 +87,7 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Group>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

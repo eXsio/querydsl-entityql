@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -29,7 +31,7 @@ public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
   @SuppressWarnings(value = "unchecked")
   public QBook(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Book, variable, "", "BOOKS");
+    super(pl.exsio.querydsl.entityql.config.entity.it.Book.class, variable, "", "BOOKS");
 
     id:
     {
@@ -90,9 +92,7 @@ public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Book>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

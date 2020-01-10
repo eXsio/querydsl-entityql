@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -33,7 +35,7 @@ public final class QOrderItem extends QBase<pl.exsio.querydsl.entityql.config.en
 
   @SuppressWarnings(value = "unchecked")
   public QOrderItem(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.OrderItem, variable, "", "ORDER_ITEMS");
+    super(pl.exsio.querydsl.entityql.config.entity.it.OrderItem.class, variable, "", "ORDER_ITEMS");
 
     id:
     {
@@ -86,15 +88,15 @@ public final class QOrderItem extends QBase<pl.exsio.querydsl.entityql.config.en
     book:
     {
       this.book =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.Book>)
-              createForeignKey(this.bookId, "BOOK_ID"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.Book>createForeignKey(
+              this.bookId, "BOOK_ID");
     }
 
     order:
     {
       this.order =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.Order>)
-              createForeignKey(this.orderId, "ORDER_ID"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.Order>createForeignKey(
+              this.orderId, "ORDER_ID");
     }
 
     _primaryKey:
@@ -103,9 +105,7 @@ public final class QOrderItem extends QBase<pl.exsio.querydsl.entityql.config.en
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.OrderItem>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

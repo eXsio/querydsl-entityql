@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -29,7 +31,8 @@ public final class QUserGroup extends QBase<pl.exsio.querydsl.entityql.config.en
 
   @SuppressWarnings(value = "unchecked")
   public QUserGroup(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.UserGroup, variable, "", "USERS_GROUPS");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.UserGroup.class, variable, "", "USERS_GROUPS");
 
     groupId:
     {
@@ -58,15 +61,15 @@ public final class QUserGroup extends QBase<pl.exsio.querydsl.entityql.config.en
     group:
     {
       this.group =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.Group>)
-              createForeignKey(this.groupId, "GROUP_ID"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.Group>createForeignKey(
+              this.groupId, "GROUP_ID");
     }
 
     user:
     {
       this.user =
-          ((ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.User>)
-              createForeignKey(this.userId, "USER_ID"));
+          this.<pl.exsio.querydsl.entityql.config.entity.it.User>createForeignKey(
+              this.userId, "USER_ID");
     }
 
     _primaryKey:
@@ -77,9 +80,7 @@ public final class QUserGroup extends QBase<pl.exsio.querydsl.entityql.config.en
 
       paths.add(this.userId);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.UserGroup>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

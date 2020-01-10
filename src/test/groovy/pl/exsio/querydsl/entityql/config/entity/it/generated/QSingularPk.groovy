@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -28,7 +30,8 @@ public final class QSingularPk
 
   @SuppressWarnings(value = "unchecked")
   public QSingularPk(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.SingularPk, variable, "", "SINGULAR_PK");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class, variable, "", "SINGULAR_PK");
 
     id1:
     {
@@ -72,9 +75,7 @@ public final class QSingularPk
 
       paths.add(this.id1);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.SingularPk>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

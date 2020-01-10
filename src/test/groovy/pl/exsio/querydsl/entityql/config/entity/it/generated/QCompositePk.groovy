@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -28,7 +30,11 @@ public final class QCompositePk
 
   @SuppressWarnings(value = "unchecked")
   public QCompositePk(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.CompositePk, variable, "", "COMPOSITE_PK");
+    super(
+        pl.exsio.querydsl.entityql.config.entity.it.CompositePk.class,
+        variable,
+        "",
+        "COMPOSITE_PK");
 
     id1:
     {
@@ -74,9 +80,7 @@ public final class QCompositePk
 
       paths.add(this.id2);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

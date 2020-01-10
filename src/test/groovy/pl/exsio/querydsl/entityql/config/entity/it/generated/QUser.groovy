@@ -4,6 +4,8 @@ import com.querydsl.core.dml.StoreClause;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import pl.exsio.querydsl.entityql.*;
 import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
@@ -35,7 +37,7 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
   @SuppressWarnings(value = "unchecked")
   public QUser(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.User, variable, "", "USERS");
+    super(pl.exsio.querydsl.entityql.config.entity.it.User.class, variable, "", "USERS");
 
     id:
     {
@@ -152,9 +154,7 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
       paths.add(this.id);
 
-      this._primaryKey =
-          ((PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.User>)
-              createPrimaryKey(paths.toArray(new Path[0])));
+      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
     }
   }
 

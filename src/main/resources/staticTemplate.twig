@@ -54,11 +54,11 @@ public final class {{ className }} extends QBase<{{entityName}}> {
                     {% for fcName in fk.foreignColumnNames %}
                         foreignColumnNames.add("{{fcName}}");
                     {% endfor %}
-                    this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(paths, foreignColumnNames));
+                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(paths, foreignColumnNames);
                 }
             {% else %}
                 {{name}}: {
-                    this.{{name}} = (({{macros.printJoinColumnType(fk)}}) createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}"));
+                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}");
                 }
             {% endif %}
         {% endfor %}
@@ -68,7 +68,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
              {% for id in q.idColumns %}
                          paths.add(this.{{id.field.name}});
              {% endfor %}
-             this._primaryKey = ((PrimaryKey<{{entityName}}>) createPrimaryKey(paths.toArray(new Path[0])));
+             this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
         }
     }
 
