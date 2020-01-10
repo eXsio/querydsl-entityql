@@ -44,7 +44,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
         {% for name, fk in q.joinColumns %}
             {% if (fk.getPaths().size() > 1) %}
                 {{name}}: {
-                    List<Path> paths = new ArrayList<>();
+                    List paths = new ArrayList();
                     List<String> foreignColumnNames = new ArrayList<>();
                     {% for fkPath in fk.getPaths().keySet() %}
                         Path<?> {{name}}{{loop.index0}}  = QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})).get();
@@ -54,7 +54,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
                     {% for fcName in fk.foreignColumnNames %}
                         foreignColumnNames.add("{{fcName}}");
                     {% endfor %}
-                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey((List<? extends Path<?>>) paths, foreignColumnNames);
+                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(paths, foreignColumnNames);
                 }
             {% else %}
                 {{name}}: {
