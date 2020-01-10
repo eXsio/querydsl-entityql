@@ -1,17 +1,19 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.it.Book> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QBook INSTANCE = new QBook();
+public final class QJBook extends QBase<pl.exsio.querydsl.entityql.config.entity.JBook> {
+
+  public static final QJBook INSTANCE = new QJBook();
 
   public final NumberPath<java.lang.Long> id;
 
@@ -21,15 +23,15 @@ public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
   public final NumberPath<java.math.BigDecimal> price;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Book> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JBook> _primaryKey;
 
-  public QBook() {
-    this("BOOKS");
+  public QJBook() {
+    this("JBOOKS");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QBook(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Book.class, variable, "", "BOOKS");
+  public QJBook(String variable) {
+    super(pl.exsio.querydsl.entityql.config.entity.JBook.class, variable, "", "JBOOKS");
 
     id:
     {
@@ -110,11 +112,11 @@ public final class QBook extends QBase<pl.exsio.querydsl.entityql.config.entity.
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Book> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Book.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JBook> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JBook.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Book> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Book.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JBook> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JBook.class, variable);
   }
 }

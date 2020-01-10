@@ -12,6 +12,9 @@ import com.querydsl.core.dml.StoreClause;
 import java.util.ArrayList;
 import java.util.List;
 
+{% if(isGroovy) %}
+@groovy.transform.CompileStatic
+{% endif %}
 public final class {{ className }} extends QBase<{{entityName}}> {
 
     public static final {{ className }} INSTANCE = new {{ className }}();
@@ -68,7 +71,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
              {% for id in q.idColumns %}
                          paths.add(this.{{id.field.name}});
              {% endfor %}
-             this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
+             this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
         }
     }
 

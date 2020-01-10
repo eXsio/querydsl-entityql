@@ -1,33 +1,35 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.sql.ForeignKey
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.sql.ForeignKey;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity.it.Order> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QOrder INSTANCE = new QOrder();
+public final class QJOrder extends QBase<pl.exsio.querydsl.entityql.config.entity.JOrder> {
+
+  public static final QJOrder INSTANCE = new QJOrder();
 
   public final NumberPath<java.lang.Long> id;
 
   public final NumberPath<java.lang.Long> userId;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.User> user;
+  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JUser> user;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Order> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JOrder> _primaryKey;
 
-  public QOrder() {
-    this("ORDERS");
+  public QJOrder() {
+    this("JORDERS");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QOrder(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Order.class, variable, "", "ORDERS");
+  public QJOrder(String variable) {
+    super(pl.exsio.querydsl.entityql.config.entity.JOrder.class, variable, "", "JORDERS");
 
     id:
     {
@@ -56,7 +58,7 @@ public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity
     user:
     {
       this.user =
-          this.<pl.exsio.querydsl.entityql.config.entity.it.User>createForeignKey(
+          this.<pl.exsio.querydsl.entityql.config.entity.JUser>createForeignKey(
               this.userId, "USER_ID");
     }
 
@@ -86,11 +88,11 @@ public final class QOrder extends QBase<pl.exsio.querydsl.entityql.config.entity
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Order> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Order.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JOrder> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JOrder.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Order> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Order.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JOrder> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JOrder.class, variable);
   }
 }

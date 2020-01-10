@@ -31,7 +31,8 @@ public class QExporter {
 
         Class<? extends E> type = q.getType();
         String fileName = String.format(fileNamePattern, type.getSimpleName());
-        String exportedClass = renderClass(q, pkgName, type, fileName);
+        boolean isGroovy = fileName.endsWith("groovy");
+        String exportedClass = renderClass(q, pkgName, type, fileName, isGroovy);
         FileUtils.writeStringToFile(
                 new File(Paths.get(destinationPath, fileName).toUri()),
                 formatter.formatSourceAndFixImports(exportedClass),
@@ -39,7 +40,7 @@ public class QExporter {
         );
     }
 
-    private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName) {
+    private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, boolean isGroovy) {
         String className = FilenameUtils.removeExtension(fileName);
         JtwigTemplate template = JtwigTemplate.classpathTemplate("staticTemplate.twig", configuration);
         return template.render(JtwigModel.newModel()
@@ -47,6 +48,7 @@ public class QExporter {
                 .with("className", className)
                 .with("entityName", type.getName())
                 .with("q", q)
+                .with("isGroovy", isGroovy)
         );
     }
 

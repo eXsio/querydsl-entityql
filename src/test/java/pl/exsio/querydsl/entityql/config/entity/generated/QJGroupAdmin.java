@@ -1,33 +1,35 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QGroupAdmin
-    extends QBase<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QGroupAdmin INSTANCE = new QGroupAdmin();
+public final class QJGroupAdmin
+    extends QBase<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> {
+
+  public static final QJGroupAdmin INSTANCE = new QJGroupAdmin();
 
   public final NumberPath<java.lang.Long> id;
 
   public final StringPath name;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> _primaryKey;
 
-  public QGroupAdmin() {
-    this("GROUP_ADMINS");
+  public QJGroupAdmin() {
+    this("JGROUP_ADMINS");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QGroupAdmin(String variable) {
+  public QJGroupAdmin(String variable) {
     super(
-        pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin.class, variable, "", "GROUP_ADMINS");
+        pl.exsio.querydsl.entityql.config.entity.JGroupAdmin.class, variable, "", "JGROUP_ADMINS");
 
     id:
     {
@@ -79,11 +81,11 @@ public final class QGroupAdmin
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JGroupAdmin.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JGroupAdmin.class, variable);
   }
 }

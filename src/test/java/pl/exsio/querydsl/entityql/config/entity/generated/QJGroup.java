@@ -1,18 +1,20 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.ForeignKey
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ForeignKey;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity.it.Group> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QGroup INSTANCE = new QGroup();
+public final class QJGroup extends QBase<pl.exsio.querydsl.entityql.config.entity.JGroup> {
+
+  public static final QJGroup INSTANCE = new QJGroup();
 
   public final NumberPath<java.lang.Long> id;
 
@@ -20,17 +22,17 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
 
   public final StringPath adminId;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin> admin;
+  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> admin;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.Group> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JGroup> _primaryKey;
 
-  public QGroup() {
-    this("GROUPS");
+  public QJGroup() {
+    this("JGROUPS");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QGroup(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.Group.class, variable, "", "GROUPS");
+  public QJGroup(String variable) {
+    super(pl.exsio.querydsl.entityql.config.entity.JGroup.class, variable, "", "JGROUPS");
 
     id:
     {
@@ -76,7 +78,7 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
     admin:
     {
       this.admin =
-          this.<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin>createForeignKey(
+          this.<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin>createForeignKey(
               this.adminId, "NAME");
     }
 
@@ -106,11 +108,11 @@ public final class QGroup extends QBase<pl.exsio.querydsl.entityql.config.entity
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Group> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Group.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JGroup> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JGroup.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.Group> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.Group.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JGroup> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JGroup.class, variable);
   }
 }

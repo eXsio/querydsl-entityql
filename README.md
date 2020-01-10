@@ -173,7 +173,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
 </dependency>
 
 <!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
@@ -248,6 +248,31 @@ String destinationPath = "/some/destination/path"; //physical location of result
 
 //this will generate a Java class under "/some/destination/path/QYourEntity.java"
 new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, destinationPath);
+
+```
+
+Generated classes are fully compatible with Java and Groovy. You can mix and match dynamic and static models:
+
+```java
+
+ //create ad-hoc QueryDSL Models out of your Entity classes
+ QBook book = QBook.INSTANCE; 
+ QOrder order = QOrder.INSTANCE;
+ Q<OrderItem> orderItem = qEntity(OrderItem.class);
+
+//use them by creating and executing a Native Query using QueryDSL API
+Long count = queryFactory.select(count())
+                .from(
+                        select(
+                                 book.name, 
+                                 order.id
+                        )
+                        .from(orderItem)
+                        .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                        .innerJoin(orderItem.<Order> joinColumn("order"), order)
+                        .where(book.price.gt(new BigDecimal("80")))
+                        .groupBy(book.category) 
+                ).fetchOne();
 
 ```
 

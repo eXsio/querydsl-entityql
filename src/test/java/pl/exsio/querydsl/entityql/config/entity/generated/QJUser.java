@@ -1,25 +1,27 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
-import pl.exsio.querydsl.entityql.path.QEnumPath
-import pl.exsio.querydsl.entityql.path.QObjectPath
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
+import pl.exsio.querydsl.entityql.path.QEnumPath;
+import pl.exsio.querydsl.entityql.path.QObjectPath;
 
-@groovy.transform.CompileStatic
-public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.it.User> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QUser INSTANCE = new QUser();
+public final class QJUser extends QBase<pl.exsio.querydsl.entityql.config.entity.JUser> {
+
+  public static final QJUser INSTANCE = new QJUser();
 
   public final NumberPath<java.lang.Long> id;
 
   public final StringPath name;
 
-  public final QEnumPath<pl.exsio.querydsl.entityql.config.entity.it.User.Type> typeStr;
+  public final QEnumPath<pl.exsio.querydsl.entityql.config.entity.JUser.Type> typeStr;
 
   public final NumberPath<java.lang.Long> typeOrd;
 
@@ -29,15 +31,15 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
 
   public final QObjectPath<java.util.Date> createdAt;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.User> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JUser> _primaryKey;
 
-  public QUser() {
-    this("USERS");
+  public QJUser() {
+    this("JUSERS");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QUser(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.it.User.class, variable, "", "USERS");
+  public QJUser(String variable) {
+    super(pl.exsio.querydsl.entityql.config.entity.JUser.class, variable, "", "JUSERS");
 
     id:
     {
@@ -66,11 +68,11 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
     typeStr:
     {
       this.typeStr =
-          ((QEnumPath<pl.exsio.querydsl.entityql.config.entity.it.User.Type>)
+          ((QEnumPath<pl.exsio.querydsl.entityql.config.entity.JUser.Type>)
               QPathFactory.create(
                       this,
                       new QPathConfig(
-                          pl.exsio.querydsl.entityql.config.entity.it.User.Type.class,
+                          pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
                           java.lang.Enum.class,
                           "USER_TYPE",
                           false,
@@ -87,7 +89,7 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
               QPathFactory.create(
                       this,
                       new QPathConfig(
-                          pl.exsio.querydsl.entityql.config.entity.it.User.Type.class,
+                          pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
                           java.lang.Long.class,
                           "USER_TYPE_ORD",
                           false,
@@ -104,7 +106,7 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
               QPathFactory.create(
                       this,
                       new QPathConfig(
-                          pl.exsio.querydsl.entityql.config.entity.it.User.Type.class,
+                          pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
                           java.lang.Long.class,
                           "USER_TYPE_DEF",
                           false,
@@ -174,11 +176,11 @@ public final class QUser extends QBase<pl.exsio.querydsl.entityql.config.entity.
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.User> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.User.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JUser> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JUser.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.User> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.User.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JUser> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JUser.class, variable);
   }
 }

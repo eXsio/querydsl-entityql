@@ -4,11 +4,9 @@ import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
-import pl.exsio.querydsl.entityql.config.entity.it.OrderItem;
 import pl.exsio.querydsl.entityql.config.entity.it.generated.QOrderItem;
 
 import static org.junit.Assert.assertTrue;
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
 public class GeneratedConstructorPerformanceBenchmark implements PerformanceBenchmark {
 

@@ -1,3 +1,10 @@
+- 2.0.1 - 2.0.6
+    - bugfixes
+    - README updates
+- 2.0.0
+    - static meta model generation
+    - handling compisote FKs and PKs
+    - bugfixes
 - 1.0.2
     - explicitly ignore @JoinColumn in an unidirectional @OneToMany relation
     - better example of handling @ManyToMany

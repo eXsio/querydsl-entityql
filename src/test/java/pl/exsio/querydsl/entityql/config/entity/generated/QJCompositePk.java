@@ -1,18 +1,20 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QSingularPk
-    extends QBase<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QSingularPk INSTANCE = new QSingularPk();
+public final class QJCompositePk
+    extends QBase<pl.exsio.querydsl.entityql.config.entity.JCompositePk> {
+
+  public static final QJCompositePk INSTANCE = new QJCompositePk();
 
   public final NumberPath<java.lang.Long> id1;
 
@@ -20,16 +22,16 @@ public final class QSingularPk
 
   public final StringPath desc;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JCompositePk> _primaryKey;
 
-  public QSingularPk() {
-    this("SINGULAR_PK");
+  public QJCompositePk() {
+    this("JCOMPOSITE_PK");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QSingularPk(String variable) {
+  public QJCompositePk(String variable) {
     super(
-        pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class, variable, "", "SINGULAR_PK");
+        pl.exsio.querydsl.entityql.config.entity.JCompositePk.class, variable, "", "JCOMPOSITE_PK");
 
     id1:
     {
@@ -73,6 +75,8 @@ public final class QSingularPk
 
       paths.add(this.id1);
 
+      paths.add(this.id2);
+
       this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
@@ -93,11 +97,11 @@ public final class QSingularPk
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JCompositePk> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JCompositePk.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JCompositePk> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JCompositePk.class, variable);
   }
 }

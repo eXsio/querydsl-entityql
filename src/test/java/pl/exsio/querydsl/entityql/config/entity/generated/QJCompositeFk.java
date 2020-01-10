@@ -1,41 +1,40 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.ForeignKey
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ForeignKey;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QCompositeFk
-    extends QBase<pl.exsio.querydsl.entityql.config.entity.it.CompositeFk> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QCompositeFk INSTANCE = new QCompositeFk();
+public final class QJCompositeFk
+    extends QBase<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> {
+
+  public static final QJCompositeFk INSTANCE = new QJCompositeFk();
 
   public final NumberPath<java.lang.Long> id;
 
   public final StringPath desc;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.CompositePk> compositePk;
+  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JCompositePk> compositePk;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> singularPk;
+  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JSingularPk> singularPk;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.CompositeFk> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> _primaryKey;
 
-  public QCompositeFk() {
-    this("COMPOSITE_FK");
+  public QJCompositeFk() {
+    this("JCOMPOSITE_FK");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QCompositeFk(String variable) {
+  public QJCompositeFk(String variable) {
     super(
-        pl.exsio.querydsl.entityql.config.entity.it.CompositeFk.class,
-        variable,
-        "",
-        "COMPOSITE_FK");
+        pl.exsio.querydsl.entityql.config.entity.JCompositeFk.class, variable, "", "JCOMPOSITE_FK");
 
     id:
     {
@@ -89,7 +88,7 @@ public final class QCompositeFk
       foreignColumnNames.add("ID_2");
 
       this.compositePk =
-          this.<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>createForeignKey(
+          this.<pl.exsio.querydsl.entityql.config.entity.JCompositePk>createForeignKey(
               paths, foreignColumnNames);
     }
 
@@ -121,7 +120,7 @@ public final class QCompositeFk
       foreignColumnNames.add("ID_2");
 
       this.singularPk =
-          this.<pl.exsio.querydsl.entityql.config.entity.it.SingularPk>createForeignKey(
+          this.<pl.exsio.querydsl.entityql.config.entity.JSingularPk>createForeignKey(
               paths, foreignColumnNames);
     }
 
@@ -151,12 +150,11 @@ public final class QCompositeFk
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.CompositeFk> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.CompositeFk.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JCompositeFk.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.CompositeFk> dynamic(String variable) {
-    return EntityQL.qEntity(
-        pl.exsio.querydsl.entityql.config.entity.it.CompositeFk.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JCompositeFk.class, variable);
   }
 }

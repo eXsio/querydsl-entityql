@@ -1,16 +1,14 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated;
+package pl.exsio.querydsl.entityql.config.entity.it.generated
 
-import com.querydsl.core.dml.StoreClause;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.*;
-import com.querydsl.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import pl.exsio.querydsl.entityql.*;
-import pl.exsio.querydsl.entityql.ex.*;
-import pl.exsio.querydsl.entityql.path.*;
-import pl.exsio.querydsl.entityql.type.*;
+import com.querydsl.core.dml.StoreClause
+import com.querydsl.core.types.Path
+import com.querydsl.core.types.dsl.NumberPath
+import com.querydsl.core.types.dsl.StringPath
+import com.querydsl.sql.PrimaryKey
+import pl.exsio.querydsl.entityql.*
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 
+@groovy.transform.CompileStatic
 public final class QCompositePk
     extends QBase<pl.exsio.querydsl.entityql.config.entity.it.CompositePk> {
 
@@ -80,7 +78,7 @@ public final class QCompositePk
 
       paths.add(this.id2);
 
-      this._primaryKey = createPrimaryKey(paths.toArray(new Path[0]));
+      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 

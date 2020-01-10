@@ -1,18 +1,20 @@
-package pl.exsio.querydsl.entityql.config.entity.it.generated
+package pl.exsio.querydsl.entityql.config.entity.generated;
 
-import com.querydsl.core.dml.StoreClause
-import com.querydsl.core.types.Path
-import com.querydsl.core.types.dsl.NumberPath
-import com.querydsl.core.types.dsl.StringPath
-import com.querydsl.sql.PrimaryKey
-import pl.exsio.querydsl.entityql.*
-import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import com.querydsl.core.dml.StoreClause;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.*;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-@groovy.transform.CompileStatic
-public final class QSingularPk
-    extends QBase<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> {
+import java.util.ArrayList;
+import java.util.List;
 
-  public static final QSingularPk INSTANCE = new QSingularPk();
+public final class QJSingularPk
+    extends QBase<pl.exsio.querydsl.entityql.config.entity.JSingularPk> {
+
+  public static final QJSingularPk INSTANCE = new QJSingularPk();
 
   public final NumberPath<java.lang.Long> id1;
 
@@ -20,16 +22,15 @@ public final class QSingularPk
 
   public final StringPath desc;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> _primaryKey;
+  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JSingularPk> _primaryKey;
 
-  public QSingularPk() {
-    this("SINGULAR_PK");
+  public QJSingularPk() {
+    this("JSINGULAR_PK");
   }
 
   @SuppressWarnings(value = "unchecked")
-  public QSingularPk(String variable) {
-    super(
-        pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class, variable, "", "SINGULAR_PK");
+  public QJSingularPk(String variable) {
+    super(pl.exsio.querydsl.entityql.config.entity.JSingularPk.class, variable, "", "JSINGULAR_PK");
 
     id1:
     {
@@ -93,11 +94,11 @@ public final class QSingularPk
     return clause;
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> dynamic() {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JSingularPk> dynamic() {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JSingularPk.class);
   }
 
-  public Q<pl.exsio.querydsl.entityql.config.entity.it.SingularPk> dynamic(String variable) {
-    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.it.SingularPk.class, variable);
+  public Q<pl.exsio.querydsl.entityql.config.entity.JSingularPk> dynamic(String variable) {
+    return EntityQL.qEntity(pl.exsio.querydsl.entityql.config.entity.JSingularPk.class, variable);
   }
 }
