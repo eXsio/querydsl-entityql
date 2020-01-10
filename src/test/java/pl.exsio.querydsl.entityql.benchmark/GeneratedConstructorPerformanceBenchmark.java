@@ -10,7 +10,7 @@ import pl.exsio.querydsl.entityql.config.entity.it.generated.QOrderItem;
 import static org.junit.Assert.assertTrue;
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
-public class GeneratedPerformanceBenchmark implements PerformanceBenchmark {
+public class GeneratedConstructorPerformanceBenchmark implements PerformanceBenchmark {
 
     @Benchmark
     @Fork(value = 1)
