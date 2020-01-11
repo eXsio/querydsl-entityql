@@ -13,7 +13,11 @@ import org.jtwig.functions.SimpleJtwigFunction;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class QExporter {
 
@@ -31,13 +35,20 @@ public class QExporter {
 
         Class<? extends E> type = q.getType();
         String fileName = String.format(fileNamePattern, type.getSimpleName());
+        Path filePath = getFilePath(pkgName, destinationPath, fileName);
         boolean isGroovy = fileName.endsWith("groovy");
         String exportedClass = renderClass(q, pkgName, type, fileName, isGroovy);
         FileUtils.writeStringToFile(
-                new File(Paths.get(destinationPath, fileName).toUri()),
+                new File(filePath.toUri()),
                 formatter.formatSourceAndFixImports(exportedClass),
                 StandardCharsets.UTF_8
         );
+    }
+
+    private Path getFilePath(String pkgName, String destinationPath, String fileName) {
+        List<String> pathElements = new ArrayList<>(Arrays.asList(pkgName.split("\\.")));
+        pathElements.add(fileName);
+        return Paths.get(destinationPath, pathElements.toArray(new String[0]));
     }
 
     private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, boolean isGroovy) {

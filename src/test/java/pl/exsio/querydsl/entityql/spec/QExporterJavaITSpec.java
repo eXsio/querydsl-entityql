@@ -1,5 +1,7 @@
 package pl.exsio.querydsl.entityql.spec;
 
+import org.junit.Ignore;
+import org.junit.Test;
 import pl.exsio.querydsl.entityql.QExporter;
 import pl.exsio.querydsl.entityql.config.entity.*;
 
@@ -12,11 +14,12 @@ public class QExporterJavaITSpec {
     String fileNamePattern = "Q%s.java";
 
     String destinationPath = getClass().getResource(".").getPath().replace("/", "\\").substring(1) +
-            "..\\..\\..\\..\\..\\..\\..\\src\\test\\java\\pl\\exsio\\querydsl\\entityql\\config\\entity\\generated";
+            "..\\..\\..\\..\\..\\..\\..\\src\\test\\java";
 
     QExporter exporter = new QExporter();
 
-    //@Test
+    @Test
+    @Ignore
     public void shouldExportIntegrationQClassesToStaticMetaModels() throws Exception {
         exporter.export(qEntity(JBook.class), fileNamePattern, pkgName, destinationPath);
         exporter.export(qEntity(JCompositePk.class), fileNamePattern, pkgName, destinationPath);

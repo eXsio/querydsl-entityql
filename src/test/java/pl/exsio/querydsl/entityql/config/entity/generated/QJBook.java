@@ -36,53 +36,42 @@ public final class QJBook extends QBase<pl.exsio.querydsl.entityql.config.entity
     id:
     {
       this.id =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "BOOK_ID", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", true, 1, -5));
+
       addMetadata(this.id, QColumnMetadataFactory.create("BOOK_ID", 1, -5, true));
     }
 
     name:
     {
       this.name =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+
       addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
     }
 
     desc:
     {
       this.desc =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "DESC", true, 3, 2005))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(
+                  java.lang.String.class, java.lang.String.class, "DESC", true, 3, 2005));
+
       addMetadata(this.desc, QColumnMetadataFactory.create("DESC", 3, 2005, true));
     }
 
     price:
     {
       this.price =
-          ((NumberPath<java.math.BigDecimal>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.math.BigDecimal.class,
-                          java.math.BigDecimal.class,
-                          "PRICE",
-                          true,
-                          4,
-                          3))
-                  .get());
+          QPathFactory.<NumberPath<java.math.BigDecimal>>create(
+              this,
+              new QPathConfig(
+                  java.math.BigDecimal.class, java.math.BigDecimal.class, "PRICE", true, 4, 3));
+
       addMetadata(this.price, QColumnMetadataFactory.create("PRICE", 4, 3, true));
     }
 
@@ -92,7 +81,9 @@ public final class QJBook extends QBase<pl.exsio.querydsl.entityql.config.entity
 
       paths.add(this.id);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.JBook>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

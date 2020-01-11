@@ -68,8 +68,9 @@ public abstract class QPathFactory {
         return pathFactory.get(fieldType).createExpression(q, new QPathConfig(field.getType(), fieldType, c, nullable, idx, sqlType));
     }
 
-    public static QPath create(QBase<?> q, QPathConfig config) {
-        return pathFactory.get(config.getFieldType()).createExpression(q, config);
+    @SuppressWarnings(value = "unchecked")
+    public static <R> R create(QBase<?> q, QPathConfig config) {
+        return (R) pathFactory.get(config.getFieldType()).createExpression(q, config).get();
     }
 
     private interface PathFactory {

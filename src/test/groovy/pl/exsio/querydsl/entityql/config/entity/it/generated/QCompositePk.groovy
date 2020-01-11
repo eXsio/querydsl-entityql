@@ -37,36 +37,30 @@ public final class QCompositePk
     id1:
     {
       this.id1 =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "ID_1", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID_1", true, 1, -5));
+
       addMetadata(this.id1, QColumnMetadataFactory.create("ID_1", 1, -5, true));
     }
 
     id2:
     {
       this.id2 =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "ID_2", true, 2, 12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(java.lang.String.class, java.lang.String.class, "ID_2", true, 2, 12));
+
       addMetadata(this.id2, QColumnMetadataFactory.create("ID_2", 2, 12, true));
     }
 
     desc:
     {
       this.desc =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "DESC", true, 3, 12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 12));
+
       addMetadata(this.desc, QColumnMetadataFactory.create("DESC", 3, 12, true));
     }
 
@@ -78,7 +72,9 @@ public final class QCompositePk
 
       paths.add(this.id2);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.it.CompositePk>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

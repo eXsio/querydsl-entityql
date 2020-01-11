@@ -34,24 +34,20 @@ public final class QJOrder extends QBase<pl.exsio.querydsl.entityql.config.entit
     id:
     {
       this.id =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "ORDER_ID", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", true, 1, -5));
+
       addMetadata(this.id, QColumnMetadataFactory.create("ORDER_ID", 1, -5, true));
     }
 
     userId:
     {
       this.userId =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "USER_ID", false, 2, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", false, 2, -5));
+
       addMetadata(this.userId, QColumnMetadataFactory.create("USER_ID", 2, -5, false));
     }
 
@@ -68,7 +64,9 @@ public final class QJOrder extends QBase<pl.exsio.querydsl.entityql.config.entit
 
       paths.add(this.id);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.JOrder>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

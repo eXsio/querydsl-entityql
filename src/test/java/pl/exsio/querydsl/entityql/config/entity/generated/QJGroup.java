@@ -37,41 +37,31 @@ public final class QJGroup extends QBase<pl.exsio.querydsl.entityql.config.entit
     id:
     {
       this.id =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 1, -5));
+
       addMetadata(this.id, QColumnMetadataFactory.create("GROUP_ID", 1, -5, true));
     }
 
     name:
     {
       this.name =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+
       addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
     }
 
     adminId:
     {
       this.adminId =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class,
-                          java.lang.String.class,
-                          "ADMIN_NAME",
-                          false,
-                          4,
-                          12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(
+                  java.lang.String.class, java.lang.String.class, "ADMIN_NAME", false, 4, 12));
+
       addMetadata(this.adminId, QColumnMetadataFactory.create("ADMIN_NAME", 4, 12, false));
     }
 
@@ -88,7 +78,9 @@ public final class QJGroup extends QBase<pl.exsio.querydsl.entityql.config.entit
 
       paths.add(this.id);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.JGroup>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

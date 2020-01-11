@@ -173,7 +173,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.0.6</version>
+    <version>2.0.7</version>
 </dependency>
 
 <!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
@@ -246,7 +246,7 @@ String fileNamePattern = "Q%s.java"; // file/class name pattern
 String packageName = "com.example.yourpackage"; //package of the generated class
 String destinationPath = "/some/destination/path"; //physical location of resulting *.java file
 
-//this will generate a Java class under "/some/destination/path/QYourEntity.java"
+//this will generate a Java class under "/some/destination/path/com/example/yourpackage/QYourEntity.java"
 new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, destinationPath);
 
 ```

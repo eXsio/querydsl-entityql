@@ -36,24 +36,20 @@ public final class QJUserGroup extends QBase<pl.exsio.querydsl.entityql.config.e
     groupId:
     {
       this.groupId =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 3, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 3, -5));
+
       addMetadata(this.groupId, QColumnMetadataFactory.create("GROUP_ID", 3, -5, true));
     }
 
     userId:
     {
       this.userId =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 4, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 4, -5));
+
       addMetadata(this.userId, QColumnMetadataFactory.create("USER_ID", 4, -5, true));
     }
 
@@ -79,7 +75,9 @@ public final class QJUserGroup extends QBase<pl.exsio.querydsl.entityql.config.e
 
       paths.add(this.userId);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.JUserGroup>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

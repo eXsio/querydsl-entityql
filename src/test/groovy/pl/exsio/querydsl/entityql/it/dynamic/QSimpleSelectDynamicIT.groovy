@@ -71,7 +71,7 @@ class QSimpleSelectDynamicIT extends Specification {
         p.name != null
     }
 
-    def "should get all rows from an Entity based on an Enum filter"() {
+    def "should get all rows from an Entity based on an Enum String filter"() {
         given:
         Q<User<String>> user = qEntity(User)
 
@@ -79,6 +79,20 @@ class QSimpleSelectDynamicIT extends Specification {
         String userName = queryFactory.query()
                 .select(user.string("name"))
                 .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        userName == "U1"
+    }
+
+    def "should get all rows from an Entity based on an Enum Ordinal filter"() {
+        given:
+        Q<User<String>> user = qEntity(User)
+
+        when:
+        String userName = queryFactory.query()
+                .select(user.string("name"))
+                .where(user.longNumber("typeOrd").eq(User.Type.ADMIN.ordinal()))
                 .from(user).fetchOne()
 
         then:

@@ -38,48 +38,42 @@ public final class QOrderItem extends QBase<pl.exsio.querydsl.entityql.config.en
     id:
     {
       this.id =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "ORDER_ITEM_ID", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(
+                  java.lang.Long.class, java.lang.Long.class, "ORDER_ITEM_ID", true, 1, -5));
+
       addMetadata(this.id, QColumnMetadataFactory.create("ORDER_ITEM_ID", 1, -5, true));
     }
 
     quantity:
     {
       this.quantity =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "QTY", false, 4, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "QTY", false, 4, -5));
+
       addMetadata(this.quantity, QColumnMetadataFactory.create("QTY", 4, -5, false));
     }
 
     bookId:
     {
       this.bookId =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "BOOK_ID", false, 2, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", false, 2, -5));
+
       addMetadata(this.bookId, QColumnMetadataFactory.create("BOOK_ID", 2, -5, false));
     }
 
     orderId:
     {
       this.orderId =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "ORDER_ID", false, 3, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(
+                  java.lang.Long.class, java.lang.Long.class, "ORDER_ID", false, 3, -5));
+
       addMetadata(this.orderId, QColumnMetadataFactory.create("ORDER_ID", 3, -5, false));
     }
 
@@ -103,7 +97,9 @@ public final class QOrderItem extends QBase<pl.exsio.querydsl.entityql.config.en
 
       paths.add(this.id);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.it.OrderItem>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 

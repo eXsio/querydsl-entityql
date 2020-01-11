@@ -39,7 +39,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
 
         {% for name, path in q.columns %}
         {{name}}: {
-            this.{{name}} = (({{macros.printColumnType(path)}}) QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(path)}},{{path.config.fieldType.name}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})).get());
+            this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, new QPathConfig({{macros.printOriginalType(path)}},{{path.config.fieldType.name}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}}));
             addMetadata(this.{{name}}, QColumnMetadataFactory.create("{{path.config.name}}",{{path.config.idx}},{{path.config.sqlType}},{{path.config.nullable}}));
         }
         {% endfor %}
@@ -50,7 +50,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
                     List paths = new ArrayList();
                     List<String> foreignColumnNames = new ArrayList<>();
                     {% for fkPath in fk.getPaths().keySet() %}
-                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})).get();
+                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}}));
                         addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create("{{fkPath.config.name}}",{{fkPath.config.idx}},{{fkPath.config.sqlType}},{{fkPath.config.nullable}}));
                         paths.add({{name}}{{loop.index0}});
                     {% endfor %}
@@ -71,7 +71,7 @@ public final class {{ className }} extends QBase<{{entityName}}> {
              {% for id in q.idColumns %}
                          paths.add(this.{{id.field.name}});
              {% endfor %}
-             this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+             this._primaryKey = this.<{{entityName}}>createPrimaryKey(paths.<Path>toArray(new Path[0]));
         }
     }
 

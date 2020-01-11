@@ -4,7 +4,6 @@ import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.entity.it.Book
 import pl.exsio.querydsl.entityql.config.entity.it.User
@@ -13,7 +12,6 @@ import pl.exsio.querydsl.entityql.config.entity.it.generated.QUser
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -73,7 +71,7 @@ class QSimpleSelectGeneratedIT extends Specification {
         p.name != null
     }
 
-    def "should get all rows from an Entity based on an Enum filter"() {
+    def "should get all rows from an Entity based on an Enum String filter"() {
         given:
         QUser user = QUser.INSTANCE
 
@@ -81,6 +79,20 @@ class QSimpleSelectGeneratedIT extends Specification {
         String userName = queryFactory.query()
                 .select(user.name)
                 .where(user.typeStr.eq(User.Type.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        userName == "U1"
+    }
+
+    def "should get all rows from an Entity based on an Enum Ordinal filter"() {
+        given:
+        QUser user = QUser.INSTANCE
+
+        when:
+        String userName = queryFactory.query()
+                .select(user.name)
+                .where(user.typeOrd.eq(User.Type.ADMIN.ordinal()))
                 .from(user).fetchOne()
 
         then:

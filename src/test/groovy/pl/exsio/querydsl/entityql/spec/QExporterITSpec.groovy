@@ -15,7 +15,7 @@ public class QExporterITSpec extends Specification {
     String fileNamePattern = "Q%s.groovy"
 
     String destinationPath = getClass().getResource(".").getPath().replace("/", "\\").substring(1) +
-            "..\\..\\..\\..\\..\\..\\..\\src\\test\\groovy\\pl\\exsio\\querydsl\\entityql\\config\\entity\\it\\generated"
+            "..\\..\\..\\..\\..\\..\\..\\src\\test\\groovy"
 
     QExporter exporter = new QExporter();
 

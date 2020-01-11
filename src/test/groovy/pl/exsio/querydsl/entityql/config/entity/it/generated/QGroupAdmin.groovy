@@ -32,24 +32,20 @@ public final class QGroupAdmin
     id:
     {
       this.id =
-          ((NumberPath<java.lang.Long>)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.Long.class, java.lang.Long.class, "GA_ID", true, 1, -5))
-                  .get());
+          QPathFactory.<NumberPath<java.lang.Long>>create(
+              this,
+              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GA_ID", true, 1, -5));
+
       addMetadata(this.id, QColumnMetadataFactory.create("GA_ID", 1, -5, true));
     }
 
     name:
     {
       this.name =
-          ((StringPath)
-              QPathFactory.create(
-                      this,
-                      new QPathConfig(
-                          java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12))
-                  .get());
+          QPathFactory.<StringPath>create(
+              this,
+              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+
       addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
     }
 
@@ -59,7 +55,9 @@ public final class QGroupAdmin
 
       paths.add(this.id);
 
-      this._primaryKey = createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<pl.exsio.querydsl.entityql.config.entity.it.GroupAdmin>createPrimaryKey(
+              paths.<Path>toArray(new Path[0]));
     }
   }
 
