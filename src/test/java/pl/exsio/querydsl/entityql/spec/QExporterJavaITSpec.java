@@ -1,6 +1,5 @@
 package pl.exsio.querydsl.entityql.spec;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import pl.exsio.querydsl.entityql.QExporter;
 import pl.exsio.querydsl.entityql.config.entity.*;
@@ -19,7 +18,7 @@ public class QExporterJavaITSpec {
     QExporter exporter = new QExporter();
 
     @Test
-    @Ignore
+   // @Ignore
     public void shouldExportIntegrationQClassesToStaticMetaModels() throws Exception {
         exporter.export(qEntity(JBook.class), fileNamePattern, pkgName, destinationPath);
         exporter.export(qEntity(JCompositePk.class), fileNamePattern, pkgName, destinationPath);
