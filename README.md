@@ -12,10 +12,11 @@ The only solution was to create an ugly String with Native SQL, right? Well, not
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
 **EntityQL can:**
-- **serve as an addition to any existent JPA configuration to execute Native SQL with minimal extra configuration needed**
-- **be a lightweight alternative to using JPA/Hibernate as a standalone Data Access Layer**
-- **generate both dynamic and static Query Models**
+- **serve as an addition to any existent JPA configuration or as a standalone Data Access Layer**
+- **be a lightweight alternative to using JPA/Hibernate**
+- **generate both dynamic and static Query Models, preserving the original JPA Entity field names**
 - **completely replace the usage of Criteria API and/or JPQL**
+- **support Native SQL features not available in JPA using fluent Java API**
 - **handle all commercial and enterprise databases without any additional costs**
 
 #### Quick example:
