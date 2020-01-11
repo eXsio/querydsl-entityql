@@ -11,9 +11,16 @@ Have you ever had a situation where you had to perform a SQL operation that was 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
+**EntityQL can:**
+- **serve as an addition to any existent JPA configuration to execute Native SQL with minimal extra configuration needed**
+- **be a lightweight alternative to using JPA/Hibernate as a standalone Data Access Layer**
+- **generate both dynamic and static Query Models**
+- **completely replace the usage of Criteria API and/or JPQL**
+- **handle all commercial and enterprise databases without any additional costs**
+
 #### Quick example:
 
-You can choose to use EntityQL in a more dynamic way:
+You can choose to use EntityQL in a more **dynamic** way:
 
 ```java
 
@@ -38,7 +45,7 @@ Long count = queryFactory.select(count())
 
 ```
 
-Or you can go with the more traditional static meta-model way:
+Or you can go with the more traditional **static** meta-model way:
 
 ```java
 

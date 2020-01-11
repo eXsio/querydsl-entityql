@@ -1,13 +1,12 @@
 package pl.exsio.querydsl.entityql.spec
 
-
 import pl.exsio.querydsl.entityql.QExporter
-import pl.exsio.querydsl.entityql.config.entity.it.*
 import pl.exsio.querydsl.entityql.config.entity.spec.Spec
 import pl.exsio.querydsl.entityql.config.entity.spec.SubSpec
 import pl.exsio.querydsl.entityql.config.entity.spec.SubSpec2
-import spock.lang.Ignore
 import spock.lang.Specification
+
+import java.nio.file.InvalidPathException
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
@@ -30,5 +29,13 @@ public class QExporterUnitSpec extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    def "should not export unit q classes to static meta models for nonexistent destination path"() {
+        when:
+        exporter.export(qEntity(Spec), fileNamePattern, pkgName, "gg:\\")
+
+        then:
+        thrown InvalidPathException
     }
 }
