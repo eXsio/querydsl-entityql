@@ -79,8 +79,8 @@ EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-S
 Those Models can be then used to construct Native SQL Queries based on JPA mappings, using QueryDSL fluent API.
 
 There are two distinct ways you can utilize the power of EntityQL:
-- generate ad-hoc dynamic meta-models on the fly using cached reflection and the ```EntityQL.qEntity``` method
-- generate static meta-model Java classes using the ```QExporter``` or [designated Maven plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)
+- **generate ad-hoc dynamic meta-models on the fly** using cached reflection and the ```EntityQL.qEntity``` method
+- **generate static meta-model Java classes** using the ```QExporter``` or **[designated Maven plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)**
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
 
