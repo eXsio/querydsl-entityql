@@ -27,9 +27,9 @@ public final class QUser extends QStaticModel<pl.exsio.querydsl.entityql.config.
 
   public final QEnumPath<pl.exsio.querydsl.entityql.config.entity.it.User.Type> typeStr;
 
-  public final NumberPath<java.lang.Long> typeOrd;
+  public final NumberPath<java.lang.Integer> typeOrd;
 
-  public final NumberPath<java.lang.Long> typeDef;
+  public final NumberPath<java.lang.Integer> typeDef;
 
   public final QObjectPath<java.lang.Object> createdBy;
 
@@ -83,31 +83,31 @@ public final class QUser extends QStaticModel<pl.exsio.querydsl.entityql.config.
     typeOrd:
     {
       this.typeOrd =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
+          QPathFactory.<NumberPath<java.lang.Integer>>create(
               this,
               new QPathConfig(
                   pl.exsio.querydsl.entityql.config.entity.it.User.Type.class,
-                  java.lang.Long.class,
+                  java.lang.Integer.class,
                   "USER_TYPE_ORD",
                   false,
                   5,
-                  -5));
-      addMetadata(this.typeOrd, QColumnMetadataFactory.create("USER_TYPE_ORD", 5, -5, false));
+                  4));
+      addMetadata(this.typeOrd, QColumnMetadataFactory.create("USER_TYPE_ORD", 5, 4, false));
     }
 
     typeDef:
     {
       this.typeDef =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
+          QPathFactory.<NumberPath<java.lang.Integer>>create(
               this,
               new QPathConfig(
                   pl.exsio.querydsl.entityql.config.entity.it.User.Type.class,
-                  java.lang.Long.class,
+                  java.lang.Integer.class,
                   "USER_TYPE_DEF",
                   false,
                   6,
-                  -5));
-      addMetadata(this.typeDef, QColumnMetadataFactory.create("USER_TYPE_DEF", 6, -5, false));
+                  4));
+      addMetadata(this.typeDef, QColumnMetadataFactory.create("USER_TYPE_DEF", 6, 4, false));
     }
 
     createdBy:

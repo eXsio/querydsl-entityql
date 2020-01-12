@@ -14,9 +14,9 @@ abstract class QField {
         } else if (type.isEnum()) {
             Enumerated enumerated = field.getDeclaredAnnotation(Enumerated.class);
             if (enumerated != null) {
-                type = enumerated.value().equals(EnumType.ORDINAL) ? Long.class : Enum.class;
+                type = enumerated.value().equals(EnumType.ORDINAL) ? Integer.class : Enum.class;
             } else {
-                type = Long.class;
+                type = Integer.class;
             }
         }
         return type;

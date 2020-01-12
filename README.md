@@ -181,7 +181,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.0.9</version>
+    <version>2.0.10</version>
 </dependency>
 
 <!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->

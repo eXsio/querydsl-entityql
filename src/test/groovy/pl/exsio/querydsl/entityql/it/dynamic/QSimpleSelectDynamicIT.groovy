@@ -92,7 +92,7 @@ class QSimpleSelectDynamicIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.string("name"))
-                .where(user.longNumber("typeOrd").eq(User.Type.ADMIN.ordinal()))
+                .where(user.intNumber("typeOrd").eq(User.Type.ADMIN.ordinal()))
                 .from(user).fetchOne()
 
         then:
