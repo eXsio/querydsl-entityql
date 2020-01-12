@@ -71,8 +71,7 @@ Long count = queryFactory.select(count())
 
 ```
 
-#### Interested? Keep on reading or jump straight to the 
-[Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!
+ **Interested? Keep on reading or jump straight to the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!**
 
 ## Overview
 
