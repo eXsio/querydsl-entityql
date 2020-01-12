@@ -71,7 +71,8 @@ Long count = queryFactory.select(count())
 
 ```
 
-#### Interested? Keep on reading! 
+#### Interested? Keep on reading or jump straight to the 
+[Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!
 
 ## Overview
 
@@ -80,7 +81,7 @@ Those Models can be then used to construct Native SQL Queries based on JPA mappi
 
 There are two distinct ways you can utilize the power of EntityQL:
 - generate ad-hoc dynamic meta-models on the fly using cached reflection and the ```EntityQL.qEntity``` method
-- generate static meta-model Java classes using the ```QExporter``` or (in the future) designated Maven plugin
+- generate static meta-model Java classes using the ```QExporter``` or [designated Maven plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
 
@@ -97,8 +98,8 @@ QueryDSL-specific models that are used for constructing SQL Queries.
 Once we've obtained an instance of ```Q``` class, everything down the line is just plain QueryDSL API in motion. 
 Please see the examples section to see how easy it is in practice.
 
-**If you prefere more static approach**, you can export your ```Q``` classes to static Java code using the ```QExporter``` utility.
-For now you have to use it manually but there are plans to create Maven plugin that will automate the code generation process.
+**If you prefer more static approach**, you can generate Static Java classes with QueryDSL-SQL compatible Query Models by
+using this [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
 
 ## Use Cases
 
@@ -246,7 +247,9 @@ In order to do that you will need to add additional dependencies:
 
 ## Static Code generation
 
-For now it is only possible to generate the code using the ```QExporter``` utility. It uses the ```Q``` class to 
+The primary method of generating Static Meta-models is to use the special [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
+
+If however you need to generate the code manually, you can do so by using the ```QExporter``` utility. It uses the ```Q``` class to 
 render the Java code with models compatible with QueryDSL-SQL format:
 
 ```java
@@ -283,9 +286,7 @@ Long count = queryFactory.select(count())
                 ).fetchOne();
 
 ```
-
-There will be a Maven plugin released in the near future to ease the process of code generation. If you'd like to 
-generate the code using the above method, you will need additional dependencies:
+ If you'd like to generate the code using the above method, you will need additional dependencies:
 
 ```xml
 
