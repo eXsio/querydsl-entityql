@@ -73,6 +73,21 @@ Long count = queryFactory.select(count())
 
  **Interested? Keep on reading or jump straight to the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!**
 
+## Motivation
+
+Why create yet another thing to communicate with databases? As it usually happens, the reason was quite simple - none of the solutions
+available on the market met my requirements and expectations, which were:
+- ability to manage my Schema from Java code
+- ability to create and populate test schemas in an in-memory H2 database
+- ability to use Java names, not DB Objects names
+- ability to create SQL queries using Fluent Java API
+- ability to use advanced SQL features like Window Functions etc
+- minimal performance overhead and minimal abstraction layer
+- ability to work with Oracle and SQL Server Enterprise witout any additional licensing costs
+
+QueryDSL-SQL was the closest, but it lacked the ability to create Query Models directly from JPA Entities. EntityQL is a missing piece that 
+makes it possible to meet all the above requirements.
+
 ## Overview
 
 EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-SQL meta models.
@@ -137,20 +152,6 @@ There are 2 primary use cases for EntityQL:
 
 All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#d0e1067
 
-## Motivation
-
-Why create yet another thing to communicate with databases? As it usually happens, the reason was quite simple - none of the solutions
-available on the market met my requirements and expectations, which were:
-- ability to manage my Schema from Java code
-- ability to create and populate test schemas in an in-memory H2 database
-- ability to use Java names, not DB Objects names
-- ability to create SQL queries using Fluent Java API
-- ability to use advanced SQL features like Window Functions etc
-- minimal performance overhead and minimal abstraction layer
-- ability to work with Oracle and SQL Server Enterprise witout any additional licensing costs
-
-QueryDSL-SQL was the closest, but it lacked the ability to create Query Models directly from JPA Entities. EntityQL is a missing piece that 
-makes it possible to meet all the above requirements.
 
 ## How does the EntityQL differ from...
 
@@ -437,9 +438,19 @@ QTestEntity.INSTANCE; //using pre-instantiated static model - 318,653,689 ops/s
 The above results clearly show that the absolute top performance is possible only when using static models. However
 the dynamic model's performance is also very good for most use cases.
 
+#### Query building 
+
+Building queries with dynamic models require calling ```Map::get``` to obtain the Field Expressions. In Static Models those 
+Expressions are pre-compiled as Class Fields. It is natural that Static Models will have better performance.
+
 #### Query execution
 
-TBD
+Once the Query is built, there is absolutely no difference in query execution. Performance is the same 
+for dynamic and static models.
+
+## Thread safety
+
+Both Dynamic and Static models are Threadsafe. You can use the same instances across different Threads.
 
 ## More Examples
 
