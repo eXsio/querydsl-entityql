@@ -137,6 +137,21 @@ There are 2 primary use cases for EntityQL:
 
 All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#d0e1067
 
+## Motivation
+
+Why create yet another thing to communicate with databases? As it usually happens, the reason was quite simple - none of the solutions
+available on the market met my requirements and expectations, which were:
+- ability to manage my Schema from Java code
+- ability to create and populate test schemas in an in-memory H2 database
+- ability to use Java names, not DB Objects names
+- ability to create SQL queries using Fluent Java API
+- ability to use advanced SQL features like Window Functions etc
+- minimal performance overhead and minimal abstraction layer
+- ability to work with Oracle and SQL Server Enterprise witout any additional licensing costs
+
+QueryDSL-SQL was the closest, but it lacked the ability to create Query Models directly from JPA Entities. EntityQL is a missing piece that 
+makes it possible to meet all the above requirements.
+
 ## How does the EntityQL differ from...
 
 1) **Hibernate / JPA in general** - EntityQL uses Entities only  as source of DDL information necessary to construct Native SQL that is executed against JDBC Connection. 
@@ -399,6 +414,8 @@ public class UserGroup implements Serializable {
 
 ## Performance
 
+#### obtaining Query Model
+
 A lot of developers are scared anytime they see Java Reflection in use. Even though EntityQL needs to use Reflection
 to scan the Entity classes, the results of the scan are cached in memory, so the actual Reflection is used only during 
 the first creation of the ```Q``` model.
@@ -420,8 +437,13 @@ QTestEntity.INSTANCE; //using pre-instantiated static model - 318,653,689 ops/s
 The above results clearly show that the absolute top performance is possible only when using static models. However
 the dynamic model's performance is also very good for most use cases.
 
+#### Query execution
+
+TBD
 
 ## More Examples
+
+You can find fully functional and configured Spring Boot based application in the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples).
 
 All of the below examples use the dynamic ad-hoc models. All of them can be used with static meta-models as well. 
 When using the static models, the String method parameters become the Fields themselves (just like in a Quick Example in the beginning).
