@@ -433,10 +433,10 @@ using JMH (you can find them in the test suite):
 | EntityQL: ```new QTestEntity();```  | 1,715,702.909 ops/s  |
 | EntityQL: ```qEntity(TestEntity.class);```  | 564,140.707 ops/s  |
 
-```
+
 Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc).
 The important thing is the difference between particular methods.
-```
+
 
 #### Query building 
 
@@ -446,10 +446,10 @@ The important thing is the difference between particular methods.
 | EntityQL: ```new QTestEntity();```  | 731,034.160 ops/s  |
 | EntityQL: ```qEntity(TestEntity.class);```  | 392,864.171 ops/s  |
 
-```
+
 Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc) and the complexity of the Query.
 The important thing is the difference between particular methods.
-```
+
 
 #### Query execution
 
@@ -462,10 +462,10 @@ The important thing is the difference between particular methods.
 | JPA: JPQL  | 18,946.990 ops/s  |
 | JPA: Criteria API | 17,933.423 ops/s  |
 
-```
+
 Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc), 
 the complexity of the Query and the amount of returned data. The important thing is the difference between particular methods.
-```
+
 
 ## Thread safety
 
