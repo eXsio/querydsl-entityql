@@ -1,0 +1,9 @@
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (1, 'B1', 'Very long Book description 1', 11.11);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (2, 'B2', 'Very long Book description 2', 22.22);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (3, 'B3', 'Very long Book description 3', 33.33);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (4, 'B4', 'Very long Book description 4', 44.44);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (5, 'B5', 'Very long Book description 5', 55.55);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (6, 'B6', 'Very long Book description 6', 66.66);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (7, 'B7', 'Very long Book description 7', 77.77);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (8, 'B8', 'Very long Book description 8', 88.88);
+INSERT INTO JBOOKS (BOOK_ID, NAME, DESC, PRICE) VALUES (9, 'B9', 'Very long Book description 9', 99.99);

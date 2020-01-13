@@ -415,8 +415,6 @@ public class UserGroup implements Serializable {
 
 ## Performance
 
-#### obtaining Query Model
-
 A lot of developers are scared anytime they see Java Reflection in use. Even though EntityQL needs to use Reflection
 to scan the Entity classes, the results of the scan are cached in memory, so the actual Reflection is used only during 
 the first creation of the ```Q``` model.
@@ -425,28 +423,49 @@ Having that said, there are always cases when a cutting edge performance is requ
 In such situations we can skip the dynamic models altogether and focus on Static Meta Models.
 
 To find out how much is the Static model faster than the Dynamic one, I've decided to implement couple of simple benchmarks 
-using JMH (you can find them in the test suite). The results of the Throughput mode are:
+using JMH (you can find them in the test suite):
 
-```java
+#### obtaining Query Model
 
-qEntity(TestEntity.class); //creation of dynamic model - 160,735 ops/s
-new QTestEntity(); //instantiation of static model - 1,066,797 ops/s
-QTestEntity.INSTANCE; //using pre-instantiated static model - 318,653,689 ops/s
+| Method  | Score |
+| ------------- | ------------- |
+| EntityQL: ```QTestEntity.INSTANCE;```  | 318,653,689.654 ops/s  |
+| EntityQL: ```new QTestEntity();```  | 1,715,702.909 ops/s  |
+| EntityQL: ```qEntity(TestEntity.class);```  | 564,140.707 ops/s  |
 
 ```
-
-The above results clearly show that the absolute top performance is possible only when using static models. However
-the dynamic model's performance is also very good for most use cases.
+Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc).
+The important thing is the difference between particular methods.
+```
 
 #### Query building 
 
-Building queries with dynamic models require calling ```Map::get``` to obtain the Field Expressions. In Static Models those 
-Expressions are pre-compiled as Class Fields. It is natural that Static Models will have better performance.
+| Method  | Score |
+| ------------- | ------------- |
+| EntityQL: ```QTestEntity.INSTANCE;```  | 1,438,755.075 ops/s  |
+| EntityQL: ```new QTestEntity();```  | 731,034.160 ops/s  |
+| EntityQL: ```qEntity(TestEntity.class);```  | 392,864.171 ops/s  |
+
+```
+Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc) and the complexity of the Query.
+The important thing is the difference between particular methods.
+```
 
 #### Query execution
 
-Once the Query is built, there is absolutely no difference in query execution. Performance is the same 
-for dynamic and static models.
+| Method  | Score |
+| ------------- | ------------- |
+| JDBC: Statement  | 94,786.871 ops/s  |
+| EntityQL: ```QTestEntity.INSTANCE;```  | 52,080.800 ops/s  |
+| EntityQL: ```new QTestEntity();```  | 49,222.448 ops/s  |
+| EntityQL: ```qEntity(TestEntity.class);```  | 45,100.517 ops/s  |
+| JPA: JPQL  | 18,946.990 ops/s  |
+| JPA: Criteria API | 17,933.423 ops/s  |
+
+```
+Please note that the actual performance may vary depending on the complexity of the source Entity (number of fields, FKs etc), 
+the complexity of the Query and the amount of returned data. The important thing is the difference between particular methods.
+```
 
 ## Thread safety
 
