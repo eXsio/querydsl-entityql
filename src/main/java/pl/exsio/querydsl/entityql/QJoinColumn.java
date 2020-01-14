@@ -1,6 +1,7 @@
 package pl.exsio.querydsl.entityql;
 
 import com.querydsl.sql.ColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.scanner.EntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
 import javax.persistence.Column;
@@ -17,12 +18,16 @@ class QJoinColumn {
 
     private final List<QColumnDefinition> foreignColumns;
 
-    QJoinColumn(Q<?> parent, Class<?> type, JoinColumn column, int idx) {
+    private final EntityScanner scanner;
+
+    QJoinColumn(Q<?> parent, Class<?> type, JoinColumn column, int idx, EntityScanner scanner) {
+        this.scanner = scanner;
         foreignColumns = getForeignColumns(type, column);
         foreignColumns.forEach(foreignColumn -> createPath(parent, column, idx, foreignColumn));
     }
 
-    QJoinColumn(Q<?> parent, Class<?> type, JoinColumns columns, int idx) {
+    QJoinColumn(Q<?> parent, Class<?> type, JoinColumns columns, int idx, EntityScanner scanner) {
+        this.scanner = scanner;
         foreignColumns = getForeignColumns(type, columns);
         if(foreignColumns.size() != columns.value().length) {
             throw new InvalidArgumentException(String.format("Unable to construct Foreign Columns out of: %s", Arrays.toString(columns.value())));
@@ -40,7 +45,7 @@ class QJoinColumn {
     }
 
     private List<QColumnDefinition> getForeignColumns(Class<?> type, JoinColumn column) {
-        Q<?> foreign = EntityQL.qEntityWithoutMappings(type);
+        Q<?> foreign = EntityQL.qEntityWithoutMappings(type, scanner);
         List<QColumnDefinition> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
             result = new ArrayList<>();
@@ -61,7 +66,7 @@ class QJoinColumn {
     }
 
     private QColumnDefinition createCustomForeignColumn(Class<?> type, JoinColumn column) {
-        Map.Entry<Field, Map.Entry<Integer, Column>> foreignColumn = QFactory.get(type).getColumns()
+        Map.Entry<Field, Map.Entry<Integer, Column>> foreignColumn = QFactory.get(type, scanner).getColumns()
                 .entrySet().stream()
                 .filter(e -> matchesCustomForeignColumnName(column, e))
                 .findFirst()

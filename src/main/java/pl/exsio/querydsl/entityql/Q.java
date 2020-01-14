@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.entity.scanner.EntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
 import pl.exsio.querydsl.entityql.path.QUuidPath;
@@ -27,6 +28,8 @@ import java.util.stream.Collectors;
 
 public class Q<E> extends QBase<E> {
 
+    private final EntityScanner scanner;
+
     private final Map<String, QPath> columns = new LinkedHashMap<>();
 
     private final Map<String, QForeignKey> joinColumns = new LinkedHashMap<>();
@@ -37,8 +40,9 @@ public class Q<E> extends QBase<E> {
 
     private final Map<Path<?>, ColumnMetadata> columnMetadata = new LinkedHashMap<>();
 
-    Q(Class<E> type, String variable, String schema, String table) {
+    Q(Class<E> type, String variable, String schema, String table, EntityScanner scanner) {
         super(type, variable, schema, table);
+        this.scanner = scanner;
     }
 
     void addColumn(Field field, Column column, int idx) {
@@ -48,7 +52,7 @@ public class Q<E> extends QBase<E> {
     }
 
     void addJoinColumn(Field field, JoinColumn column, int idx) {
-        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx);
+        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx, scanner);
         if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", field.getName()));
         }
@@ -61,7 +65,7 @@ public class Q<E> extends QBase<E> {
     }
 
     void addJoinColumns(Field field, JoinColumns columns, Integer idx) {
-        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), columns, idx);
+        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), columns, idx, scanner);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
         this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field, qColumn.getPaths(), qColumn.getForeignColumnNames()));

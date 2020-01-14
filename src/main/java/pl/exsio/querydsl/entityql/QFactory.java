@@ -1,5 +1,7 @@
 package pl.exsio.querydsl.entityql;
 
+import pl.exsio.querydsl.entityql.entity.metadata.EntityMetadata;
+import pl.exsio.querydsl.entityql.entity.scanner.EntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
@@ -14,6 +16,10 @@ class QFactory<E> {
 
     private final Class<E> entityClass;
 
+    private final EntityScanner scanner;
+
+    private final EntityMetadata entityMetadata;
+
     private Table table;
 
     private Map<Field, Map.Entry<Integer, Column>> columns = new LinkedHashMap<>();
@@ -26,15 +32,17 @@ class QFactory<E> {
 
     private static final Map<Class<?>, QFactory<?>> instances = new HashMap<>();
 
-    private QFactory(Class<E> entityClass) {
+    private QFactory(Class<E> entityClass, EntityScanner scanner, EntityMetadata entityMetadata) {
         this.entityClass = entityClass;
+        this.scanner = scanner;
+        this.entityMetadata = entityMetadata;
         scanEntityClass();
     }
 
     @SuppressWarnings(value = "unchecked")
-    static <E> QFactory<E> get(Class<E> entityClass) {
+    static <E> QFactory<E> get(Class<E> entityClass, EntityScanner scanner) {
         return (QFactory<E>) instances.compute(entityClass,
-                (eClass, qFactory) -> qFactory == null ? fetch(eClass) : qFactory
+                (eClass, qFactory) -> qFactory == null ? fetch(eClass, scanner) : qFactory
         );
     }
 
@@ -42,8 +50,8 @@ class QFactory<E> {
         return create(table.name(), withMappings);
     }
 
-    private static <E> QFactory<E> fetch(Class<E> entityClass) {
-        return new QFactory<>(entityClass);
+    private static <E> QFactory<E> fetch(Class<E> entityClass, EntityScanner scanner) {
+        return new QFactory<>(entityClass, scanner, scanner.scanEntity(entityClass));
     }
 
     private void scanEntityClass() {
@@ -98,7 +106,7 @@ class QFactory<E> {
     }
 
     Q<E> create(String variable, boolean withMappings) {
-        Q<E> type = new Q<>(entityClass, variable, table.schema(), table.name());
+        Q<E> type = new Q<>(entityClass, variable, table.schema(), table.name(), scanner);
         columns.forEach((field, column) -> type.addColumn(field, column.getValue(), column.getKey()));
         if (withMappings) {
             joinColumns.forEach((field, column) -> type.addJoinColumn(field, column.getValue(), column.getKey()));

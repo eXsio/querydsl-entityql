@@ -3,6 +3,8 @@ package pl.exsio.querydsl.entityql;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import pl.exsio.querydsl.entityql.entity.scanner.EntityScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.JpaEntityScanner;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,15 +12,23 @@ import java.util.List;
 public class EntityQL {
 
     public static <E> Q<E> qEntity(Class<E> entityClass) {
-        return QFactory.get(entityClass).create(true);
+        return qEntity(entityClass, new JpaEntityScanner());
     }
 
     public static <E> Q<E> qEntity(Class<E> entityClass, String variable) {
-        return QFactory.get(entityClass).create(variable, true);
+        return qEntity(entityClass, new JpaEntityScanner(), variable);
     }
 
-    static <E> Q<E> qEntityWithoutMappings(Class<E> entityClass) {
-        return QFactory.get(entityClass).create(false);
+    public static <E> Q<E> qEntity(Class<E> entityClass, EntityScanner scanner) {
+        return QFactory.get(entityClass, scanner).create(true);
+    }
+
+    public static <E> Q<E> qEntity(Class<E> entityClass, EntityScanner scanner, String variable) {
+        return QFactory.get(entityClass, scanner).create(variable, true);
+    }
+
+    static <E> Q<E> qEntityWithoutMappings(Class<E> entityClass, EntityScanner scanner) {
+        return QFactory.get(entityClass, scanner).create(false);
     }
 
     @SafeVarargs
