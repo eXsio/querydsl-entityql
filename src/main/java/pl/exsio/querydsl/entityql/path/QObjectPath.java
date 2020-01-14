@@ -9,6 +9,9 @@ import com.querydsl.core.types.dsl.SimplePath;
 import javax.annotation.Nullable;
 import java.lang.reflect.AnnotatedElement;
 
+/**
+ * Custom Enum path for handling Java Objects not officially supported by EntityQL
+ */
 public class QObjectPath<T> extends SimpleExpression<T> implements Path<T> {
 
     private final SimplePath<T> delegatePath;

@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Factory Class to construct QPath instances
+ */
 public abstract class QPathFactory {
 
     private static final Map<Class<?>, PathFactory> pathFactory = new HashMap<>();

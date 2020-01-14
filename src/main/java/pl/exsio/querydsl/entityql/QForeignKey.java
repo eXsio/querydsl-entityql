@@ -6,6 +6,10 @@ import com.querydsl.sql.ForeignKey;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+/**
+ * EntityQL Wrapper for QueryDSL's ForeignKey. Contains the Path itself, information about whether the Path is a Parametrized
+ * Type and a configuration that is needed to construct ForeignKey instances from the Static Model
+ */
 public class QForeignKey {
 
     private final ForeignKey<?> foreignKey;

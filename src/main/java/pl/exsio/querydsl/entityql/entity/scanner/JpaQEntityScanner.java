@@ -9,6 +9,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+/**
+ * Default QEntityScanner implementation based on JPA Metadata Annotations
+ */
 public class JpaQEntityScanner implements QEntityScanner {
 
     @Override

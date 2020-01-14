@@ -1,3 +1,7 @@
+- 2.1.0
+    - decoupled JPA metadata scanning
+    - javadoc for public API
+    - code style improvements
 - 2.0.1 - 2.0.6
     - bugfixes
     - README updates

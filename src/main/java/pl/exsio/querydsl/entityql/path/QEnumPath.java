@@ -5,6 +5,9 @@ import com.querydsl.core.types.dsl.LiteralExpression;
 
 import java.lang.reflect.AnnotatedElement;
 
+/**
+ * Custom Enum path for handling Java Enums in QueryDSL
+ */
 public class QEnumPath<T extends Enum<T>> extends LiteralExpression<T> implements Path<T> {
 
     private static final long serialVersionUID = 7983490925756833429L;

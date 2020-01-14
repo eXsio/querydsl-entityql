@@ -1,5 +1,8 @@
 package pl.exsio.querydsl.entityql;
 
+/**
+ * Configuration class needed to create a QPath instance by using QPathFactory::create
+ */
 public class QPathConfig {
 
     private final Class<?> originalFieldType;

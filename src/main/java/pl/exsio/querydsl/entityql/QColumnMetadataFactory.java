@@ -3,6 +3,9 @@ package pl.exsio.querydsl.entityql;
 import com.querydsl.sql.ColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 
+/**
+ * Factory Class to construct QueryDSL's ColumnMetadata instances
+ */
 public abstract class QColumnMetadataFactory {
 
     static ColumnMetadata create(QEntityColumnMetadata column, int sqlType) {

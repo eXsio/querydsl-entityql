@@ -6,6 +6,9 @@ import com.querydsl.core.types.dsl.LiteralExpression;
 import java.lang.reflect.AnnotatedElement;
 import java.util.UUID;
 
+/**
+ * Custom Enum path for handling Java UUIDs in QueryDSL
+ */
 public class QUuidPath extends LiteralExpression<UUID> implements Path<UUID> {
 
     private static final long serialVersionUID = 7983490925756833429L;

@@ -2,6 +2,10 @@ package pl.exsio.querydsl.entityql;
 
 import com.querydsl.core.types.Path;
 
+/**
+ * EntityQL Wrapper for QueryDSL's Path. Contains the Path itself, information about whether the Path is a Parametrized
+ * Type and a Config that is needed to construct that Path using QPathFactory::create method.
+ */
 public class QPath {
 
     private final Path<?> path;

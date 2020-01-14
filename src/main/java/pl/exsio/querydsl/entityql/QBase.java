@@ -3,9 +3,14 @@ package pl.exsio.querydsl.entityql;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.RelationalPathBase;
 
-public abstract class QBase<E> extends RelationalPathBase<E> {
+/**
+ * Base QueryDSL Model class for EntityQL, contains all the protected methods EntityQL needs to properly work
+ * from the original RelationalPathBase
+ *
+ */
+abstract class QBase<E> extends RelationalPathBase<E> {
 
-    public QBase(Class<? extends E> type, String variable, String schema, String table) {
+    QBase(Class<? extends E> type, String variable, String schema, String table) {
         super(type, variable, schema, table);
     }
 

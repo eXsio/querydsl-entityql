@@ -2,6 +2,7 @@ package pl.exsio.querydsl.entityql;
 
 import com.google.common.primitives.Primitives;
 import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.jtwig.JtwigModel;
@@ -12,6 +13,7 @@ import org.jtwig.functions.FunctionRequest;
 import org.jtwig.functions.SimpleJtwigFunction;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility Class used to generate Static Java classes from the Dynamic Q Models.
+ * For most cases you should rather use the designated Maven plugin available here:
+ * https://github.com/eXsio/querydsl-entityql-maven-plugin
+ */
 public class QExporter {
 
     private final EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
@@ -30,8 +37,27 @@ public class QExporter {
 
     private final Formatter formatter = new Formatter();
 
+    /**
+     * Exports the given Q Model to physical Java source code file.
+     *
+     * Example:
+     *
+     * String fileNamePattern = "Q%s.java"; // file/class name pattern
+     * String packageName = "com.example.yourpackage"; //package of the generated class
+     * String destinationPath = "/some/destination/path"; //physical location of resulting *.java file
+     *
+     * //this will generate a Java class under "/some/destination/path/com/example/yourpackage/QYourEntity.java"
+     * new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, destinationPath);
+     *
+     * @param q - Q Model to be exported
+     * @param fileNamePattern - String patter of File/Class name, for example "Q%s.java"
+     * @param pkgName - package name of the resulting class
+     * @param destinationPath - physical destination path
+     * @throws IOException -  when it is not possible to save the resulting .java file
+     * @throws FormatterException - when the resulting Java class is malformed
+     */
     public <E> void export(Q<E> q, String fileNamePattern,
-                           String pkgName, String destinationPath) throws Exception {
+                           String pkgName, String destinationPath) throws IOException, FormatterException {
 
         Class<? extends E> type = q.getType();
         String fileName = String.format(fileNamePattern, type.getSimpleName());

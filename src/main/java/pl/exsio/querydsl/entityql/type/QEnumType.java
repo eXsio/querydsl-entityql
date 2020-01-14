@@ -8,11 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class EnumType<T extends Enum<T>> extends AbstractType<T> {
+/**
+ * Custom Enum Type for handling Java Enums in QueryDSL
+ */
+public class QEnumType<T extends Enum<T>> extends AbstractType<T> {
 
     private final Class<T> enumType;
 
-    public EnumType(Class<T> enumType) {
+    public QEnumType(Class<T> enumType) {
         super(Types.VARCHAR);
         this.enumType = enumType;
     }

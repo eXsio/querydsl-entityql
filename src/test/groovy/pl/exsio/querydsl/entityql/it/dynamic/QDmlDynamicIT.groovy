@@ -126,12 +126,12 @@ class QDmlDynamicIT extends Specification {
         when:
         queryFactory.insert(file)
                 .set(file.uuid("id"), id)
-                .set(file.array("data"), data)
+                .set(file.<byte[], Byte>array("data"), data)
                 .execute()
 
         and:
         UploadedFile uploadedFile = queryFactory.select(
-                constructor(UploadedFile, file.<byte[]> array("data"), file.uuid("id")))
+                constructor(UploadedFile, file.<byte[], Byte>array("data"), file.uuid("id")))
                 .from(file)
                 .where(file.uuid("id").eq(id))
                 .fetchOne()
