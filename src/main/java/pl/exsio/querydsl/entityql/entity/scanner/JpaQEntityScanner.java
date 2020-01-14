@@ -8,8 +8,6 @@ import javax.persistence.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class JpaQEntityScanner implements QEntityScanner {
 
@@ -24,13 +22,14 @@ public class JpaQEntityScanner implements QEntityScanner {
     private Table getTable(Class<?> entityClass) {
         Table table = entityClass.getDeclaredAnnotation(Table.class);
         if (table == null) {
-            throw new InvalidArgumentException(String.format("Entity class %s must have @Table annotation", entityClass.getName()));
+            throw new InvalidArgumentException(String.format("Entity class %s must have @Table annotation",
+                    entityClass.getName())
+            );
         }
         return table;
     }
 
     private void setColumns(QEntityMetadata metadata, Class<?> entityClass) {
-        List<String> ids = new LinkedList<>();
         Class<?> prevClass = entityClass;
         while (!prevClass.equals(Object.class)) {
             for (int i = 0; i < prevClass.getDeclaredFields().length; i++) {
@@ -46,33 +45,45 @@ public class JpaQEntityScanner implements QEntityScanner {
     private void parse(Field field, int index, QEntityMetadata metadata) {
         Column column = field.getDeclaredAnnotation(Column.class);
         if (column != null) {
-            Id id = field.getDeclaredAnnotation(Id.class);
-            QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(field.getType(), getComputedType(field), field.getName(),
-                    column.name(), column.nullable(), column.columnDefinition(), index);
-            metadata.addColumn(columnMetadata);
-            if (id != null) {
-                metadata.addIdColumn(columnMetadata);
-            }
+            addColumn(field, index, metadata, column);
         } else {
             JoinColumn joinColumn = field.getDeclaredAnnotation(JoinColumn.class);
             if (joinColumn != null) {
                 if (field.getDeclaredAnnotation(OneToMany.class) == null) {
-                    metadata.addJoinColumn(new QEntityJoinColumnMetadata(field.getType(), field.getName(), joinColumn.name(),
-                            joinColumn.columnDefinition(), joinColumn.referencedColumnName(), joinColumn.nullable(), index));
+                    addJoinColumn(field, index, metadata, joinColumn);
                 }
             } else {
                 JoinColumns joinColumns = field.getDeclaredAnnotation(JoinColumns.class);
                 if (joinColumns != null) {
                     if (field.getDeclaredAnnotation(OneToMany.class) == null) {
-                        QEntityCompositeJoinColumnMetadata compositeJoinColumn = new QEntityCompositeJoinColumnMetadata(field.getType(), field.getName(), index);
-                        Arrays.stream(joinColumns.value())
-                                .map(jc -> new QEntityCompositeJoinColumnItemMetadata(jc.name(), jc.columnDefinition(), jc.referencedColumnName(), jc.nullable()))
-                                .forEach(compositeJoinColumn::addItem);
-                        metadata.addCompositeJoinColumn(compositeJoinColumn);
+                        addCompositeJoinColumn(field, index, metadata, joinColumns);
                     }
                 }
             }
         }
+    }
+
+    private void addColumn(Field field, int index, QEntityMetadata metadata, Column column) {
+        Id id = field.getDeclaredAnnotation(Id.class);
+        QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(field.getType(), getComputedType(field), field.getName(),
+                column.name(), column.nullable(), column.columnDefinition(), index);
+        metadata.addColumn(columnMetadata);
+        if (id != null) {
+            metadata.addIdColumn(columnMetadata);
+        }
+    }
+
+    private void addJoinColumn(Field field, int index, QEntityMetadata metadata, JoinColumn joinColumn) {
+        metadata.addJoinColumn(new QEntityJoinColumnMetadata(field.getType(), field.getName(), joinColumn.name(),
+                joinColumn.columnDefinition(), joinColumn.referencedColumnName(), joinColumn.nullable(), index));
+    }
+
+    private void addCompositeJoinColumn(Field field, int index, QEntityMetadata metadata, JoinColumns joinColumns) {
+        QEntityCompositeJoinColumnMetadata compositeJoinColumn = new QEntityCompositeJoinColumnMetadata(field.getType(), field.getName(), index);
+        Arrays.stream(joinColumns.value())
+                .map(jc -> new QEntityCompositeJoinColumnItemMetadata(jc.name(), jc.columnDefinition(), jc.referencedColumnName(), jc.nullable()))
+                .forEach(compositeJoinColumn::addItem);
+        metadata.addCompositeJoinColumn(compositeJoinColumn);
     }
 
     private static Class<?> getComputedType(Field field) {
