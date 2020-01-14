@@ -37,8 +37,6 @@ public class Q<E> extends QBase<E> {
 
     List<QEntityColumnMetadata> idColumns = new LinkedList<>();
 
-    private final Map<Path<?>, ColumnMetadata> columnMetadata = new LinkedHashMap<>();
-
     Q(Class<E> type, String variable, String schema, String table, QEntityScanner scanner) {
         super(type, variable, schema, table);
         this.scanner = scanner;
@@ -96,7 +94,6 @@ public class Q<E> extends QBase<E> {
 
     @Override
     protected <P extends Path<?>> P addMetadata(P path, ColumnMetadata metadata) {
-        this.columnMetadata.put(path, metadata);
         return super.addMetadata(path, metadata);
     }
 
@@ -261,9 +258,5 @@ public class Q<E> extends QBase<E> {
     @SuppressWarnings(value = "unchecked")
     public PrimaryKey<E> primaryKey() {
         return (PrimaryKey<E>) id;
-    }
-
-    Map<Path<?>, ColumnMetadata> getColumnMetadata() {
-        return columnMetadata;
     }
 }
