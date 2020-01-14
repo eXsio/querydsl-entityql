@@ -7,15 +7,14 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
-import pl.exsio.querydsl.entityql.entity.scanner.EntityScanner;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityCompositeJoinColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
 import pl.exsio.querydsl.entityql.path.QUuidPath;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 public class Q<E> extends QBase<E> {
 
-    private final EntityScanner scanner;
+    private final QEntityScanner scanner;
 
     private final Map<String, QPath> columns = new LinkedHashMap<>();
 
@@ -36,39 +35,39 @@ public class Q<E> extends QBase<E> {
 
     private PrimaryKey<?> id;
 
-    List<QColumnDefinition> idColumns = new LinkedList<>();
+    List<QEntityColumnMetadata> idColumns = new LinkedList<>();
 
     private final Map<Path<?>, ColumnMetadata> columnMetadata = new LinkedHashMap<>();
 
-    Q(Class<E> type, String variable, String schema, String table, EntityScanner scanner) {
+    Q(Class<E> type, String variable, String schema, String table, QEntityScanner scanner) {
         super(type, variable, schema, table);
         this.scanner = scanner;
     }
 
-    void addColumn(Field field, Column column, int idx) {
-        QColumn qColumn = new QColumn(this, field, column, idx);
-        this.columns.put(field.getName(), qColumn.getPath());
+    void addColumn(QEntityColumnMetadata column) {
+        QColumn qColumn = new QColumn(this, column);
+        this.columns.put(column.getFieldName(), qColumn.getPath());
         addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
     }
 
-    void addJoinColumn(Field field, JoinColumn column, int idx) {
-        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), column, idx, scanner);
+    void addJoinColumn(QEntityJoinColumnMetadata column) {
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
         if (qColumn.getPaths().size() > 1) {
-            throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", field.getName()));
+            throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", column.getFieldName()));
         }
         qColumn.getPaths().forEach((path, metadata) -> {
-            this.columns.put(String.format("%sId", field.getName()), path);
+            this.columns.put(String.format("%sId", column.getFieldName()), path);
             addMetadata(path.get(), metadata);
             ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
-            this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field, qColumn.getPaths(), qColumn.getForeignColumnNames()));
+            this.joinColumns.put(column.getFieldName(), new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames()));
         });
     }
 
-    void addJoinColumns(Field field, JoinColumns columns, Integer idx) {
-        QJoinColumn qColumn = new QJoinColumn(this, field.getType(), columns, idx, scanner);
+    void addCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
-        this.joinColumns.put(field.getName(), new QForeignKey(foreignKey, field, qColumn.getPaths(), qColumn.getForeignColumnNames()));
+        this.joinColumns.put(column.getFieldName(), new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames()));
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {
@@ -77,9 +76,9 @@ public class Q<E> extends QBase<E> {
                 .collect(Collectors.toList());
     }
 
-    void addPrimaryKey(Map<Field, Column> ids) {
-        idColumns = ids.entrySet().stream().map(e -> new QColumnDefinition(e.getKey(), e.getValue())).collect(Collectors.toList());
-        List<String> pkColumnNames = ids.keySet().stream().map(Field::getName).collect(Collectors.toList());
+    void addPrimaryKey(List<QEntityColumnMetadata> ids) {
+        idColumns = ids;
+        List<String> pkColumnNames = ids.stream().map(QEntityColumnMetadata::getFieldName).collect(Collectors.toList());
         Path[] pkPaths = this.columns.entrySet().stream()
                 .filter(e -> pkColumnNames.contains(e.getKey()))
                 .map(e -> e.getValue().get())

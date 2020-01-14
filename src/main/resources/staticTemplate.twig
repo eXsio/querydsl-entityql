@@ -76,7 +76,7 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
         _primaryKey: {
              List<Path> paths = new ArrayList();
              {% for id in q.idColumns %}
-                         paths.add(this.{{id.field.name}});
+                 paths.add(this.{{id.fieldName}});
              {% endfor %}
              this._primaryKey = this.<{{entityName}}>createPrimaryKey(paths.<Path>toArray(new Path[0]));
         }

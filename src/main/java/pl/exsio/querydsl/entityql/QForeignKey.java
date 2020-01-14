@@ -3,7 +3,6 @@ package pl.exsio.querydsl.entityql;
 import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 
-import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -17,11 +16,11 @@ public class QForeignKey {
 
     private final LinkedList<String> foreignColumnNames;
 
-    QForeignKey(ForeignKey<?> foreignKey, Field field,
+    QForeignKey(ForeignKey<?> foreignKey, Class<?> parametrizedType,
                 LinkedHashMap<QPath, ColumnMetadata> paths,
                 LinkedList<String> foreignColumnNames) {
         this.foreignKey = foreignKey;
-        this.parametrizedType = field.getType();
+        this.parametrizedType = parametrizedType;
         this.paths = paths;
         this.foreignColumnNames = foreignColumnNames;
     }

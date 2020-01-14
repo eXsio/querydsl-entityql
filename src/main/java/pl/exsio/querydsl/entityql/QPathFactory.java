@@ -1,11 +1,11 @@
 package pl.exsio.querydsl.entityql;
 
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
 import pl.exsio.querydsl.entityql.path.QObjectPath;
 import pl.exsio.querydsl.entityql.path.QUuidPath;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
@@ -60,12 +60,13 @@ public abstract class QPathFactory {
         return (Class<Object>) config.getOriginalFieldType();
     }
 
-    static QPath create(Q<?> q, Field field, String c, boolean nullable, int idx, int sqlType) {
-        Class<?> fieldType = QField.getType(field);
+    static QPath create(Q<?> q, QEntityColumnMetadata column, int sqlType) {
+        Class<?> fieldType = column.getComputedFieldType();
         if (!pathFactory.containsKey(fieldType)) {
             fieldType = Object.class;
         }
-        return pathFactory.get(fieldType).createExpression(q, new QPathConfig(field.getType(), fieldType, c, nullable, idx, sqlType));
+        return pathFactory.get(fieldType).createExpression(q, new QPathConfig(column.getOriginalFieldType(), fieldType,
+                column.getColumnName(), column.isNullable(), column.getIdx(), sqlType));
     }
 
     @SuppressWarnings(value = "unchecked")

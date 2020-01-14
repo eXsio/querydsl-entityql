@@ -5,9 +5,9 @@ import javax.persistence.Enumerated;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-abstract class QField {
+public abstract class QField {
 
-    static Class<?> getType(Field field) {
+    public static Class<?> getType(Field field) {
         Class<?> type = field.getType();
         if (type.isArray()) {
             type = Array.class;
