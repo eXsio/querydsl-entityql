@@ -471,6 +471,14 @@ the complexity of the Query and the amount of returned data. The important thing
 
 Both Dynamic and Static models are Threadsafe. You can use the same instances across different Threads.
 
+## Extending EntityQL
+
+Although EntityQL was primarily created to work with JPA Entities, there is a possibility to implement your own ```QEntityScanner```
+that will analyze the Entity class and provide an instance of ```QEntityMetadata```. This opens up EntityQL to possibilities 
+of connecting QueryDSL to other Persistence Frameworks, like Spring Data JDBC etc.
+
+Once you have your ```QEntityScanner```, you can create your ```Q``` instance by calling ```EntityQL.qEntity(YourEntity.class, new YourEntityScanner())```.
+
 ## More Examples
 
 You can find fully functional and configured Spring Boot based application in the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples).
