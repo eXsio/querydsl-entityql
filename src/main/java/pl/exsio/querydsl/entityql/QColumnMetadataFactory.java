@@ -6,7 +6,10 @@ import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 public abstract class QColumnMetadataFactory {
 
     static ColumnMetadata create(QEntityColumnMetadata column, int sqlType) {
-        ColumnMetadata metadata = ColumnMetadata.named(column.getColumnName()).withIndex(column.getIdx()).ofType(sqlType);
+        ColumnMetadata metadata = ColumnMetadata
+                .named(column.getColumnName())
+                .withIndex(column.getIdx())
+                .ofType(sqlType);
         if (!column.isNullable()) {
             metadata = metadata.notNull();
         }
@@ -14,7 +17,10 @@ public abstract class QColumnMetadataFactory {
     }
 
     public static ColumnMetadata create(QPathConfig config) {
-        ColumnMetadata metadata = ColumnMetadata.named(config.getName()).withIndex(config.getIdx()).ofType(config.getSqlType());
+        ColumnMetadata metadata = ColumnMetadata
+                .named(config.getName())
+                .withIndex(config.getIdx())
+                .ofType(config.getSqlType());
         if (!config.isNullable()) {
             metadata = metadata.notNull();
         }

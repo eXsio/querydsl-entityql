@@ -14,7 +14,8 @@ public class QPathConfig {
 
     private final int sqlType;
 
-    public QPathConfig(Class<?> originalFieldType, Class<?> computedFieldType, String name, boolean nullable, int idx, int sqlType) {
+    public QPathConfig(Class<?> originalFieldType, Class<?> computedFieldType, String name,
+                       boolean nullable, int idx, int sqlType) {
         this.originalFieldType = originalFieldType;
         this.computedFieldType = computedFieldType;
         this.name = name;

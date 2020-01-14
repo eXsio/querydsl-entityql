@@ -19,7 +19,6 @@ public class QEntityCompositeJoinColumnMetadata {
         this.idx = idx;
     }
 
-
     public String getFieldName() {
         return fieldName;
     }

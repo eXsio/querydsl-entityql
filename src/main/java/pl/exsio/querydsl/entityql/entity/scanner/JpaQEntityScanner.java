@@ -21,7 +21,6 @@ public class JpaQEntityScanner implements QEntityScanner {
         return metadata;
     }
 
-
     private Table getTable(Class<?> entityClass) {
         Table table = entityClass.getDeclaredAnnotation(Table.class);
         if (table == null) {

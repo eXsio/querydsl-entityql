@@ -65,8 +65,10 @@ public abstract class QPathFactory {
         if (!pathFactory.containsKey(computedFieldType)) {
             computedFieldType = Object.class;
         }
-        return pathFactory.get(computedFieldType).createExpression(q, new QPathConfig(column.getOriginalFieldType(), computedFieldType,
-                column.getColumnName(), column.isNullable(), column.getIdx(), sqlType));
+        return pathFactory.get(computedFieldType)
+                .createExpression(q, new QPathConfig(column.getOriginalFieldType(), computedFieldType,
+                        column.getColumnName(), column.isNullable(), column.getIdx(), sqlType)
+                );
     }
 
     @SuppressWarnings(value = "unchecked")

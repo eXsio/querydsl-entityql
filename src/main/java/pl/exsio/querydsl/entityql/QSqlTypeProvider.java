@@ -42,8 +42,8 @@ abstract class QSqlTypeProvider {
 
     }
 
-    static Optional<TypeProvider> get(Class<?> fieldClass) {
-        return Optional.ofNullable(sqlTypeProvider.get(fieldClass));
+    static Optional<TypeProvider> get(Class<?> computedFieldType) {
+        return Optional.ofNullable(sqlTypeProvider.get(computedFieldType));
     }
 
     interface TypeProvider {

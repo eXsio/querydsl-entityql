@@ -18,7 +18,10 @@ class QColumn {
     }
 
     private int getSqlType(QEntityColumnMetadata column) {
-        return QSqlTypeProvider.get(column.getComputedFieldType()).map(t -> t.getSqlType(column.getColumnDefinition())).orElse(Types.OTHER);
+        return QSqlTypeProvider
+                .get(column.getComputedFieldType())
+                .map(t -> t.getSqlType(column.getColumnDefinition()))
+                .orElse(Types.OTHER);
     }
 
     QPath getPath() {

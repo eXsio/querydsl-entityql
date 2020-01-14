@@ -63,7 +63,8 @@ class QJoinColumn {
         final List<QEntityColumnMetadata> result = new LinkedList<>();
         column.getItems().forEach(item -> {
             if (!isCustomForeignColumn(item)) {
-                throw new InvalidArgumentException(String.format("Composite FK requires a non-empty referencedColumnName: %s", item.getColumnName()));
+                throw new InvalidArgumentException(String.format("Composite FK requires a non-empty referencedColumnName: %s",
+                        item.getColumnName()));
             }
             result.add(createCustomForeignColumn(column.getFieldType(), item));
         });
@@ -76,7 +77,8 @@ class QJoinColumn {
                 .filter(fc -> matchesCustomForeignColumnName(column, fc))
                 .findFirst()
                 .orElseThrow(() ->
-                        new InvalidArgumentException(String.format("Unable to find field mapped to Column '%s' in Entity %s", column.getReferencedColumnName(), fieldType.getName()))
+                        new InvalidArgumentException(String.format("Unable to find field mapped to Column '%s' in Entity %s",
+                                column.getReferencedColumnName(), fieldType.getName()))
                 );
     }
 
@@ -89,7 +91,9 @@ class QJoinColumn {
     }
 
     private int getSqlType(QEntityColumnMetadata computedColumn) {
-        return QSqlTypeProvider.get(computedColumn.getComputedFieldType()).map(t -> t.getSqlType(computedColumn.getColumnDefinition())).orElse(Types.OTHER);
+        return QSqlTypeProvider
+                .get(computedColumn.getComputedFieldType())
+                .map(t -> t.getSqlType(computedColumn.getColumnDefinition())).orElse(Types.OTHER);
     }
 
     LinkedHashMap<QPath, ColumnMetadata> getPaths() {

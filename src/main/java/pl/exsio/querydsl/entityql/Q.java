@@ -53,13 +53,18 @@ public class Q<E> extends QBase<E> {
     void addJoinColumn(QEntityJoinColumnMetadata column) {
         QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
         if (qColumn.getPaths().size() > 1) {
-            throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s", column.getFieldName()));
+            throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s",
+                    column.getFieldName())
+            );
         }
         qColumn.getPaths().forEach((path, metadata) -> {
             this.columns.put(String.format("%sId", column.getFieldName()), path);
             addMetadata(path.get(), metadata);
             ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
-            this.joinColumns.put(column.getFieldName(), new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames()));
+            this.joinColumns.put(
+                    column.getFieldName(),
+                    new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
+            );
         });
     }
 
@@ -67,7 +72,10 @@ public class Q<E> extends QBase<E> {
         QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
-        this.joinColumns.put(column.getFieldName(), new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames()));
+        this.joinColumns.put(
+                column.getFieldName(),
+                new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
+        );
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {
@@ -218,14 +226,18 @@ public class Q<E> extends QBase<E> {
 
     private void checkIfColumnExists(String fieldName) {
         if (!columns.containsKey(fieldName)) {
-            throw new InvalidArgumentException(String.format("No Column with name %s, available columns: %s", fieldName, columns.keySet()));
+            throw new InvalidArgumentException(String.format("No Column with name %s, available columns: %s",
+                    fieldName, columns.keySet())
+            );
         }
     }
 
     @SuppressWarnings(value = "unchecked")
     public <T> ForeignKey<T> joinColumn(String fieldName) {
         if (!joinColumns.containsKey(fieldName)) {
-            throw new InvalidArgumentException(String.format("No FK with name %s, available FKs: %s", fieldName, joinColumns.keySet()));
+            throw new InvalidArgumentException(String.format("No FK with name %s, available FKs: %s",
+                    fieldName, joinColumns.keySet())
+            );
         }
         return (ForeignKey<T>) this.joinColumns.get(fieldName).get();
     }
