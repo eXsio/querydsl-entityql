@@ -49,89 +49,90 @@ public final class QJUser extends QStaticModel<pl.exsio.querydsl.entityql.config
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("USER_ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      this.name =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
 
-      addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
+      this.name = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.name, QColumnMetadataFactory.create(config));
     }
 
     typeStr:
     {
+      QPathConfig config =
+          new QPathConfig(
+              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
+              java.lang.Enum.class,
+              "USER_TYPE",
+              false,
+              4,
+              12);
       this.typeStr =
           QPathFactory.<QEnumPath<pl.exsio.querydsl.entityql.config.entity.JUser.Type>>create(
-              this,
-              new QPathConfig(
-                  pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-                  java.lang.Enum.class,
-                  "USER_TYPE",
-                  false,
-                  4,
-                  12));
-      addMetadata(this.typeStr, QColumnMetadataFactory.create("USER_TYPE", 4, 12, false));
+              this, config);
+      addMetadata(this.typeStr, QColumnMetadataFactory.create(config));
     }
 
     typeOrd:
     {
-      this.typeOrd =
-          QPathFactory.<NumberPath<java.lang.Integer>>create(
-              this,
-              new QPathConfig(
-                  pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-                  java.lang.Integer.class,
-                  "USER_TYPE_ORD",
-                  false,
-                  5,
-                  4));
-      addMetadata(this.typeOrd, QColumnMetadataFactory.create("USER_TYPE_ORD", 5, 4, false));
+      QPathConfig config =
+          new QPathConfig(
+              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
+              java.lang.Integer.class,
+              "USER_TYPE_ORD",
+              false,
+              5,
+              4);
+      this.typeOrd = QPathFactory.<NumberPath<java.lang.Integer>>create(this, config);
+
+      addMetadata(this.typeOrd, QColumnMetadataFactory.create(config));
     }
 
     typeDef:
     {
-      this.typeDef =
-          QPathFactory.<NumberPath<java.lang.Integer>>create(
-              this,
-              new QPathConfig(
-                  pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-                  java.lang.Integer.class,
-                  "USER_TYPE_DEF",
-                  false,
-                  6,
-                  4));
-      addMetadata(this.typeDef, QColumnMetadataFactory.create("USER_TYPE_DEF", 6, 4, false));
+      QPathConfig config =
+          new QPathConfig(
+              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
+              java.lang.Integer.class,
+              "USER_TYPE_DEF",
+              false,
+              6,
+              4);
+      this.typeDef = QPathFactory.<NumberPath<java.lang.Integer>>create(this, config);
+
+      addMetadata(this.typeDef, QColumnMetadataFactory.create(config));
     }
 
     createdBy:
     {
-      this.createdBy =
-          QPathFactory.<QObjectPath<java.lang.Object>>create(
-              this,
-              new QPathConfig(
-                  java.lang.Object.class, java.lang.Object.class, "CREATED_BY", true, 7, 1111));
+      QPathConfig config =
+          new QPathConfig(
+              java.lang.Object.class, java.lang.Object.class, "CREATED_BY", true, 7, 1111);
 
-      addMetadata(this.createdBy, QColumnMetadataFactory.create("CREATED_BY", 7, 1111, true));
+      this.createdBy = QPathFactory.<QObjectPath<java.lang.Object>>create(this, config);
+
+      addMetadata(this.createdBy, QColumnMetadataFactory.create(config));
     }
 
     createdAt:
     {
-      this.createdAt =
-          QPathFactory.<QObjectPath<java.util.Date>>create(
-              this,
-              new QPathConfig(
-                  java.util.Date.class, java.lang.Object.class, "CREATED_AT", true, 8, 1111));
+      QPathConfig config =
+          new QPathConfig(
+              java.util.Date.class, java.lang.Object.class, "CREATED_AT", true, 8, 1111);
 
-      addMetadata(this.createdAt, QColumnMetadataFactory.create("CREATED_AT", 8, 1111, true));
+      this.createdAt = QPathFactory.<QObjectPath<java.util.Date>>create(this, config);
+
+      addMetadata(this.createdAt, QColumnMetadataFactory.create(config));
     }
 
     _primaryKey:

@@ -40,22 +40,22 @@ public final class QUploadedFile
 
     id:
     {
-      this.id =
-          QPathFactory.<QUuidPath>create(
-              this,
-              new QPathConfig(java.util.UUID.class, java.util.UUID.class, "FILE_ID", false, 1, 12));
+      QPathConfig config =
+          new QPathConfig(java.util.UUID.class, java.util.UUID.class, "FILE_ID", false, 1, 12);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("FILE_ID", 1, 12, false));
+      this.id = QPathFactory.<QUuidPath>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     data:
     {
-      this.data =
-          QPathFactory.<ArrayPath<byte[], java.lang.Byte>>create(
-              this,
-              new QPathConfig(byte[].class, java.lang.reflect.Array.class, "DATA", false, 2, 2003));
+      QPathConfig config =
+          new QPathConfig(byte[].class, java.lang.reflect.Array.class, "DATA", false, 2, 2003);
 
-      addMetadata(this.data, QColumnMetadataFactory.create("DATA", 2, 2003, false));
+      this.data = QPathFactory.<ArrayPath<byte[], java.lang.Byte>>create(this, config);
+
+      addMetadata(this.data, QColumnMetadataFactory.create(config));
     }
 
     _primaryKey:

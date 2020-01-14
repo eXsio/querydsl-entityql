@@ -4,7 +4,7 @@ public class QPathConfig {
 
     private final Class<?> originalFieldType;
 
-    private final Class<?> fieldType;
+    private final Class<?> computedFieldType;
 
     private final String name;
 
@@ -14,9 +14,9 @@ public class QPathConfig {
 
     private final int sqlType;
 
-    public QPathConfig(Class<?> originalFieldType, Class<?> fieldType, String name, boolean nullable, int idx, int sqlType) {
+    public QPathConfig(Class<?> originalFieldType, Class<?> computedFieldType, String name, boolean nullable, int idx, int sqlType) {
         this.originalFieldType = originalFieldType;
-        this.fieldType = fieldType;
+        this.computedFieldType = computedFieldType;
         this.name = name;
         this.nullable = nullable;
         this.idx = idx;
@@ -27,8 +27,8 @@ public class QPathConfig {
         return originalFieldType;
     }
 
-    public Class<?> getFieldType() {
-        return fieldType;
+    public Class<?> getComputedFieldType() {
+        return computedFieldType;
     }
 
     public String getName() {

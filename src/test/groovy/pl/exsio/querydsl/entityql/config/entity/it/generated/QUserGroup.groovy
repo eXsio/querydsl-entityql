@@ -41,22 +41,22 @@ public final class QUserGroup
 
     groupId:
     {
-      this.groupId =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 3, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GROUP_ID", true, 3, -5);
 
-      addMetadata(this.groupId, QColumnMetadataFactory.create("GROUP_ID", 3, -5, true));
+      this.groupId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.groupId, QColumnMetadataFactory.create(config));
     }
 
     userId:
     {
-      this.userId =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 4, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 4, -5);
 
-      addMetadata(this.userId, QColumnMetadataFactory.create("USER_ID", 4, -5, true));
+      this.userId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.userId, QColumnMetadataFactory.create(config));
     }
 
     group:

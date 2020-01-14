@@ -39,22 +39,22 @@ public final class QJOrder extends QStaticModel<pl.exsio.querydsl.entityql.confi
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("ORDER_ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     userId:
     {
-      this.userId =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", false, 2, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", false, 2, -5);
 
-      addMetadata(this.userId, QColumnMetadataFactory.create("USER_ID", 2, -5, false));
+      this.userId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.userId, QColumnMetadataFactory.create(config));
     }
 
     user:

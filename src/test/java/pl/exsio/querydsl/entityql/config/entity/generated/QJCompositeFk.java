@@ -44,21 +44,22 @@ public final class QJCompositeFk
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this, new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     desc:
     {
-      this.desc =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 4, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 4, 12);
 
-      addMetadata(this.desc, QColumnMetadataFactory.create("DESC", 4, 12, true));
+      this.desc = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.desc, QColumnMetadataFactory.create(config));
     }
 
     compositePk:
@@ -66,22 +67,18 @@ public final class QJCompositeFk
       List paths = new ArrayList();
       List<String> foreignColumnNames = new ArrayList<>();
 
-      Path<?> compositePk0 =
-          QPathFactory.<Path>create(
-              this,
-              new QPathConfig(
-                  java.lang.Long.class, java.lang.Long.class, "CPK_ID_1", false, 2, -5));
+      QPathConfig config0 =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "CPK_ID_1", false, 2, -5);
 
-      addMetadata(compositePk0, QColumnMetadataFactory.create("CPK_ID_1", 2, -5, false));
+      Path<?> compositePk0 = QPathFactory.<Path>create(this, config0);
+      addMetadata(compositePk0, QColumnMetadataFactory.create(config0));
       paths.add(compositePk0);
 
-      Path<?> compositePk1 =
-          QPathFactory.<Path>create(
-              this,
-              new QPathConfig(
-                  java.lang.String.class, java.lang.String.class, "CPK_ID_2", false, 2, 12));
+      QPathConfig config1 =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "CPK_ID_2", false, 2, 12);
 
-      addMetadata(compositePk1, QColumnMetadataFactory.create("CPK_ID_2", 2, 12, false));
+      Path<?> compositePk1 = QPathFactory.<Path>create(this, config1);
+      addMetadata(compositePk1, QColumnMetadataFactory.create(config1));
       paths.add(compositePk1);
 
       foreignColumnNames.add("ID_1");
@@ -98,22 +95,18 @@ public final class QJCompositeFk
       List paths = new ArrayList();
       List<String> foreignColumnNames = new ArrayList<>();
 
-      Path<?> singularPk0 =
-          QPathFactory.<Path>create(
-              this,
-              new QPathConfig(
-                  java.lang.Long.class, java.lang.Long.class, "SPK_ID_1", false, 3, -5));
+      QPathConfig config0 =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "SPK_ID_1", false, 3, -5);
 
-      addMetadata(singularPk0, QColumnMetadataFactory.create("SPK_ID_1", 3, -5, false));
+      Path<?> singularPk0 = QPathFactory.<Path>create(this, config0);
+      addMetadata(singularPk0, QColumnMetadataFactory.create(config0));
       paths.add(singularPk0);
 
-      Path<?> singularPk1 =
-          QPathFactory.<Path>create(
-              this,
-              new QPathConfig(
-                  java.lang.String.class, java.lang.String.class, "SPK_ID_2", false, 3, 12));
+      QPathConfig config1 =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "SPK_ID_2", false, 3, 12);
 
-      addMetadata(singularPk1, QColumnMetadataFactory.create("SPK_ID_2", 3, 12, false));
+      Path<?> singularPk1 = QPathFactory.<Path>create(this, config1);
+      addMetadata(singularPk1, QColumnMetadataFactory.create(config1));
       paths.add(singularPk1);
 
       foreignColumnNames.add("ID_1");

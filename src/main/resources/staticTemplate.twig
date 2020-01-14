@@ -46,8 +46,9 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
 
         {% for name, path in q.columns %}
         {{name}}: {
-            this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, new QPathConfig({{macros.printOriginalType(path)}},{{path.config.fieldType.name}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}}));
-            addMetadata(this.{{name}}, QColumnMetadataFactory.create("{{path.config.name}}",{{path.config.idx}},{{path.config.sqlType}},{{path.config.nullable}}));
+            QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.name}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
+            this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
+            addMetadata(this.{{name}}, QColumnMetadataFactory.create(config));
         }
         {% endfor %}
 
@@ -57,8 +58,9 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
                     List paths = new ArrayList();
                     List<String> foreignColumnNames = new ArrayList<>();
                     {% for fkPath in fk.getPaths().keySet() %}
-                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.fieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}}));
-                        addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create("{{fkPath.config.name}}",{{fkPath.config.idx}},{{fkPath.config.sqlType}},{{fkPath.config.nullable}}));
+                        QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
+                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
+                        addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
                         paths.add({{name}}{{loop.index0}});
                     {% endfor %}
                     {% for fcName in fk.foreignColumnNames %}

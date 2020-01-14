@@ -39,44 +39,43 @@ public final class QBook extends QStaticModel<pl.exsio.querydsl.entityql.config.
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("BOOK_ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      this.name =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
 
-      addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
+      this.name = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.name, QColumnMetadataFactory.create(config));
     }
 
     desc:
     {
-      this.desc =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(
-                  java.lang.String.class, java.lang.String.class, "DESC", true, 3, 2005));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 2005);
 
-      addMetadata(this.desc, QColumnMetadataFactory.create("DESC", 3, 2005, true));
+      this.desc = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.desc, QColumnMetadataFactory.create(config));
     }
 
     price:
     {
-      this.price =
-          QPathFactory.<NumberPath<java.math.BigDecimal>>create(
-              this,
-              new QPathConfig(
-                  java.math.BigDecimal.class, java.math.BigDecimal.class, "PRICE", true, 4, 3));
+      QPathConfig config =
+          new QPathConfig(
+              java.math.BigDecimal.class, java.math.BigDecimal.class, "PRICE", true, 4, 3);
 
-      addMetadata(this.price, QColumnMetadataFactory.create("PRICE", 4, 3, true));
+      this.price = QPathFactory.<NumberPath<java.math.BigDecimal>>create(this, config);
+
+      addMetadata(this.price, QColumnMetadataFactory.create(config));
     }
 
     _primaryKey:

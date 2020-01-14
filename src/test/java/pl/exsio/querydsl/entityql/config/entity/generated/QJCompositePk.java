@@ -41,32 +41,32 @@ public final class QJCompositePk
 
     id1:
     {
-      this.id1 =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID_1", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID_1", true, 1, -5);
 
-      addMetadata(this.id1, QColumnMetadataFactory.create("ID_1", 1, -5, true));
+      this.id1 = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id1, QColumnMetadataFactory.create(config));
     }
 
     id2:
     {
-      this.id2 =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "ID_2", true, 2, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "ID_2", true, 2, 12);
 
-      addMetadata(this.id2, QColumnMetadataFactory.create("ID_2", 2, 12, true));
+      this.id2 = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.id2, QColumnMetadataFactory.create(config));
     }
 
     desc:
     {
-      this.desc =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 12);
 
-      addMetadata(this.desc, QColumnMetadataFactory.create("DESC", 3, 12, true));
+      this.desc = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.desc, QColumnMetadataFactory.create(config));
     }
 
     _primaryKey:

@@ -13,9 +13,9 @@ public abstract class QColumnMetadataFactory {
         return metadata;
     }
 
-    public static ColumnMetadata create(String name, int idx, int sqlType, boolean nullable) {
-        ColumnMetadata metadata = ColumnMetadata.named(name).withIndex(idx).ofType(sqlType);
-        if (!nullable) {
+    public static ColumnMetadata create(QPathConfig config) {
+        ColumnMetadata metadata = ColumnMetadata.named(config.getName()).withIndex(config.getIdx()).ofType(config.getSqlType());
+        if (!config.isNullable()) {
             metadata = metadata.notNull();
         }
         return metadata;

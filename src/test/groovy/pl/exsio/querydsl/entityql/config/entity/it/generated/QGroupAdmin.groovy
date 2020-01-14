@@ -37,22 +37,22 @@ public final class QGroupAdmin
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GA_ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GA_ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("GA_ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      this.name =
-          QPathFactory.<StringPath>create(
-              this,
-              new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12));
+      QPathConfig config =
+          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
 
-      addMetadata(this.name, QColumnMetadataFactory.create("NAME", 2, 12, true));
+      this.name = QPathFactory.<StringPath>create(this, config);
+
+      addMetadata(this.name, QColumnMetadataFactory.create(config));
     }
 
     _primaryKey:

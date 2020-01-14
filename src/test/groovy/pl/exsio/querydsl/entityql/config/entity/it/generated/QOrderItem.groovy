@@ -44,44 +44,42 @@ public final class QOrderItem
 
     id:
     {
-      this.id =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(
-                  java.lang.Long.class, java.lang.Long.class, "ORDER_ITEM_ID", true, 1, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ITEM_ID", true, 1, -5);
 
-      addMetadata(this.id, QColumnMetadataFactory.create("ORDER_ITEM_ID", 1, -5, true));
+      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     quantity:
     {
-      this.quantity =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "QTY", false, 4, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "QTY", false, 4, -5);
 
-      addMetadata(this.quantity, QColumnMetadataFactory.create("QTY", 4, -5, false));
+      this.quantity = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.quantity, QColumnMetadataFactory.create(config));
     }
 
     bookId:
     {
-      this.bookId =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", false, 2, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", false, 2, -5);
 
-      addMetadata(this.bookId, QColumnMetadataFactory.create("BOOK_ID", 2, -5, false));
+      this.bookId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.bookId, QColumnMetadataFactory.create(config));
     }
 
     orderId:
     {
-      this.orderId =
-          QPathFactory.<NumberPath<java.lang.Long>>create(
-              this,
-              new QPathConfig(
-                  java.lang.Long.class, java.lang.Long.class, "ORDER_ID", false, 3, -5));
+      QPathConfig config =
+          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", false, 3, -5);
 
-      addMetadata(this.orderId, QColumnMetadataFactory.create("ORDER_ID", 3, -5, false));
+      this.orderId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+
+      addMetadata(this.orderId, QColumnMetadataFactory.create(config));
     }
 
     book:

@@ -47,12 +47,12 @@ public abstract class QPathFactory {
 
     @SuppressWarnings(value = "unchecked")
     private static QEnumPath<?> createEnumeratedPath(QBase<?> q, QPathConfig config) {
-        return new QEnumPath(config.getFieldType(), q, config.getName());
+        return new QEnumPath(config.getComputedFieldType(), q, config.getName());
     }
 
     @SuppressWarnings(value = "unchecked")
     private static Class<Object> getType(QPathConfig config) {
-        return (Class<Object>) config.getFieldType();
+        return (Class<Object>) config.getComputedFieldType();
     }
 
     @SuppressWarnings(value = "unchecked")
@@ -61,17 +61,17 @@ public abstract class QPathFactory {
     }
 
     static QPath create(Q<?> q, QEntityColumnMetadata column, int sqlType) {
-        Class<?> fieldType = column.getComputedFieldType();
-        if (!pathFactory.containsKey(fieldType)) {
-            fieldType = Object.class;
+        Class<?> computedFieldType = column.getComputedFieldType();
+        if (!pathFactory.containsKey(computedFieldType)) {
+            computedFieldType = Object.class;
         }
-        return pathFactory.get(fieldType).createExpression(q, new QPathConfig(column.getOriginalFieldType(), fieldType,
+        return pathFactory.get(computedFieldType).createExpression(q, new QPathConfig(column.getOriginalFieldType(), computedFieldType,
                 column.getColumnName(), column.isNullable(), column.getIdx(), sqlType));
     }
 
     @SuppressWarnings(value = "unchecked")
     public static <R> R create(QBase<?> q, QPathConfig config) {
-        return (R) pathFactory.get(config.getFieldType()).createExpression(q, config).get();
+        return (R) pathFactory.get(config.getComputedFieldType()).createExpression(q, config).get();
     }
 
     private interface PathFactory {
