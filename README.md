@@ -129,7 +129,8 @@ There are two distinct ways you can utilize the power of EntityQL:
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
 
-## <a name="HowItWorks"></a> How it works ([Contents](#Contents))
+## <a name="HowItWorks"></a> How it works 
+([Contents](#Contents))
 
 There is a special method ```EntityQL::qEntity``` that uses Reflection to gather all DDL information required to construct 
 QueryDSL meta-model and to sucessfuly perform all operations supported by QueryDSL. The scan occurs once per Entity class - 
