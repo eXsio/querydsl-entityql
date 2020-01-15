@@ -1,31 +1,34 @@
-package pl.exsio.querydsl.entityql.jpa.it.generated
+package pl.exsio.querydsl.entityql.jpa.it.dynamic
+
 
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.dto.OrderItemBookCountDto
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrder
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrderItem
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUser
+import pl.exsio.querydsl.entityql.jpa.entity.it.Book
+import pl.exsio.querydsl.entityql.jpa.entity.it.Order
+import pl.exsio.querydsl.entityql.jpa.entity.it.OrderItem
+import pl.exsio.querydsl.entityql.jpa.entity.it.User
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
 import static com.querydsl.sql.SQLExpressions.count
 import static com.querydsl.sql.SQLExpressions.select
+import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QAdvSelectGeneratedIT extends Specification {
+class QJPAAdvSelectDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
 
     def "should correctly use aggregate functions"() {
         given:
-        QOrderItem orderItem = QOrderItem.INSTANCE
+        Q<OrderItem> orderItem = qEntity(OrderItem)
 
         when:
 
@@ -33,11 +36,11 @@ class QAdvSelectGeneratedIT extends Specification {
                 .select(
                         constructor(
                                 OrderItemBookCountDto,
-                                orderItem.orderId,
-                                count(orderItem.bookId)))
+                                orderItem.longNumber("orderId"),
+                                count(orderItem.longNumber("bookId"))))
                 .from(orderItem)
-                .groupBy(orderItem.orderId)
-                .orderBy(orderItem.orderId.asc())
+                .groupBy(orderItem.longNumber("orderId"))
+                .orderBy(orderItem.longNumber("orderId").asc())
                 .fetch();
 
         then:
@@ -52,20 +55,20 @@ class QAdvSelectGeneratedIT extends Specification {
 
     def "should correctly use subQueries"() {
         given:
-        QUser user = QUser.INSTANCE
-        QBook book = QBook.INSTANCE
-        QOrder order = QOrder.INSTANCE
-        QOrderItem orderItem = QOrderItem.INSTANCE
+        Q<User> user = qEntity(User)
+        Q<Book> book = qEntity(Book)
+        Q<Order> order = qEntity(Order)
+        Q<OrderItem> orderItem = qEntity(OrderItem)
 
         when:
-        List<String> result = queryFactory.select(user.name)
+        List<String> result = queryFactory.select(user.string("name"))
                 .from(user)
-                .where(user.id.in(
-                        select(order.userId)
+                .where(user.longNumber("id").in(
+                        select(order.longNumber("userId"))
                                 .from(orderItem)
-                                .innerJoin(orderItem.book, book)
-                                .innerJoin(orderItem.order, order)
-                                .where(book.price.gt(new BigDecimal("80")))
+                                .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                                .innerJoin(orderItem.<Order> joinColumn("order"), order)
+                                .where(book.decimalNumber("price").gt(new BigDecimal("80")))
                 )).fetch()
 
         then:
@@ -75,18 +78,18 @@ class QAdvSelectGeneratedIT extends Specification {
 
     def "should correctly use nested selects"() {
         given:
-        QBook book = QBook.INSTANCE
-        QOrder order = QOrder.INSTANCE
-        QOrderItem orderItem = QOrderItem.INSTANCE
+        Q<Book> book = qEntity(Book)
+        Q<Order> order = qEntity(Order)
+        Q<OrderItem> orderItem = qEntity(OrderItem)
 
         when:
         Long result = queryFactory.select(count())
                 .from(
-                        select(order.userId)
+                        select(order.longNumber("userId"))
                                 .from(orderItem)
-                                .innerJoin(orderItem.book, book)
-                                .innerJoin(orderItem.order, order)
-                                .where(book.price.gt(new BigDecimal("80")))
+                                .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                                .innerJoin(orderItem.<Order> joinColumn("order"), order)
+                                .where(book.decimalNumber("price").gt(new BigDecimal("80")))
                 ).fetchOne()
 
         then:

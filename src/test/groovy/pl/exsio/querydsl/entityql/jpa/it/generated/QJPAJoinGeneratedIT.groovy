@@ -14,7 +14,7 @@ import static com.querydsl.core.types.Projections.constructor
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QJoinGeneratedIT extends Specification {
+class QJPAJoinGeneratedIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory

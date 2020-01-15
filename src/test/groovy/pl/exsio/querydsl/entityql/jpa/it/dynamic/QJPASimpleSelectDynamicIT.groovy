@@ -1,39 +1,40 @@
-package pl.exsio.querydsl.entityql.jpa.it.generated
+package pl.exsio.querydsl.entityql.jpa.it.dynamic
 
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
+import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
 import pl.exsio.querydsl.entityql.jpa.entity.it.Book
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
-import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUser
+import pl.exsio.querydsl.entityql.jpa.entity.it.User
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
+import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QSimpleSelectGeneratedIT extends Specification {
+class QJPASimpleSelectDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
 
     def "should get all rows from an Entity"() {
         given:
-        QBook book = QBook.INSTANCE
+        Q<Book> book = qEntity(Book)
 
         when:
         List<Book> books = queryFactory.query()
                 .select(
                         constructor(
                                 Book,
-                                book.id,
-                                book.name,
-                                book.desc,
-                                book.price
+                                book.longNumber("id"),
+                                book.string("name"),
+                                book.string("desc"),
+                                book.decimalNumber("price")
                         ))
                 .from(book).fetch()
 
@@ -49,19 +50,19 @@ class QSimpleSelectGeneratedIT extends Specification {
 
     def "should get one row from an Entity"() {
         given:
-        QBook book = QBook.INSTANCE
+        Q<Book> book = qEntity(Book)
 
         when:
         Book p = queryFactory.query()
                 .select(
                         constructor(
                                 Book,
-                                book.id,
-                                book.name,
-                                book.desc,
-                                book.price
+                                book.longNumber("id"),
+                                book.string("name"),
+                                book.string("desc"),
+                                book.decimalNumber("price")
                         ))
-                .where(book.id.eq(1L))
+                .where(book.longNumber("id").eq(1L))
                 .from(book).fetchOne()
 
         then:
@@ -74,12 +75,12 @@ class QSimpleSelectGeneratedIT extends Specification {
 
     def "should get all rows from an Entity based on an Enum String filter"() {
         given:
-        QUser user = QUser.INSTANCE
+        Q<User<String>> user = qEntity(User)
 
         when:
         String userName = queryFactory.query()
-                .select(user.name)
-                .where(user.typeStr.eq(UserTypeByName.ADMIN))
+                .select(user.string("name"))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -88,12 +89,12 @@ class QSimpleSelectGeneratedIT extends Specification {
 
     def "should get all rows from an Entity based on an Enum Ordinal filter"() {
         given:
-        QUser user = QUser.INSTANCE
+        Q<User<String>> user = qEntity(User)
 
         when:
         String userName = queryFactory.query()
-                .select(user.name)
-                .where(user.typeOrd.eq(UserTypeByOrdinal.ADMIN))
+                .select(user.string("name"))
+                .where(user.<UserTypeByOrdinal>enumerated("typeOrd").eq(UserTypeByOrdinal.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -102,12 +103,12 @@ class QSimpleSelectGeneratedIT extends Specification {
 
     def "should get generic Fields"() {
         given:
-        QUser user = QUser.INSTANCE
+        Q<User<String>> user = qEntity(User)
 
         when:
         String createdBy = queryFactory.query()
-                .select(user.createdBy)
-                .where(user.typeStr.eq(UserTypeByName.ADMIN))
+                .select(user.<String> column("createdBy"))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -116,12 +117,12 @@ class QSimpleSelectGeneratedIT extends Specification {
 
     def "should get unknown Fields"() {
         given:
-        QUser user = QUser.INSTANCE
+        Q<User<String>> user = qEntity(User)
 
         when:
         Date createdBy = queryFactory.query()
-                .select(user.createdAt)
-                .where(user.typeStr.eq(UserTypeByName.ADMIN))
+                .select(user.<Date> column("createdAt"))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:

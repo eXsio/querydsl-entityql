@@ -16,7 +16,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class QCompositeFkDynamicIT extends Specification {
+class QJPACompositeFkDynamicIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory

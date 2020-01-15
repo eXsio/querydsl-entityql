@@ -2,31 +2,27 @@ package pl.exsio.querydsl.entityql.spring_data_jdbc.entity.it
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
-
-import java.time.Instant
+import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
+import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
 
 public class User<T> {
-
-    enum Type {
-        ADMIN, CLIENT
-    }
 
     @Column("USER_ID")
     @Id
     private final Long id;
     private final String name;
     private final Order order;
-    private final Type typeStr
-    private final Type typeDef
+    private final UserTypeByName typeStr
+    private final UserTypeByOrdinal typeOrd
     private final T createdBy
-    private final Instant createdAt;
+    private final Date createdAt;
 
-    User(Long id, String name, Order order, Type typeStr, Type typeDef, T createdBy, Instant createdAt) {
+    User(Long id, String name, Order order, UserTypeByName typeStr, UserTypeByOrdinal typeOrd, T createdBy, Date createdAt) {
         this.id = id
         this.name = name
         this.order = order
         this.typeStr = typeStr
-        this.typeDef = typeDef
+        this.typeOrd = typeOrd
         this.createdBy = createdBy
         this.createdAt = createdAt
     }
@@ -43,8 +39,12 @@ public class User<T> {
         return order;
     }
 
-    Type getType() {
+    UserTypeByName getTypeStr() {
         return typeStr
+    }
+
+    UserTypeByOrdinal getTypeOrd() {
+        return typeOrd
     }
 
     T getCreatedBy() {

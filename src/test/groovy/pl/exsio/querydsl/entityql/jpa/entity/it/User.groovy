@@ -9,10 +9,6 @@ import javax.persistence.*
 @Table(name = "USERS")
 public class User<T> {
 
-    enum Type {
-        ADMIN, CLIENT
-    }
-
     @Id
     @Column(name = "USER_ID")
     @GeneratedValue
@@ -24,11 +20,11 @@ public class User<T> {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Order order;
 
-    @Column(name = "USER_TYPE", nullable = false)
+    @Column(name = "TYPE_STR", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserTypeByName typeStr
 
-    @Column(name = "USER_TYPE_ORD", nullable = false)
+    @Column(name = "TYPE_ORD", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private UserTypeByOrdinal typeOrd
 

@@ -1,15 +1,15 @@
-package pl.exsio.querydsl.entityql.jpa.it.dynamic
+package pl.exsio.querydsl.entityql.jpa.it.generated
 
 import com.querydsl.sql.SQLQueryFactory
 import com.querydsl.sql.dml.SQLUpdateClause
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
-import pl.exsio.querydsl.entityql.jpa.entity.it.Book
 import pl.exsio.querydsl.entityql.jpa.entity.it.UploadedFile
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUploadedFile
 import spock.lang.Specification
 
 import javax.transaction.Transactional
@@ -17,25 +17,24 @@ import java.util.stream.IntStream
 
 import static com.querydsl.core.types.Projections.constructor
 import static com.querydsl.sql.SQLExpressions.count
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
-class QDmlDynamicIT extends Specification {
+class QJPADmlGeneratedIT extends Specification {
 
     @Autowired
     SQLQueryFactory queryFactory
 
     def "should correctly insert new Entity"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         queryFactory.insert(book)
-                .set(book.longNumber("id"), 10L)
-                .set(book.string("name"), "newBook")
-                .set(book.decimalNumber("price"), BigDecimal.ONE)
+                .set(book.id, 10L)
+                .set(book.name, "newBook")
+                .set(book.price, BigDecimal.ONE)
                 .execute();
 
         then:
@@ -44,14 +43,14 @@ class QDmlDynamicIT extends Specification {
 
     def "should correctly insert new Entity using set() method"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         book.set(
                 queryFactory.insert(book),
-                "id", 11L,
-                "name", "newBook2",
-                "price", BigDecimal.ONE)
+                book.id, 11L,
+                book.name, "newBook2",
+                book.price, BigDecimal.ONE)
                 .execute()
 
 
@@ -61,52 +60,52 @@ class QDmlDynamicIT extends Specification {
 
     def "should correctly update existing Entity"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         queryFactory.update(book)
-                .set(book.string("name"), "updatedBook")
-                .set(book.decimalNumber("price"), BigDecimal.ONE)
-                .where(book.longNumber("id").eq(9L))
+                .set(book.name, "updatedBook")
+                .set(book.price, BigDecimal.ONE)
+                .where(book.id.eq(9L))
                 .execute();
 
         then:
         queryFactory.query().select(count()).from(book)
-                .where(book.string("name").eq("updatedBook")
-                        .and(book.decimalNumber("price").eq(BigDecimal.ONE))
-                        .and(book.longNumber("id").eq(9L)))
+                .where(book.name.eq("updatedBook")
+                        .and(book.price.eq(BigDecimal.ONE))
+                        .and(book.id.eq(9L)))
                 .fetchOne() == 1L
     }
 
 
     def "should correctly update existing Entity using set() method"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         SQLUpdateClause update = queryFactory.update(book)
-                .where(book.longNumber("id").eq(9L))
+                .where(book.id.eq(9L))
 
         book.set(update,
-                "name", "updatedBook",
-                "price", BigDecimal.ONE
+                book.name, "updatedBook",
+                book.price, BigDecimal.ONE
         ).execute()
 
         then:
         queryFactory.query().select(count()).from(book)
-                .where(book.string("name").eq("updatedBook")
-                        .and(book.decimalNumber("price").eq(BigDecimal.ONE))
-                        .and(book.longNumber("id").eq(9L)))
+                .where(book.name.eq("updatedBook")
+                        .and(book.price.eq(BigDecimal.ONE))
+                        .and(book.id.eq(9L)))
                 .fetchOne() == 1L
     }
 
     def "should correctly delete existing Entity"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         queryFactory.delete(book)
-                .where(book.longNumber("id").eq(4L))
+                .where(book.id.eq(4L))
                 .execute();
 
         then:
@@ -115,7 +114,7 @@ class QDmlDynamicIT extends Specification {
 
     def "should insert and read byte array"() {
         given:
-        Q<UploadedFile> file = qEntity(UploadedFile)
+        QUploadedFile file = QUploadedFile.INSTANCE
 
         UUID id = UUID.randomUUID()
         int size = 10
@@ -124,15 +123,15 @@ class QDmlDynamicIT extends Specification {
 
         when:
         queryFactory.insert(file)
-                .set(file.uuid("id"), id)
-                .set(file.<byte[], Byte>array("data"), data)
+                .set(file.id, id)
+                .set(file.data, data)
                 .execute()
 
         and:
         UploadedFile uploadedFile = queryFactory.select(
-                constructor(UploadedFile, file.<byte[], Byte>array("data"), file.uuid("id")))
+                constructor(UploadedFile, file.data, file.id))
                 .from(file)
-                .where(file.uuid("id").eq(id))
+                .where(file.id.eq(id))
                 .fetchOne()
 
         then:
@@ -148,15 +147,15 @@ class QDmlDynamicIT extends Specification {
 
     def "should throw exception when trying to use odd number of parameters in set()"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         SQLUpdateClause update = queryFactory.update(book)
-                .where(book.longNumber("id").eq(9L))
+                .where(book.id.eq(9L))
 
         book.set(update,
-                "name", "updatedBook",
-                "price"
+                book.name, "updatedBook",
+                book.price
         ).execute()
 
         then:
@@ -165,14 +164,14 @@ class QDmlDynamicIT extends Specification {
 
     def "should throw exception when trying to use non-String key in set()"() {
         given:
-        Q<Book> book = qEntity(Book)
+        QBook book = QBook.INSTANCE
 
         when:
         SQLUpdateClause update = queryFactory.update(book)
-                .where(book.longNumber("id").eq(9L))
+                .where(book.id.eq(9L))
 
         book.set(update,
-                "name", "updatedBook",
+                book.name, "updatedBook",
                 new Object(), BigDecimal.ONE
         ).execute()
 
