@@ -14,12 +14,11 @@ public class QExporterITSpec extends Specification {
 
     String fileNamePattern = "Q%s.groovy"
 
-    String destinationPath = getClass().getResource(".").getPath().replace("/", "\\").substring(1) +
-            "..\\..\\..\\..\\..\\..\\..\\src\\test\\groovy"
+    String destinationPath = java.nio.file.Paths.get("src/test/groovy").toAbsolutePath()
 
     QExporter exporter = new QExporter();
 
-    @Ignore
+//    @Ignore
     def "should export integration q classes to static meta models"() {
         when:
         exporter.export(qEntity(Book), fileNamePattern, pkgName, destinationPath)
