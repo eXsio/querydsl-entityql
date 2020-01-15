@@ -6,6 +6,8 @@ import pl.exsio.querydsl.entityql.config.entity.it.*
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import java.nio.file.Paths
+
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 public class QExporterITSpec extends Specification {
@@ -14,11 +16,11 @@ public class QExporterITSpec extends Specification {
 
     String fileNamePattern = "Q%s.groovy"
 
-    String destinationPath = java.nio.file.Paths.get("src/test/groovy").toAbsolutePath()
+    String destinationPath = Paths.get("src/test/groovy").toAbsolutePath()
 
     QExporter exporter = new QExporter();
 
-//    @Ignore
+    @Ignore
     def "should export integration q classes to static meta models"() {
         when:
         exporter.export(qEntity(Book), fileNamePattern, pkgName, destinationPath)

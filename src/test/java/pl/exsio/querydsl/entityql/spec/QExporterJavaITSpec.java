@@ -5,6 +5,8 @@ import org.junit.Test;
 import pl.exsio.querydsl.entityql.QExporter;
 import pl.exsio.querydsl.entityql.config.entity.*;
 
+import java.nio.file.Paths;
+
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
 public class QExporterJavaITSpec {
@@ -13,8 +15,7 @@ public class QExporterJavaITSpec {
 
     String fileNamePattern = "Q%s.java";
 
-    String destinationPath = getClass().getResource(".").getPath().replace("/", "\\").substring(1) +
-            "..\\..\\..\\..\\..\\..\\..\\src\\test\\java";
+    String destinationPath = Paths.get("src/test/java").toAbsolutePath().toString();
 
     QExporter exporter = new QExporter();
 
