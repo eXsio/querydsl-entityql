@@ -81,24 +81,27 @@ Long count = queryFactory.select(count())
     * [Quick example](#QuickExample)
 2. [Motivation](#Motivation)
 3. [Overview](#Overview)
-4. [How it works](#HowItWorks)
-5. [Use Cases](#UseCases)
-6. [QueryDSL SQL Features](#QueryDslSqlFeatures)
-7. [How does the EntityQL differ from...](#HowDiffers)
-8. [Installation](#Installation)
-9. [Configuration](#Configuration)
-10. [Spring Configuration](#SpringConfiguration)
-11. [Static Code generation](#StaticCodeGen)
-12. [Limitations and restrictions](#Limits)
-13. [Performance](#Performance)
+4. [Supplementary Projects](#Supple)
+    * [Maven Plugin](#MavenPl)
+    * [Examples Project](#ExamplesProj)
+5. [How it works](#HowItWorks)
+6. [Use Cases](#UseCases)
+7. [QueryDSL SQL Features](#QueryDslSqlFeatures)
+8. [How does the EntityQL differ from...](#HowDiffers)
+9. [Installation](#Installation)
+10. [Configuration](#Configuration)
+11. [Spring Configuration](#SpringConfiguration)
+12. [Static Code generation](#StaticCodeGen)
+13. [Limitations and restrictions](#Limits)
+14. [Performance](#Performance)
     * [Obtaining Query Model](#Obtain)
     * [Query building ](#Build)
     * [Query execution](#Execute)
-14. [Thread safety](#Threads)
-15. [Extending EntityQL](#Extending)
-16. [More examples](#Examples)
-17. [Support](#Support)
-18. [Bugs](#Bugs)
+15. [Thread safety](#Threads)
+16. [Extending EntityQL](#Extending)
+17. [More examples](#Examples)
+18. [Support](#Support)
+19. [Bugs](#Bugs)
     
 
 ## <a name="Motivation"></a> Motivation 
@@ -128,6 +131,21 @@ There are two distinct ways you can utilize the power of EntityQL:
 - **generate static meta-model Java classes** using the ```QExporter``` or **[designated Maven plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)**
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
+
+## <a name="Supple"></a> Supplementary Projects
+([Contents](#Contents))
+
+There are 2 more Projects that make EntityQL a complete package:
+
+#### <a name="MavenPl"></a> Maven Plugin
+([Contents](#Contents))
+
+**[Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)** designed to easily generate Static Query Models.
+
+#### <a name="ExamplesProj"></a> Examples Project
+([Contents](#Contents))
+
+**[Examples Project](https://github.com/eXsio/querydsl-entityql-examples)**  to show how to configure and use EntityQL.
 
 ## <a name="HowItWorks"></a> How it works 
 ([Contents](#Contents))
