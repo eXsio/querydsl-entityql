@@ -1,4 +1,4 @@
-# QueryDSL EntityQL - Native Query builder for JPA
+# QueryDSL EntityQL - Native Query builder for JPA and Spring Data JDBC
 
 [![Build Status](https://travis-ci.org/eXsio/querydsl-entityql.svg?branch=master)](https://travis-ci.org/eXsio/querydsl-entityql)
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
@@ -12,12 +12,15 @@ Have you ever had a situation where you had to perform a SQL operation that was 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
+Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC!
+
 **EntityQL can:**
 - **serve as an addition to any existent JPA configuration or as a standalone Data Access Layer**
 - **be a lightweight alternative to using JPA/Hibernate**
 - **generate both dynamic and static Query Models, preserving the original JPA Entity field names**
 - **completely replace the usage of Criteria API and/or JPQL**
 - **support Native SQL features not available in JPA using fluent Java API**
+- **construct QueryDSL Queries using both JPA and Spring Data JDBC Metadata systems**
 - **handle all commercial and enterprise databases without any additional costs**
 
 #### <a name="QuickExample"></a> Quick example:
@@ -91,17 +94,18 @@ Long count = queryFactory.select(count())
 9. [Installation](#Installation)
 10. [Configuration](#Configuration)
 11. [Spring Configuration](#SpringConfiguration)
-12. [Static Code generation](#StaticCodeGen)
-13. [Limitations and restrictions](#Limits)
-14. [Performance](#Performance)
+12. [Spring Data JDBC Integration](#SpringDataJDBC)
+13. [Static Code generation](#StaticCodeGen)
+14. [Limitations and restrictions](#Limits)
+15. [Performance](#Performance)
     * [Obtaining Query Model](#Obtain)
     * [Query building ](#Build)
     * [Query execution](#Execute)
-15. [Thread safety](#Threads)
-16. [Extending EntityQL](#Extending)
-17. [More examples](#Examples)
-18. [Support](#Support)
-19. [Bugs](#Bugs)
+16. [Thread safety](#Threads)
+17. [Extending EntityQL](#Extending)
+18. [More examples](#Examples)
+19. [Support](#Support)
+20. [Bugs](#Bugs)
     
 
 ## <a name="Motivation"></a> Motivation 
@@ -161,7 +165,7 @@ using this [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugi
 ## <a name="UseCases"></a> Use Cases 
 ([Contents](#Contents))
 
-There are 2 primary use cases for EntityQL:
+There are 3 primary use cases for EntityQL:
 
 1) Supplementary add-on on top of existing JPA/Hibernate usage.
 
@@ -191,6 +195,11 @@ There are 2 primary use cases for EntityQL:
     - wants to have unbeatable persistence performance (QueryDSL is orders of magnitude faster than Hibernate as it has minimal abstractions and works directly on JDBC level)
 
     EntityQL is just a translation layer between JPA mappings and QueryDSL. QueryDSL is perfectly capable to handle all DML statements.
+    
+3) Complementary platform for all Spring Data JDBC users
+
+    EntityQL is able to create both Dynamic and Static Models from Spring Data JDBC Entities using Spring's own implementation 
+    to gather all metadata (no reverse engineering)!    
 
 ## <a name="QueryDslSqlFeatures"></a> QueryDSL SQL Features 
 ([Contents](#Contents))
@@ -244,19 +253,28 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
 </dependency>
 
-<!-- dependencies of EntityQL. JPA API can be skipped if you're using hibernate-core. -->
+<!-- QueryDSL itself -->
+<dependency>
+    <groupId>com.querydsl</groupId>
+    <artifactId>querydsl-sql</artifactId>
+    <version>4.2.2</version>
+</dependency>
+
+<!-- if you'd like to use JPA Annotations as source of Metadata -->
 <dependency>
     <groupId>org.hibernate.javax.persistence</groupId>
     <artifactId>hibernate-jpa-2.1-api</artifactId>
     <version>1.0.2.Final</version>
 </dependency>
+
+<!-- if you'd like to use Spring Data JDBC as source of Metadata -->
 <dependency>
-    <groupId>com.querydsl</groupId>
-    <artifactId>querydsl-sql</artifactId>
-    <version>4.2.2</version>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-jdbc</artifactId>
+    <version>1.1.1.RELEASE</version>
 </dependency>
 
 ```
@@ -303,11 +321,26 @@ public SQLTemplates sqlTemplates() {
 
 @Bean
 public SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
-    //last param is an optional varargs String with all the java.lang.Enum packages that you use in your Entities
-    return new EntityQlQueryFactory(new Configuration(sqlTemplates), dataSource, "your.enums.package");
+    return new EntityQlQueryFactory(new Configuration(sqlTemplates), dataSource)
+        .registerEnumsByName("your.named.enums.package")
+        .registerEnumsByOrdinal("your.ordinal.enums.package");
 }
 
 ```
+
+## <a name="SpringDataJDBC"></a> Spring Data JDBC Integration
+([Contents](#Contents))
+
+You can obtain instances of Dynamic Query Models using the following code snippet:
+
+```java
+
+//Use NamingStrategy of your choice
+QEntityScanner scanner = new SpringDataJdbcQEntityScanner(NamingStrategy.INSTANCE);
+Q<Book> book = EntityQL.qEntity(Book.class, scanner);
+```
+
+You can export the ```Q``` dynamic model using ```QExporter``` tool or [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
 
 ## <a name="StaticCodeGen"></a> Static Code generation 
 ([Contents](#Contents))

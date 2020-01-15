@@ -1,3 +1,6 @@
+- 2.2.0
+    - Spring Data JDBC integration
+    - Handle Named and Ordinal Enums in the same way
 - 2.1.0
     - decoupled JPA metadata scanning
     - javadoc for public API
