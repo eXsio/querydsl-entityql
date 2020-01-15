@@ -68,7 +68,7 @@ public final class QUser extends QStaticModel<User> {
     typeStr:
     {
       QPathConfig config =
-          new QPathConfig(UserTypeByName.class, Enum.class, "USER_TYPE", false, 4, 12);
+          new QPathConfig(UserTypeByName.class, Enum.class, "TYPE_STR", false, 4, 12);
 
       this.typeStr = QPathFactory.<QEnumPath<UserTypeByName>>create(this, config);
 
@@ -78,7 +78,7 @@ public final class QUser extends QStaticModel<User> {
     typeOrd:
     {
       QPathConfig config =
-          new QPathConfig(UserTypeByOrdinal.class, Enum.class, "USER_TYPE_ORD", false, 5, 12);
+          new QPathConfig(UserTypeByOrdinal.class, Enum.class, "TYPE_ORD", false, 5, 12);
 
       this.typeOrd = QPathFactory.<QEnumPath<UserTypeByOrdinal>>create(this, config);
 
