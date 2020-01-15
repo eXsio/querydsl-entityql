@@ -5,7 +5,7 @@
 
 
 
-## TL;DR
+## <a name="TLDR"></a> TL;DR
 
 Have you ever had a situation where you had to perform a SQL operation that was not supported by JPA? 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
@@ -19,7 +19,7 @@ With EntityQL you can create Native Queries using your own JPA Entities and a be
 - **support Native SQL features not available in JPA using fluent Java API**
 - **handle all commercial and enterprise databases without any additional costs**
 
-#### Quick example:
+#### <a name="QuickExample"></a> Quick example:
 
 You can choose to use EntityQL in a more **dynamic** way:
 
@@ -73,7 +73,33 @@ Long count = queryFactory.select(count())
 
  **Interested? Keep on reading or jump straight to the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!**
 
-## Motivation
+## Contents
+
+1. [TL;DR](#TLDR)
+    * [Quick example](#QuickExample)
+2. [Motivation](#Motivation)
+3. [Overview](#Overview)
+4. [How it works](#HowItWorks)
+5. [Use Cases](#UseCases)
+6. [QueryDSL SQL Features](#QueryDslSqlFeatures)
+7. [How does the EntityQL differ from...](#HowDiffers)
+8. [Installation](#Installation)
+9. [Configuration](#Configuration)
+10. [Spring Configuration](#SpringConfiguration)
+11. [Static Code generation](#StaticCodeGen)
+12. [Limitations and restrictions](#Limits)
+13. [Performance](#Performance)
+    * [Obtaining Query Model](#Obtain)
+    * [Query building ](#Build)
+    * [Query execution](#Execute)
+14. [Thread safety](#Threads)
+15. [Extending EntityQL](#Extending)
+16. [More examples](#Examples)
+17. [Support](#Support)
+18. [Bugs](#Bugs)
+    
+
+## <a name="Motivation"></a> Motivation
 
 Why create yet another thing to communicate with databases? As it usually happens, the reason was quite simple - none of the solutions
 available on the market met my requirements and expectations, which were:
@@ -88,7 +114,7 @@ available on the market met my requirements and expectations, which were:
 QueryDSL-SQL was the closest, but it lacked the ability to create Query Models directly from JPA Entities. EntityQL is a missing piece that 
 makes it possible to meet all the above requirements.
 
-## Overview
+## <a name="Overview"></a> Overview
 
 EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-SQL meta models.
 Those Models can be then used to construct Native SQL Queries based on JPA mappings, using QueryDSL fluent API.
@@ -99,7 +125,7 @@ There are two distinct ways you can utilize the power of EntityQL:
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
 
-## How it works
+## <a name="HowItWorks"></a> How it works
 
 There is a special method ```EntityQL::qEntity``` that uses Reflection to gather all DDL information required to construct 
 QueryDSL meta-model and to sucessfuly perform all operations supported by QueryDSL. The scan occurs once per Entity class - 
@@ -115,7 +141,7 @@ Please see the examples section to see how easy it is in practice.
 **If you prefer more static approach**, you can generate Static Java classes with QueryDSL-SQL compatible Query Models by
 using this [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
 
-## Use Cases
+## <a name="UseCases"></a> Use Cases
 
 There are 2 primary use cases for EntityQL:
 
@@ -148,12 +174,12 @@ There are 2 primary use cases for EntityQL:
 
     EntityQL is just a translation layer between JPA mappings and QueryDSL. QueryDSL is perfectly capable to handle all DML statements.
 
-## QueryDSL SQL Features
+## <a name="QueryDslSqlFeatures"></a> QueryDSL SQL Features
 
 All of the QueryDSL-SQL features are described here: http://www.querydsl.com/static/querydsl/4.2.1/reference/html_single/#d0e1067
 
 
-## How does the EntityQL differ from...
+## <a name="HowDiffers"></a> How does the EntityQL differ from...
 
 1) **Hibernate / JPA in general** - EntityQL uses Entities only  as source of DDL information necessary to construct Native SQL that is executed against JDBC Connection. 
 There is no Persistence Context, no Entity Manager, no L1/L2/L3 cache, no Dirty Checking, no Cascades. That makes EntityQL offer less "magic" features, but at the same time
@@ -181,7 +207,7 @@ You have also an ability to choose between dynamic ad-hoc meta models and the st
 It is also worth mentioning that JOOQ is not free for Enterprise Databases like Oracle or SQL Server Enterprise. EntityQL relies on an open-source stack that is free to use
 for everyone and everywhere.
 
-## Installation
+## <a name="Installation"></a> Installation
 
 In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 
@@ -214,7 +240,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 
 ```
 
-## Configuration
+## <a name="Configuration"></a> Configuration
 
 There is nothing to be configured especially for EntityQL. All you need to have is configured ```SqlQueryFacotory``` and - 
 if you want to use Hibernate's schema generation - also configured Hibernate.
@@ -239,7 +265,7 @@ In order to do that you will need to add additional dependencies:
 </dependency>
 ```
 
-## Spring Configuration
+## <a name="SpringConfiguration"></a> Spring Configuration
 
 1. Use the base and additional maven dependencies from the above section
 2. Configure QueryDSL:
@@ -260,7 +286,7 @@ In order to do that you will need to add additional dependencies:
 
 ```
 
-## Static Code generation
+## <a name="StaticCodeGen"></a> Static Code generation
 
 The primary method of generating Static Meta-models is to use the special [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
 
@@ -328,7 +354,7 @@ Long count = queryFactory.select(count())
 
 ```
 
-## Limitations and restrictions
+## <a name="Limits"></a> Limitations and restrictions
 
 EntityQL was created with 2 main principles in mind: simplicity and explicitness. 
 All the limitations revolve around whether we have all the data needed to construct the meta-models. 
@@ -413,7 +439,7 @@ public class UserGroup implements Serializable {
 }
 ```
 
-## Performance
+## <a name="Performance"></a> Performance
 
 A lot of developers are scared anytime they see Java Reflection in use. Even though EntityQL needs to use Reflection
 to scan the Entity classes, the results of the scan are cached in memory, so the actual Reflection is used only during 
@@ -425,7 +451,7 @@ In such situations we can skip the dynamic models altogether and focus on Static
 To find out how much is the Static model faster than the Dynamic one, I've decided to implement couple of simple benchmarks 
 using JMH (you can find them in the test suite):
 
-#### obtaining Query Model
+#### <a name="Obtain"></a> Obtaining Query Model
 
 | Method  | Score |
 | ------------- | ------------- |
@@ -438,7 +464,7 @@ Please note that the actual performance may vary depending on the complexity of 
 The important thing is the difference between particular methods.
 
 
-#### Query building 
+#### <a name="Build"></a> Query building 
 
 | Method  | Score |
 | ------------- | ------------- |
@@ -451,7 +477,7 @@ Please note that the actual performance may vary depending on the complexity of 
 The important thing is the difference between particular methods.
 
 
-#### Query execution
+#### <a name="Execute"></a> Query execution
 
 | Method  | Score |
 | ------------- | ------------- |
@@ -467,11 +493,11 @@ Please note that the actual performance may vary depending on the complexity of 
 the complexity of the Query and the amount of returned data. The important thing is the difference between particular methods.
 
 
-## Thread safety
+## <a name="Threads"></a> Thread safety
 
 Both Dynamic and Static models are Threadsafe. You can use the same instances across different Threads.
 
-## Extending EntityQL
+## <a name="Extending"></a> Extending EntityQL
 
 Although EntityQL was primarily created to work with JPA Entities, there is a possibility to implement your own ```QEntityScanner```
 that will analyze the Entity class and provide an instance of ```QEntityMetadata```. This opens up EntityQL to possibilities 
@@ -479,7 +505,7 @@ of connecting QueryDSL to other Persistence Frameworks, like Spring Data JDBC et
 
 Once you have your ```QEntityScanner```, you can create your ```Q``` instance by calling ```EntityQL.qEntity(YourEntity.class, new YourEntityScanner())```.
 
-## More Examples
+## <a name="Examples"></a> More Examples
 
 You can find fully functional and configured Spring Boot based application in the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples).
 
@@ -791,10 +817,10 @@ public class UserGroup implements Serializable {
 
 ```
 
-## Support
+## <a name="Support"></a> Support
 
 Although this is a project I'm working on in my spare time, I try to fix any issues as soon as I can. If you nave a feature request that could prove useful I will also consider adding it in the shortest possible time.
 
-## BUGS
+## <a name="Bugs"></a> BUGS
 
 If You find any bugs, feel free to submit PR or create an issue on GitHub: https://github.com/eXsio/querydsl-entityql
