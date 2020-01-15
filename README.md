@@ -139,7 +139,7 @@ There are 2 more Projects that make EntityQL a complete package:
 
 #### <a name="MavenPl"></a> [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin) designed to easily generate Static Query Models.
 
-#### <a name="ExamplesProj"></a> [Examples Project](https://github.com/eXsio/querydsl-entityql-examples)  to show how to configure and use EntityQL.
+#### <a name="ExamplesProj"></a> [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) created to show how to configure and use EntityQL.
 
 ## <a name="HowItWorks"></a> How it works 
 ([Contents](#Contents))
