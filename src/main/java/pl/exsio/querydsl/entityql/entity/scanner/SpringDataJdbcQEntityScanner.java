@@ -15,6 +15,7 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * QEntityScanner implementation based on Spring Data JDBC.
@@ -74,7 +75,6 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                                                                          property.getName(),
                                                                          property.getColumnName(),
                                                                          isNullable(property),
-                                                                         "",
                                                                          getIndex(property, fieldNameToIndex));
 
         metadata.addColumn(columnMetadata);
@@ -88,13 +88,11 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                                RelationalPersistentProperty property,
                                Map<String, Integer> fieldNameToIndex) {
         RelationalPersistentEntity<?> persistentEntity = context.getPersistentEntity(property.getActualType());
-        PersistentPropertyPathExtension path = new PersistentPropertyPathExtension(context, persistentEntity);
+        PersistentPropertyPathExtension path = new PersistentPropertyPathExtension(context, Objects.requireNonNull(persistentEntity));
         String reverseColumnName = property.getReverseColumnName(path);
         QEntityJoinColumnMetadata column = new QEntityJoinColumnMetadata(property.getActualType(),
                                                                          property.getName(),
                                                                          reverseColumnName,
-                                                                         "",
-                                                                         "",
                                                                          isNullable(property),
                                                                          getIndex(property, fieldNameToIndex));
         metadata.addJoinColumn(column);
