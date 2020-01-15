@@ -299,17 +299,17 @@ In order to do that you will need to add additional dependencies:
 
 ```java
 
-        @Bean
-        public SQLTemplates sqlTemplates() {
-            //choose the implementation that matches your database engine
-            return new H2Templates(); 
-        }
-    
-        @Bean
-        public SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
-            //last param is an optional varargs String with all the java.lang.Enum packages that you use in your Entities
-            return new EntityQlQueryFactory(new Configuration(sqlTemplates), dataSource, "your.enums.package");
-        }
+@Bean
+public SQLTemplates sqlTemplates() {
+    //choose the implementation that matches your database engine
+    return new H2Templates(); 
+}
+
+@Bean
+public SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
+    //last param is an optional varargs String with all the java.lang.Enum packages that you use in your Entities
+    return new EntityQlQueryFactory(new Configuration(sqlTemplates), dataSource, "your.enums.package");
+}
 
 ```
 
