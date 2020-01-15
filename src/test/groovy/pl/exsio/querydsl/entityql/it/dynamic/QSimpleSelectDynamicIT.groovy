@@ -8,6 +8,8 @@ import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.entity.it.Book
 import pl.exsio.querydsl.entityql.config.entity.it.User
+import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
+import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
@@ -78,7 +80,7 @@ class QSimpleSelectDynamicIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.string("name"))
-                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -92,7 +94,7 @@ class QSimpleSelectDynamicIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.string("name"))
-                .where(user.intNumber("typeOrd").eq(User.Type.ADMIN.ordinal()))
+                .where(user.<UserTypeByOrdinal>enumerated("typeOrd").eq(UserTypeByOrdinal.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -106,7 +108,7 @@ class QSimpleSelectDynamicIT extends Specification {
         when:
         String createdBy = queryFactory.query()
                 .select(user.<String> column("createdBy"))
-                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -120,7 +122,7 @@ class QSimpleSelectDynamicIT extends Specification {
         when:
         Date createdBy = queryFactory.query()
                 .select(user.<Date> column("createdAt"))
-                .where(user.<User.Type> enumerated("typeStr").eq(User.Type.ADMIN))
+                .where(user.<UserTypeByName> enumerated("typeStr").eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:

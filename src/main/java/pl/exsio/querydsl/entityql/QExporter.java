@@ -84,6 +84,7 @@ public class QExporter {
                 .with("package", pkgName)
                 .with("className", className)
                 .with("entityName", type.getName())
+                .with("entitySimpleName", type.getSimpleName())
                 .with("q", q)
                 .with("isGroovy", isGroovy)
         );

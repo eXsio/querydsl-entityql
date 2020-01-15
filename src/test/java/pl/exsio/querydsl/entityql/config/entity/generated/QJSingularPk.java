@@ -8,6 +8,7 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JSingularPk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +18,17 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJSingularPk
-    extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JSingularPk> {
+public final class QJSingularPk extends QStaticModel<JSingularPk> {
 
   public static final QJSingularPk INSTANCE = new QJSingularPk();
 
-  public final NumberPath<java.lang.Long> id1;
+  public final NumberPath<Long> id1;
 
   public final StringPath id2;
 
   public final StringPath desc;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JSingularPk> _primaryKey;
+  public final PrimaryKey<JSingularPk> _primaryKey;
 
   public QJSingularPk() {
     this("JSINGULAR_PK");
@@ -36,22 +36,20 @@ public final class QJSingularPk
 
   @SuppressWarnings(value = "unchecked")
   public QJSingularPk(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.JSingularPk.class, variable, "", "JSINGULAR_PK");
+    super(JSingularPk.class, variable, "", "JSINGULAR_PK");
 
     id1:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID_1", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ID_1", true, 1, -5);
 
-      this.id1 = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id1 = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id1, QColumnMetadataFactory.create(config));
     }
 
     id2:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "ID_2", true, 2, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "ID_2", true, 2, 12);
 
       this.id2 = QPathFactory.<StringPath>create(this, config);
 
@@ -60,8 +58,7 @@ public final class QJSingularPk
 
     desc:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "DESC", true, 3, 12);
 
       this.desc = QPathFactory.<StringPath>create(this, config);
 
@@ -74,9 +71,7 @@ public final class QJSingularPk
 
       paths.add(this.id1);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JSingularPk>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JSingularPk>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

@@ -8,7 +8,9 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JBook;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +19,19 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJBook extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JBook> {
+public final class QJBook extends QStaticModel<JBook> {
 
   public static final QJBook INSTANCE = new QJBook();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
   public final StringPath name;
 
   public final StringPath desc;
 
-  public final NumberPath<java.math.BigDecimal> price;
+  public final NumberPath<BigDecimal> price;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JBook> _primaryKey;
+  public final PrimaryKey<JBook> _primaryKey;
 
   public QJBook() {
     this("JBOOKS");
@@ -37,22 +39,20 @@ public final class QJBook extends QStaticModel<pl.exsio.querydsl.entityql.config
 
   @SuppressWarnings(value = "unchecked")
   public QJBook(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.JBook.class, variable, "", "JBOOKS");
+    super(JBook.class, variable, "", "JBOOKS");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
 
       this.name = QPathFactory.<StringPath>create(this, config);
 
@@ -61,8 +61,7 @@ public final class QJBook extends QStaticModel<pl.exsio.querydsl.entityql.config
 
     desc:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 3, 2005);
+      QPathConfig config = new QPathConfig(String.class, String.class, "DESC", true, 3, 2005);
 
       this.desc = QPathFactory.<StringPath>create(this, config);
 
@@ -71,11 +70,9 @@ public final class QJBook extends QStaticModel<pl.exsio.querydsl.entityql.config
 
     price:
     {
-      QPathConfig config =
-          new QPathConfig(
-              java.math.BigDecimal.class, java.math.BigDecimal.class, "PRICE", true, 4, 3);
+      QPathConfig config = new QPathConfig(BigDecimal.class, BigDecimal.class, "PRICE", true, 4, 3);
 
-      this.price = QPathFactory.<NumberPath<java.math.BigDecimal>>create(this, config);
+      this.price = QPathFactory.<NumberPath<BigDecimal>>create(this, config);
 
       addMetadata(this.price, QColumnMetadataFactory.create(config));
     }
@@ -86,9 +83,7 @@ public final class QJBook extends QStaticModel<pl.exsio.querydsl.entityql.config
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JBook>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JBook>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

@@ -1,5 +1,8 @@
 package pl.exsio.querydsl.entityql.config.entity.it
 
+import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
+import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
+
 import javax.persistence.*
 
 @Entity
@@ -23,14 +26,11 @@ public class User<T> {
 
     @Column(name = "USER_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type typeStr
+    private UserTypeByName typeStr
 
     @Column(name = "USER_TYPE_ORD", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private Type typeOrd
-
-    @Column(name = "USER_TYPE_DEF", nullable = false)
-    private Type typeDef
+    private UserTypeByOrdinal typeOrd
 
     @Column(name = "CREATED_BY", columnDefinition = "varchar(15)")
     @org.hibernate.annotations.Type(type = "java.lang.String")
@@ -71,18 +71,29 @@ public class User<T> {
         this.order = order;
     }
 
-    Type getType() {
+    UserTypeByName getTypeStr() {
         return typeStr
     }
 
-    void setType(Type type) {
-        this.typeStr = type
-        this.typeDef = type
-        this.typeOrd = type
+    void setTypeStr(UserTypeByName typeStr) {
+        this.typeStr = typeStr
     }
 
-    T getCreatedBy() {
-        return createdBy
+    UserTypeByOrdinal getTypeOrd() {
+        return typeOrd
+    }
+
+    void setTypeOrd(UserTypeByOrdinal typeOrd) {
+        this.typeOrd = typeOrd
+    }
+
+
+    Date getCreatedAt() {
+        return createdAt
+    }
+
+    void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt
     }
 
     void setCreatedBy(T createdBy) {

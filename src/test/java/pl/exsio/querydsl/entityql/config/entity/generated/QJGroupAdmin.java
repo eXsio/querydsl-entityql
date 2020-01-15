@@ -8,6 +8,7 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JGroupAdmin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +18,15 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJGroupAdmin
-    extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> {
+public final class QJGroupAdmin extends QStaticModel<JGroupAdmin> {
 
   public static final QJGroupAdmin INSTANCE = new QJGroupAdmin();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
   public final StringPath name;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin> _primaryKey;
+  public final PrimaryKey<JGroupAdmin> _primaryKey;
 
   public QJGroupAdmin() {
     this("JGROUP_ADMINS");
@@ -34,23 +34,20 @@ public final class QJGroupAdmin
 
   @SuppressWarnings(value = "unchecked")
   public QJGroupAdmin(String variable) {
-    super(
-        pl.exsio.querydsl.entityql.config.entity.JGroupAdmin.class, variable, "", "JGROUP_ADMINS");
+    super(JGroupAdmin.class, variable, "", "JGROUP_ADMINS");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "GA_ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "GA_ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
 
       this.name = QPathFactory.<StringPath>create(this, config);
 
@@ -63,9 +60,7 @@ public final class QJGroupAdmin
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JGroupAdmin>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JGroupAdmin>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

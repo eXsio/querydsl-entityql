@@ -60,7 +60,8 @@ public class SpringContext {
     @Bean
     static SQLQueryFactory queryFactory(DataSource dataSource, SQLTemplates sqlTemplates) {
         return new EntityQlQueryFactory(new com.querydsl.sql.Configuration(sqlTemplates), dataSource)
-        .registerEnumsByName("pl.exsio.querydsl.entityql")
+        .registerEnumsByName("pl.exsio.querydsl.entityql.config.enums.by_name")
+        .registerEnumsByOrdinal("pl.exsio.querydsl.entityql.config.enums.by_ordinal")
     }
 
 }

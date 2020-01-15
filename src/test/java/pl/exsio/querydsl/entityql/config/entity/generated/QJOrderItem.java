@@ -8,6 +8,9 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JBook;
+import pl.exsio.querydsl.entityql.config.entity.JOrder;
+import pl.exsio.querydsl.entityql.config.entity.JOrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,24 +20,23 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJOrderItem
-    extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JOrderItem> {
+public final class QJOrderItem extends QStaticModel<JOrderItem> {
 
   public static final QJOrderItem INSTANCE = new QJOrderItem();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
-  public final NumberPath<java.lang.Long> quantity;
+  public final NumberPath<Long> quantity;
 
-  public final NumberPath<java.lang.Long> bookId;
+  public final NumberPath<Long> bookId;
 
-  public final NumberPath<java.lang.Long> orderId;
+  public final NumberPath<Long> orderId;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JBook> book;
+  public final ForeignKey<JBook> book;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JOrder> order;
+  public final ForeignKey<JOrder> order;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JOrderItem> _primaryKey;
+  public final PrimaryKey<JOrderItem> _primaryKey;
 
   public QJOrderItem() {
     this("JORDER_ITEMS");
@@ -42,44 +44,40 @@ public final class QJOrderItem
 
   @SuppressWarnings(value = "unchecked")
   public QJOrderItem(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.JOrderItem.class, variable, "", "JORDER_ITEMS");
+    super(JOrderItem.class, variable, "", "JORDER_ITEMS");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ITEM_ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ITEM_ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     quantity:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "QTY", false, 4, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 4, -5);
 
-      this.quantity = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.quantity = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.quantity, QColumnMetadataFactory.create(config));
     }
 
     bookId:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "BOOK_ID", false, 2, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", false, 2, -5);
 
-      this.bookId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.bookId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.bookId, QColumnMetadataFactory.create(config));
     }
 
     orderId:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", false, 3, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 3, -5);
 
-      this.orderId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.orderId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.orderId, QColumnMetadataFactory.create(config));
     }
@@ -104,9 +102,7 @@ public final class QJOrderItem
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JOrderItem>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JOrderItem>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

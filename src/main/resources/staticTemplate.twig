@@ -4,12 +4,28 @@ package {{ package }};
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.*;
 import pl.exsio.querydsl.entityql.*;
-import pl.exsio.querydsl.entityql.ex.*;
 import pl.exsio.querydsl.entityql.path.*;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.dml.StoreClause;
 import java.util.ArrayList;
 import java.util.List;
+import {{entityName}};
+{% for name, path in q.columns %}
+    {% if (path.parametrized) %}
+        import {{replace(path.parametrizedType.name, { '$': '.' })}};
+    {% endif %}
+    import {{path.config.computedFieldType.name}};
+{% endfor %}
+
+{% for name, fk in q.joinColumns %}
+        import {{replace(fk.parametrizedType.name, { '$': '.' })}};
+        {% for fkPath in fk.getPaths().keySet() %}
+            import {{fkPath.config.computedFieldType.name}};
+        {% endfor %}
+{% endfor %}
+{% if(isGroovy) %}
+import groovy.transform.CompileStatic;
+{% endif %}
 
 /**
  *
@@ -19,9 +35,9 @@ import java.util.List;
  *
  */
 {% if(isGroovy) %}
-@groovy.transform.CompileStatic
+@CompileStatic
 {% endif %}
-public final class {{ className }} extends QStaticModel<{{entityName}}> {
+public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
 
     public static final {{ className }} INSTANCE = new {{ className }}();
 
@@ -33,7 +49,7 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
         public final {{macros.printJoinColumnType(fk)}} {{ name }};
     {% endfor %}
 
-    public final PrimaryKey<{{entityName}}> _primaryKey;
+    public final PrimaryKey<{{entitySimpleName}}> _primaryKey;
 
     public {{ className }}() {
        this("{{ q.tableName }}");
@@ -41,11 +57,11 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
 
     @SuppressWarnings(value = "unchecked")
     public {{ className }}(String variable) {
-        super({{entityName}}.class, variable, "{{q.schemaName }}", "{{ q.tableName }}");
+        super({{entitySimpleName}}.class, variable, "{{q.schemaName }}", "{{ q.tableName }}");
 
         {% for name, path in q.columns %}
         {{name}}: {
-            QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.name}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
+            QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.simpleName}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
             this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
             addMetadata(this.{{name}}, QColumnMetadataFactory.create(config));
         }
@@ -57,7 +73,7 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
                     List paths = new ArrayList();
                     List<String> foreignColumnNames = new ArrayList<>();
                     {% for fkPath in fk.getPaths().keySet() %}
-                        QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.name}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
+                        QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
                         Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
                         addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
                         paths.add({{name}}{{loop.index0}});
@@ -65,11 +81,11 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
                     {% for fcName in fk.foreignColumnNames %}
                         foreignColumnNames.add("{{fcName}}");
                     {% endfor %}
-                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(paths, foreignColumnNames);
+                    this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(paths, foreignColumnNames);
                 }
             {% else %}
                 {{name}}: {
-                    this.{{name}} = this.<{{fk.parametrizedType.name}}>createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}");
+                    this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}");
                 }
             {% endif %}
         {% endfor %}
@@ -79,7 +95,7 @@ public final class {{ className }} extends QStaticModel<{{entityName}}> {
              {% for id in q.idColumns %}
                  paths.add(this.{{id.fieldName}});
              {% endfor %}
-             this._primaryKey = this.<{{entityName}}>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+             this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(paths.<Path>toArray(new Path[0]));
         }
     }
 }

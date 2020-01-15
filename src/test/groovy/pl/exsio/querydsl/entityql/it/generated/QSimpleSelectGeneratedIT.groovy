@@ -6,9 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.User
 import pl.exsio.querydsl.entityql.config.entity.it.generated.QBook
 import pl.exsio.querydsl.entityql.config.entity.it.generated.QUser
+import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
+import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
@@ -78,7 +79,7 @@ class QSimpleSelectGeneratedIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.name)
-                .where(user.typeStr.eq(User.Type.ADMIN))
+                .where(user.typeStr.eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -92,7 +93,7 @@ class QSimpleSelectGeneratedIT extends Specification {
         when:
         String userName = queryFactory.query()
                 .select(user.name)
-                .where(user.typeOrd.eq(User.Type.ADMIN.ordinal()))
+                .where(user.typeOrd.eq(UserTypeByOrdinal.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -106,7 +107,7 @@ class QSimpleSelectGeneratedIT extends Specification {
         when:
         String createdBy = queryFactory.query()
                 .select(user.createdBy)
-                .where(user.typeStr.eq(User.Type.ADMIN))
+                .where(user.typeStr.eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
@@ -120,7 +121,7 @@ class QSimpleSelectGeneratedIT extends Specification {
         when:
         Date createdBy = queryFactory.query()
                 .select(user.createdAt)
-                .where(user.typeStr.eq(User.Type.ADMIN))
+                .where(user.typeStr.eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:

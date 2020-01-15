@@ -1,11 +1,11 @@
 {% macro printColumnType(path) %}
     {{ path.get().class.simpleName }}
     {% if (path.parametrized) %}
-        <{{replace(path.parametrizedType.name, { '$': '.' })}}>
+        <{{replace(path.parametrizedType.simpleName, { '$': '.' })}}>
     {% endif %}
     {% if (path.config.originalFieldType.array) %}
         {% if (path.config.originalFieldType.componentType.primitive) %}
-            <{{path.config.originalFieldType.componentType}}[], {{wrapPrimitive(path.config.originalFieldType.componentType).name}}>
+            <{{path.config.originalFieldType.componentType}}[], {{wrapPrimitive(path.config.originalFieldType.componentType).simpleName}}>
         {% else %}
             <{{path.config.originalFieldType.componentType}}[], {{path.config.originalFieldType.componentType}}>
         {% endif %}
@@ -14,13 +14,13 @@
 {% endmacro %}
 
 {% macro printJoinColumnType(fk) %}
-    {{ fk.get().class.simpleName }}<{{fk.parametrizedType.name}}>
+    {{ fk.get().class.simpleName }}<{{fk.parametrizedType.simpleName}}>
 {% endmacro %}
 
 {% macro printOriginalType(path) %}
     {% if (path.config.originalFieldType.array) %}
         {{path.config.originalFieldType.componentType}}[].class
     {% else %}
-        {{replace(path.config.originalFieldType.name, { '$': '.' })}}.class
+        {{replace(path.config.originalFieldType.simpleName, { '$': '.' })}}.class
     {% endif %}
 {% endmacro %}

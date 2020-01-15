@@ -8,10 +8,13 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JUser;
+import pl.exsio.querydsl.entityql.config.entity.JUser.Type;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
 import pl.exsio.querydsl.entityql.path.QObjectPath;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,25 +22,25 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJUser extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JUser> {
+public final class QJUser extends QStaticModel<JUser> {
 
   public static final QJUser INSTANCE = new QJUser();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
   public final StringPath name;
 
-  public final QEnumPath<pl.exsio.querydsl.entityql.config.entity.JUser.Type> typeStr;
+  public final QEnumPath<Type> typeStr;
 
-  public final NumberPath<java.lang.Integer> typeOrd;
+  public final QEnumPath<Type> typeOrd;
 
-  public final NumberPath<java.lang.Integer> typeDef;
+  public final QEnumPath<Type> typeDef;
 
-  public final QObjectPath<java.lang.Object> createdBy;
+  public final QObjectPath<Object> createdBy;
 
-  public final QObjectPath<java.util.Date> createdAt;
+  public final QObjectPath<Date> createdAt;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JUser> _primaryKey;
+  public final PrimaryKey<JUser> _primaryKey;
 
   public QJUser() {
     this("JUSERS");
@@ -45,22 +48,20 @@ public final class QJUser extends QStaticModel<pl.exsio.querydsl.entityql.config
 
   @SuppressWarnings(value = "unchecked")
   public QJUser(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.JUser.class, variable, "", "JUSERS");
+    super(JUser.class, variable, "", "JUSERS");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     name:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "NAME", true, 2, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
 
       this.name = QPathFactory.<StringPath>create(this, config);
 
@@ -69,68 +70,45 @@ public final class QJUser extends QStaticModel<pl.exsio.querydsl.entityql.config
 
     typeStr:
     {
-      QPathConfig config =
-          new QPathConfig(
-              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-              java.lang.Enum.class,
-              "USER_TYPE",
-              false,
-              4,
-              12);
-      this.typeStr =
-          QPathFactory.<QEnumPath<pl.exsio.querydsl.entityql.config.entity.JUser.Type>>create(
-              this, config);
+      QPathConfig config = new QPathConfig(Type.class, Enum.class, "USER_TYPE", false, 4, 12);
+
+      this.typeStr = QPathFactory.<QEnumPath<Type>>create(this, config);
+
       addMetadata(this.typeStr, QColumnMetadataFactory.create(config));
     }
 
     typeOrd:
     {
-      QPathConfig config =
-          new QPathConfig(
-              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-              java.lang.Integer.class,
-              "USER_TYPE_ORD",
-              false,
-              5,
-              4);
-      this.typeOrd = QPathFactory.<NumberPath<java.lang.Integer>>create(this, config);
+      QPathConfig config = new QPathConfig(Type.class, Enum.class, "USER_TYPE_ORD", false, 5, 12);
+
+      this.typeOrd = QPathFactory.<QEnumPath<Type>>create(this, config);
 
       addMetadata(this.typeOrd, QColumnMetadataFactory.create(config));
     }
 
     typeDef:
     {
-      QPathConfig config =
-          new QPathConfig(
-              pl.exsio.querydsl.entityql.config.entity.JUser.Type.class,
-              java.lang.Integer.class,
-              "USER_TYPE_DEF",
-              false,
-              6,
-              4);
-      this.typeDef = QPathFactory.<NumberPath<java.lang.Integer>>create(this, config);
+      QPathConfig config = new QPathConfig(Type.class, Enum.class, "USER_TYPE_DEF", false, 6, 12);
+
+      this.typeDef = QPathFactory.<QEnumPath<Type>>create(this, config);
 
       addMetadata(this.typeDef, QColumnMetadataFactory.create(config));
     }
 
     createdBy:
     {
-      QPathConfig config =
-          new QPathConfig(
-              java.lang.Object.class, java.lang.Object.class, "CREATED_BY", true, 7, 1111);
+      QPathConfig config = new QPathConfig(Object.class, Object.class, "CREATED_BY", true, 7, 1111);
 
-      this.createdBy = QPathFactory.<QObjectPath<java.lang.Object>>create(this, config);
+      this.createdBy = QPathFactory.<QObjectPath<Object>>create(this, config);
 
       addMetadata(this.createdBy, QColumnMetadataFactory.create(config));
     }
 
     createdAt:
     {
-      QPathConfig config =
-          new QPathConfig(
-              java.util.Date.class, java.lang.Object.class, "CREATED_AT", true, 8, 1111);
+      QPathConfig config = new QPathConfig(Date.class, Object.class, "CREATED_AT", true, 8, 1111);
 
-      this.createdAt = QPathFactory.<QObjectPath<java.util.Date>>create(this, config);
+      this.createdAt = QPathFactory.<QObjectPath<Date>>create(this, config);
 
       addMetadata(this.createdAt, QColumnMetadataFactory.create(config));
     }
@@ -141,9 +119,7 @@ public final class QJUser extends QStaticModel<pl.exsio.querydsl.entityql.config
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JUser>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JUser>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

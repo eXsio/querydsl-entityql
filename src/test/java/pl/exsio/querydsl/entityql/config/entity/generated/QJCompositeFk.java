@@ -9,6 +9,9 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JCompositeFk;
+import pl.exsio.querydsl.entityql.config.entity.JCompositePk;
+import pl.exsio.querydsl.entityql.config.entity.JSingularPk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +21,19 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJCompositeFk
-    extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> {
+public final class QJCompositeFk extends QStaticModel<JCompositeFk> {
 
   public static final QJCompositeFk INSTANCE = new QJCompositeFk();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
   public final StringPath desc;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JCompositePk> compositePk;
+  public final ForeignKey<JCompositePk> compositePk;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JSingularPk> singularPk;
+  public final ForeignKey<JSingularPk> singularPk;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JCompositeFk> _primaryKey;
+  public final PrimaryKey<JCompositeFk> _primaryKey;
 
   public QJCompositeFk() {
     this("JCOMPOSITE_FK");
@@ -39,23 +41,20 @@ public final class QJCompositeFk
 
   @SuppressWarnings(value = "unchecked")
   public QJCompositeFk(String variable) {
-    super(
-        pl.exsio.querydsl.entityql.config.entity.JCompositeFk.class, variable, "", "JCOMPOSITE_FK");
+    super(JCompositeFk.class, variable, "", "JCOMPOSITE_FK");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     desc:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "DESC", true, 4, 12);
+      QPathConfig config = new QPathConfig(String.class, String.class, "DESC", true, 4, 12);
 
       this.desc = QPathFactory.<StringPath>create(this, config);
 
@@ -67,15 +66,13 @@ public final class QJCompositeFk
       List paths = new ArrayList();
       List<String> foreignColumnNames = new ArrayList<>();
 
-      QPathConfig config0 =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "CPK_ID_1", false, 2, -5);
+      QPathConfig config0 = new QPathConfig(Long.class, Long.class, "CPK_ID_1", false, 2, -5);
 
       Path<?> compositePk0 = QPathFactory.<Path>create(this, config0);
       addMetadata(compositePk0, QColumnMetadataFactory.create(config0));
       paths.add(compositePk0);
 
-      QPathConfig config1 =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "CPK_ID_2", false, 2, 12);
+      QPathConfig config1 = new QPathConfig(String.class, String.class, "CPK_ID_2", false, 2, 12);
 
       Path<?> compositePk1 = QPathFactory.<Path>create(this, config1);
       addMetadata(compositePk1, QColumnMetadataFactory.create(config1));
@@ -95,15 +92,13 @@ public final class QJCompositeFk
       List paths = new ArrayList();
       List<String> foreignColumnNames = new ArrayList<>();
 
-      QPathConfig config0 =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "SPK_ID_1", false, 3, -5);
+      QPathConfig config0 = new QPathConfig(Long.class, Long.class, "SPK_ID_1", false, 3, -5);
 
       Path<?> singularPk0 = QPathFactory.<Path>create(this, config0);
       addMetadata(singularPk0, QColumnMetadataFactory.create(config0));
       paths.add(singularPk0);
 
-      QPathConfig config1 =
-          new QPathConfig(java.lang.String.class, java.lang.String.class, "SPK_ID_2", false, 3, 12);
+      QPathConfig config1 = new QPathConfig(String.class, String.class, "SPK_ID_2", false, 3, 12);
 
       Path<?> singularPk1 = QPathFactory.<Path>create(this, config1);
       addMetadata(singularPk1, QColumnMetadataFactory.create(config1));
@@ -124,9 +119,7 @@ public final class QJCompositeFk
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JCompositeFk>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JCompositeFk>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }

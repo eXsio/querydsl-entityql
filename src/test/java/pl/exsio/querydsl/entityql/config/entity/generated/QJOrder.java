@@ -8,6 +8,8 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.config.entity.JOrder;
+import pl.exsio.querydsl.entityql.config.entity.JUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +19,17 @@ import java.util.List;
  * recommended to make any changes to this class. Any manual changes will be lost upon the next
  * class generation.
  */
-public final class QJOrder extends QStaticModel<pl.exsio.querydsl.entityql.config.entity.JOrder> {
+public final class QJOrder extends QStaticModel<JOrder> {
 
   public static final QJOrder INSTANCE = new QJOrder();
 
-  public final NumberPath<java.lang.Long> id;
+  public final NumberPath<Long> id;
 
-  public final NumberPath<java.lang.Long> userId;
+  public final NumberPath<Long> userId;
 
-  public final ForeignKey<pl.exsio.querydsl.entityql.config.entity.JUser> user;
+  public final ForeignKey<JUser> user;
 
-  public final PrimaryKey<pl.exsio.querydsl.entityql.config.entity.JOrder> _primaryKey;
+  public final PrimaryKey<JOrder> _primaryKey;
 
   public QJOrder() {
     this("JORDERS");
@@ -35,24 +37,22 @@ public final class QJOrder extends QStaticModel<pl.exsio.querydsl.entityql.confi
 
   @SuppressWarnings(value = "unchecked")
   public QJOrder(String variable) {
-    super(pl.exsio.querydsl.entityql.config.entity.JOrder.class, variable, "", "JORDERS");
+    super(JOrder.class, variable, "", "JORDERS");
 
     id:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "ORDER_ID", true, 1, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", true, 1, -5);
 
-      this.id = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
     }
 
     userId:
     {
-      QPathConfig config =
-          new QPathConfig(java.lang.Long.class, java.lang.Long.class, "USER_ID", false, 2, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", false, 2, -5);
 
-      this.userId = QPathFactory.<NumberPath<java.lang.Long>>create(this, config);
+      this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
     }
@@ -70,9 +70,7 @@ public final class QJOrder extends QStaticModel<pl.exsio.querydsl.entityql.confi
 
       paths.add(this.id);
 
-      this._primaryKey =
-          this.<pl.exsio.querydsl.entityql.config.entity.JOrder>createPrimaryKey(
-              paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<JOrder>createPrimaryKey(paths.<Path>toArray(new Path[0]));
     }
   }
 }
