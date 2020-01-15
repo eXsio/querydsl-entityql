@@ -7,12 +7,12 @@ import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
 import pl.exsio.querydsl.entityql.Q
-import pl.exsio.querydsl.entityql.config.entity.spec.NoIdSpec
-import pl.exsio.querydsl.entityql.config.entity.spec.NoTableSpec
-import pl.exsio.querydsl.entityql.config.entity.spec.Spec
-import pl.exsio.querydsl.entityql.config.entity.spec.SubSpec
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 import pl.exsio.querydsl.entityql.ex.MissingIdException
+import pl.exsio.querydsl.entityql.jpa.entity.spec.NoIdSpec
+import pl.exsio.querydsl.entityql.jpa.entity.spec.NoTableSpec
+import pl.exsio.querydsl.entityql.jpa.entity.spec.Spec
+import pl.exsio.querydsl.entityql.jpa.entity.spec.SubSpec
 import spock.lang.Specification
 
 import java.time.LocalDate

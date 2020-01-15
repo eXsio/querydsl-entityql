@@ -4,21 +4,13 @@ import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import pl.exsio.querydsl.entityql.benchmark.PerformanceBenchmark;
-import pl.exsio.querydsl.entityql.config.entity.it.OrderItem;
 import pl.exsio.querydsl.entityql.dto.BookDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.sql.DataSource;
-
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
 public class JpaJPQLQueryExecutionBenchmark extends JpaQueryExecutionBenchmark {
 

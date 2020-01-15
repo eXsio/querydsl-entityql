@@ -8,10 +8,10 @@ import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.dto.OrderItemBookCountDto
-import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.Order
-import pl.exsio.querydsl.entityql.config.entity.it.OrderItem
-import pl.exsio.querydsl.entityql.config.entity.it.User
+import pl.exsio.querydsl.entityql.jpa.entity.it.Book
+import pl.exsio.querydsl.entityql.jpa.entity.it.Order
+import pl.exsio.querydsl.entityql.jpa.entity.it.OrderItem
+import pl.exsio.querydsl.entityql.jpa.entity.it.User
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor

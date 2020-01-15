@@ -2,7 +2,7 @@ package pl.exsio.querydsl.entityql.spec;
 
 import org.junit.Test;
 import pl.exsio.querydsl.entityql.QExporter;
-import pl.exsio.querydsl.entityql.config.entity.*;
+import pl.exsio.querydsl.entityql.jpa.entity.*;
 
 import java.nio.file.Paths;
 
@@ -10,7 +10,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
 public class QExporterJavaITSpec {
 
-    String pkgName = "pl.exsio.querydsl.entityql.config.entity.generated";
+    String pkgName = "pl.exsio.querydsl.entityql.jpa.entity.generated";
 
     String fileNamePattern = "Q%s.java";
 

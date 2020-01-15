@@ -6,10 +6,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.User
 import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
+import pl.exsio.querydsl.entityql.jpa.entity.it.Book
+import pl.exsio.querydsl.entityql.jpa.entity.it.User
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor

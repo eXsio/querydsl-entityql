@@ -2,7 +2,7 @@ package pl.exsio.querydsl.entityql.spec
 
 
 import pl.exsio.querydsl.entityql.QExporter
-import pl.exsio.querydsl.entityql.config.entity.it.*
+import pl.exsio.querydsl.entityql.jpa.entity.it.*
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -12,7 +12,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 public class QExporterITSpec extends Specification {
 
-    String pkgName = "pl.exsio.querydsl.entityql.config.entity.it.generated"
+    String pkgName = "pl.exsio.querydsl.entityql.jpa.entity.it.generated"
 
     String fileNamePattern = "Q%s.groovy"
 

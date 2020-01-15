@@ -1,18 +1,15 @@
 package pl.exsio.querydsl.entityql.it.generated
 
-
 import com.querydsl.sql.SQLQueryFactory
 import com.querydsl.sql.dml.SQLUpdateClause
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.UploadedFile
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QBook
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QUploadedFile
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
+import pl.exsio.querydsl.entityql.jpa.entity.it.UploadedFile
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUploadedFile
 import spock.lang.Specification
 
 import javax.transaction.Transactional
@@ -20,7 +17,6 @@ import java.util.stream.IntStream
 
 import static com.querydsl.core.types.Projections.constructor
 import static com.querydsl.sql.SQLExpressions.count
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)

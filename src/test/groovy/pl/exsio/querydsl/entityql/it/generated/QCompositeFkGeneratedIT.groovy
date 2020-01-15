@@ -4,18 +4,15 @@ import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.CompositeFk
-import pl.exsio.querydsl.entityql.config.entity.it.CompositePk
-import pl.exsio.querydsl.entityql.config.entity.it.SingularPk
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QCompositeFk
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QCompositePk
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QSingularPk
+import pl.exsio.querydsl.entityql.jpa.entity.it.CompositePk
+import pl.exsio.querydsl.entityql.jpa.entity.it.SingularPk
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QCompositeFk
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QCompositePk
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QSingularPk
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)

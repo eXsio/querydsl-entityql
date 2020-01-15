@@ -9,10 +9,8 @@ import org.openjdk.jmh.runner.RunnerException;
 import pl.exsio.querydsl.entityql.EntityQL;
 import pl.exsio.querydsl.entityql.Q;
 import pl.exsio.querydsl.entityql.benchmark.EntityQLQueryExecutionBenchmark;
-import pl.exsio.querydsl.entityql.config.entity.JBook;
 import pl.exsio.querydsl.entityql.dto.BookDto;
-
-import java.util.List;
+import pl.exsio.querydsl.entityql.jpa.entity.JBook;
 
 import static com.querydsl.core.types.Projections.constructor;
 import static org.junit.Assert.assertTrue;

@@ -6,8 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.*
-import pl.exsio.querydsl.entityql.config.entity.it.generated.*
+import pl.exsio.querydsl.entityql.jpa.entity.it.*
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor

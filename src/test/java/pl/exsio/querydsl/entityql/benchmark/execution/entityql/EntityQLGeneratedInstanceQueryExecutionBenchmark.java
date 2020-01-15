@@ -6,8 +6,8 @@ import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
 import pl.exsio.querydsl.entityql.benchmark.EntityQLQueryExecutionBenchmark;
-import pl.exsio.querydsl.entityql.config.entity.generated.QJBook;
 import pl.exsio.querydsl.entityql.dto.BookDto;
+import pl.exsio.querydsl.entityql.jpa.entity.generated.QJBook;
 
 import java.util.List;
 

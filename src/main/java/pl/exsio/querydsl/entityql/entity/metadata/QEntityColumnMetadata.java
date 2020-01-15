@@ -37,7 +37,9 @@ public class QEntityColumnMetadata implements ColumnInfoMetadata {
 
     /**
      * In most cases this value is not used. For now it is used only as an indicator
-     * that a String should be treated as CLOB SQL Type. In such cases, use the value "CLOB"
+     * that a String should be treated as CLOB SQL Type. In such cases, use the value "CLOB".
+     *
+     * @since  2.2 this may also take a value of "BLOB" indicating that BLOB SQL Type should be used for ArrayPaths
      */
     private final String columnDefinition;
 

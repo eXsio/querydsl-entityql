@@ -1,27 +1,18 @@
 package pl.exsio.querydsl.entityql.benchmark.execution.jdbc;
 
-import com.querydsl.sql.H2Templates;
-import com.querydsl.sql.SQLQueryFactory;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import pl.exsio.querydsl.entityql.benchmark.PerformanceBenchmark;
 import pl.exsio.querydsl.entityql.benchmark.execution.QueryExecutionBenchmark;
-import pl.exsio.querydsl.entityql.config.EntityQlQueryFactory;
-import pl.exsio.querydsl.entityql.config.entity.generated.QJBook;
 import pl.exsio.querydsl.entityql.dto.BookDto;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.querydsl.core.types.Projections.constructor;
 import static org.junit.Assert.assertTrue;
 
 public class JDBCQueryExecutionBenchmark extends QueryExecutionBenchmark {

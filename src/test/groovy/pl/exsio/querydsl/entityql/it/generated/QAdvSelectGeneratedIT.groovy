@@ -1,27 +1,20 @@
 package pl.exsio.querydsl.entityql.it.generated
 
-
 import com.querydsl.sql.SQLQueryFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
 import pl.exsio.querydsl.entityql.config.dto.OrderItemBookCountDto
-import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.Order
-import pl.exsio.querydsl.entityql.config.entity.it.OrderItem
-import pl.exsio.querydsl.entityql.config.entity.it.User
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QBook
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QOrder
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QOrderItem
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QUser
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrder
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrderItem
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUser
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
 import static com.querydsl.sql.SQLExpressions.count
 import static com.querydsl.sql.SQLExpressions.select
-import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 @ContextConfiguration(classes = [SpringContext])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)

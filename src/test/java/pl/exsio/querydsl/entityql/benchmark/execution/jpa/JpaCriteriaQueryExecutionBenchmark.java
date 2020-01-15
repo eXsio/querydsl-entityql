@@ -4,24 +4,15 @@ import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import pl.exsio.querydsl.entityql.benchmark.PerformanceBenchmark;
-import pl.exsio.querydsl.entityql.config.entity.JBook;
-import pl.exsio.querydsl.entityql.config.entity.it.Book;
 import pl.exsio.querydsl.entityql.dto.BookDto;
+import pl.exsio.querydsl.entityql.jpa.entity.JBook;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.sql.DataSource;
 import java.util.List;
-import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
 

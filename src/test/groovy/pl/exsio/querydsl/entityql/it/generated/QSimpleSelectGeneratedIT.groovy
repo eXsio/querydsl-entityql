@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.Book
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QBook
-import pl.exsio.querydsl.entityql.config.entity.it.generated.QUser
 import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
+import pl.exsio.querydsl.entityql.jpa.entity.it.Book
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QBook
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QUser
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor

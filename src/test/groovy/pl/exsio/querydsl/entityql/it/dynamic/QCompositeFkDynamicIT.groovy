@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
-import pl.exsio.querydsl.entityql.config.entity.it.CompositeFk
-import pl.exsio.querydsl.entityql.config.entity.it.CompositePk
-import pl.exsio.querydsl.entityql.config.entity.it.SingularPk
+import pl.exsio.querydsl.entityql.jpa.entity.it.CompositeFk
+import pl.exsio.querydsl.entityql.jpa.entity.it.CompositePk
+import pl.exsio.querydsl.entityql.jpa.entity.it.SingularPk
 import spock.lang.Specification
 
 import static com.querydsl.core.types.Projections.constructor
