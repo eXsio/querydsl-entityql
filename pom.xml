@@ -37,6 +37,7 @@
         <google-java-format.version>1.7</google-java-format.version>
         <guava.version>28.2-jre</guava.version>
         <commons-io.version>2.6</commons-io.version>
+        <spring-data-jdbc.version>1.1.1.RELEASE</spring-data-jdbc.version>
 
     </properties>
 
@@ -71,6 +72,13 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>${reflections.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jdbc</artifactId>
+            <version>${spring-data-jdbc.version}</version>
             <scope>provided</scope>
         </dependency>
 
