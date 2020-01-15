@@ -2,12 +2,16 @@ package pl.exsio.querydsl.entityql.entity.scanner;
 
 import org.springframework.data.jdbc.core.mapping.JdbcMappingContext;
 import org.springframework.data.jdbc.core.mapping.JdbcSimpleTypes;
-import org.springframework.data.relational.core.mapping.*;
-import pl.exsio.querydsl.entityql.entity.metadata.*;
+import org.springframework.data.relational.core.mapping.NamingStrategy;
+import org.springframework.data.relational.core.mapping.PersistentPropertyPathExtension;
+import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
+import org.springframework.data.relational.core.mapping.RelationalPersistentProperty;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
+import pl.exsio.querydsl.entityql.entity.metadata.QEntityMetadata;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +71,6 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                            Map<String, Integer> fieldNameToIndex) {
 
         QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(property.getType(),
-                                                                         getComputedType(property),
                                                                          property.getName(),
                                                                          property.getColumnName(),
                                                                          isNullable(property),
@@ -95,20 +98,6 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                                                                          isNullable(property),
                                                                          getIndex(property, fieldNameToIndex));
         metadata.addJoinColumn(column);
-    }
-
-    private static Class<?> getComputedType(RelationalPersistentProperty property) {
-        Class<?> type = property.getType();
-
-        if (type.isArray()) {
-            return Array.class;
-        }
-
-        if (type.isEnum()) {
-            return Enum.class;
-        }
-
-        return type;
     }
 
     private Integer getIndex(RelationalPersistentProperty property, Map<String, Integer> fieldNameToIndex) {

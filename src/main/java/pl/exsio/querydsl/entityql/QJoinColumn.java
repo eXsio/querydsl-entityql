@@ -41,7 +41,7 @@ class QJoinColumn {
     }
 
     private void createPath(Q<?> parent,String fieldName, int idx, ReferenceColumnInfoMetadata column, QEntityColumnMetadata foreignColumn) {
-        QEntityColumnMetadata computedColumn = new QEntityColumnMetadata(foreignColumn.getOriginalFieldType(), foreignColumn.getComputedFieldType(),
+        QEntityColumnMetadata computedColumn = new QEntityColumnMetadata(foreignColumn.getOriginalFieldType(),
                 fieldName, column.getColumnName(), column.isNullable(), column.getColumnDefinition(), idx);
         int sqlType = getSqlType(computedColumn);
         QPath qPath = QPathFactory.create(parent, computedColumn, sqlType);

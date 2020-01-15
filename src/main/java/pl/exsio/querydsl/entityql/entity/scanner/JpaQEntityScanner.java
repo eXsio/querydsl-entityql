@@ -5,7 +5,6 @@ import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
@@ -68,7 +67,7 @@ public class JpaQEntityScanner implements QEntityScanner {
 
     private void addColumn(Field field, int index, QEntityMetadata metadata, Column column) {
         Id id = field.getDeclaredAnnotation(Id.class);
-        QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(field.getType(), getComputedType(field), field.getName(),
+        QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(field.getType(), field.getName(),
                 column.name(), column.nullable(), column.columnDefinition(), index);
         metadata.addColumn(columnMetadata);
         if (id != null) {
@@ -87,20 +86,5 @@ public class JpaQEntityScanner implements QEntityScanner {
                 .map(jc -> new QEntityCompositeJoinColumnItemMetadata(jc.name(), jc.columnDefinition(), jc.referencedColumnName(), jc.nullable()))
                 .forEach(compositeJoinColumn::addItem);
         metadata.addCompositeJoinColumn(compositeJoinColumn);
-    }
-
-    private static Class<?> getComputedType(Field field) {
-        Class<?> type = field.getType();
-        if (type.isArray()) {
-            type = Array.class;
-        } else if (type.isEnum()) {
-            Enumerated enumerated = field.getDeclaredAnnotation(Enumerated.class);
-            if (enumerated != null) {
-                type = enumerated.value().equals(EnumType.ORDINAL) ? Integer.class : Enum.class;
-            } else {
-                type = Integer.class;
-            }
-        }
-        return type;
     }
 }

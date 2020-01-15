@@ -1,5 +1,7 @@
 package pl.exsio.querydsl.entityql.entity.metadata;
 
+import java.lang.reflect.Array;
+
 /**
  * Column Metadata of Java Field - DB Column mapping
  */
@@ -45,11 +47,11 @@ public class QEntityColumnMetadata implements ColumnInfoMetadata {
     private final int idx;
 
 
-    public QEntityColumnMetadata(Class<?> originalFieldType, Class<?> computedFieldType,
+    public QEntityColumnMetadata(Class<?> originalFieldType,
                                  String fieldName, String columnName,
                                  boolean nullable, String columnDefinition, int idx) {
         this.originalFieldType = originalFieldType;
-        this.computedFieldType = computedFieldType;
+        this.computedFieldType = computeType(originalFieldType);
         this.fieldName = fieldName;
         this.columnName = columnName;
         this.nullable = nullable;
@@ -57,9 +59,9 @@ public class QEntityColumnMetadata implements ColumnInfoMetadata {
         this.idx = idx;
     }
 
-    public QEntityColumnMetadata(Class<?> originalFieldType, Class<?> computedFieldType,
+    public QEntityColumnMetadata(Class<?> originalFieldType,
                                  String fieldName, String columnName, boolean nullable, int idx) {
-        this(originalFieldType, computedFieldType, fieldName, columnName, nullable, "", idx);
+        this(originalFieldType, fieldName, columnName, nullable, "", idx);
     }
 
     public Class<?> getOriginalFieldType() {
@@ -91,5 +93,14 @@ public class QEntityColumnMetadata implements ColumnInfoMetadata {
     @Override
     public String getColumnDefinition() {
         return columnDefinition;
+    }
+
+    private Class<?> computeType(Class<?> type) {
+        if (type.isArray()) {
+            type = Array.class;
+        } else if (type.isEnum()) {
+            type = Enum.class;
+        }
+        return type;
     }
 }
