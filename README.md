@@ -227,7 +227,9 @@ EntityQL doesn't require any static code generation, the Meta Models are generat
 by exporting the ```Q``` classes, the models will have all the Java names you've created, but will allow you to perform Native SQL queries. 
 
 5) **Vanilla QueryDSL-SQL and/or JOOQ** - both of the frameworks are offering similar feature sets and both rely on generating Static Meta Model by reverse engineering 
-your Schema. Their workflows demand that you create your Database Schema before your code. In both cases the resulting meta-model classes will contain DB Objects names (There are Naming Strategies available but they are limited).
+your Schema. Their workflows demand that you create your Database Schema before your code (jOOQ has a way of creating models from JPA, but it's more of a workaround - it uses Hibernate to create
+Schema in an inmemory H2 db and then it reverse engineers that Schema).
+In both cases the resulting meta-model classes will contain DB Objects names (There are Naming Strategies available but they are limited).
 Most of Java developers (especially ones used to dealing with JPA) like to create their Schema in a form of JPA Entities first, and then export them to Database. 
 EntityQL lets you keep your Schema management in Java Code, allows the same level of integration testing as Hibernate (you can still use Hibernate to generate your 
 test in-memory H2 Database) and at the same time offers convenient, fluent Java API that constructs Native Queries and runs them directly on JDBC level, making whole thing extremely fast.
