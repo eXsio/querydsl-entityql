@@ -240,7 +240,7 @@ test in-memory H2 Database) and at the same time offers convenient, fluent Java 
 You have also an ability to choose between dynamic ad-hoc meta models and the static generated classes.
 
 <a name="jOOQ"></a> 6) **jOOQ** - It is a huge Java framework with lots of SQL features (has a parser, supports stored procedures, DDL, procedural languages, can translate between dialects, can interpret DDL to build a meta model, 
-has schema diff tool, supports multi tenancy, SQL transformation, row level type safety etc). However its focus was (and propably will never be) on generating Meta Models from Java classes
+has schema diff tool, supports multi tenancy, SQL transformation, row level type safety etc). However its focus was never (and propably will never be) on generating Meta Models from Java classes
 and on working with JPA. When it comes to using jOOQ simply as a Query Builder it offers similar feature set as QueryDSL and relies on generating Static Meta Model by reverse engineering 
 your Schema. It is also worth mentioning that JOOQ is not free for Enterprise Databases like Oracle or SQL Server Enterprise. EntityQL relies on an open-source stack that is free to use
 for everyone and everywhere.
