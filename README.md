@@ -91,6 +91,12 @@ Long count = queryFactory.select(count())
 6. [Use Cases](#UseCases)
 7. [QueryDSL SQL Features](#QueryDslSqlFeatures)
 8. [How does the EntityQL differ from...](#HowDiffers)
+    * [Hibernate / JPA in general](#HibernateInGeneral)
+    * [Hibernate / JPA Native Queries](#HibernateNative)
+    * [QueryDSL-JPA in general](#QueryDslJpaInGeneral)
+    * [QueryDSL-JPA JpaSqlQuery class](#queryDslJpaSql)
+    * [Vanilla QueryDSL-SQL](#QueryDslSql)
+    * [jOOQ](#jOOQ)
 9. [Installation](#Installation)
 10. [Configuration](#Configuration)
 11. [Spring Configuration](#SpringConfiguration)
@@ -192,7 +198,7 @@ There are 3 primary use cases for EntityQL:
     - doesn't need/want all the fireworks offered by Hibernate (like dirty checking, auto flushing, cascades etc)
     - would like to have 100% control over the executed SQL statements
     - needs SQL features unavailable in JPA, but supported by QueryDSL (like window functions)
-    - wants to have unbeatable persistence performance (QueryDSL is orders of magnitude faster than Hibernate as it has minimal abstractions and works directly on JDBC level)
+    - wants to have unbeatable persistence performance (QueryDSL is 2 to 3 times faster than Hibernate as it has minimal abstractions and works directly on JDBC level)
 
     EntityQL is just a translation layer between JPA mappings and QueryDSL. QueryDSL is perfectly capable to handle all DML statements.
     
@@ -210,33 +216,37 @@ All of the QueryDSL-SQL features are described here: http://www.querydsl.com/sta
 ## <a name="HowDiffers"></a> How does the EntityQL differ from... 
 ([Contents](#Contents))
 
-1) **Hibernate / JPA in general** - EntityQL uses Entities only  as source of DDL information necessary to construct Native SQL that is executed against JDBC Connection. 
+<a name="HibernateInGeneral"></a> 1) **Hibernate / JPA in general** - EntityQL uses Entities only  as source of DDL information necessary to construct Native SQL that is executed against JDBC Connection. 
 There is no Persistence Context, no Entity Manager, no L1/L2/L3 cache, no Dirty Checking, no Cascades. That makes EntityQL offer less "magic" features, but at the same time
-makes it orders of magnitude faster than Hibernate.
+makes it a lot faster than Hibernate.
  
-2) **Hibernate / JPA Native Queries** - Hibernate offers Native SQL support only in a form of Strings containing full SQL queries. EntityQL offers full fluent QueryDSL Java API
+<a name="HibernateNative"></a> 2) **Hibernate / JPA Native Queries** - Hibernate offers Native SQL support only in a form of Strings containing full SQL queries. EntityQL offers full fluent QueryDSL Java API
 that is way more safe and convenient to use, not to mention it is fully portable. QueryDSL has its form of Dialects that translates the query built with Java API to the SQL Dialect that matches
 your Database.
 
-3) **QueryDSL-JPA in general** - the JPA module is just an additional layer on top of JPA/Hibernate. All of the queries built with its API are translated into JPQL. 
+<a name="QueryDslJpaInGeneral"></a> 3) **QueryDSL-JPA in general** - the JPA module is just an additional layer on top of JPA/Hibernate. All of the queries built with its API are translated into JPQL. 
 Although QueryDSL-JPA API is lightyears ahead of ugly, unreadable Criteria API or error-prone JPQL Strings, it suffers from the same limited SQL operations it can support as the original JPA.
 
-4) **QueryDSL-JPA JpaSqlQuery class** - the JPA module has the ability to construct Native SQL with Java API. The only limitation (at least for some) is that you need to generate both JPA
+<a name="queryDslJpaSql"></a> 4) **QueryDSL-JPA JpaSqlQuery class** - the JPA module has the ability to construct Native SQL with Java API. The only limitation (at least for some) is that you need to generate both JPA
 Meta Models (Q-classes created from your Entity Mappings, containing Java fields names) and SQL Meta Models (S-classes created by reverse engineering your Database Schema, containing DB Objects names). 
 EntityQL doesn't require any static code generation, the Meta Models are generated on the fly and cached in memory for further reuse. If you choose to generate the static models
 by exporting the ```Q``` classes, the models will have all the Java names you've created, but will allow you to perform Native SQL queries. 
 
-5) **Vanilla QueryDSL-SQL and/or JOOQ** - both of the frameworks are offering similar feature sets and both rely on generating Static Meta Model by reverse engineering 
-your Schema. Their workflows demand that you create your Database Schema before your code (jOOQ has a way of creating models from JPA, but it's more of a workaround - it uses Hibernate to create
-Schema in an inmemory H2 db and then it reverse engineers that Schema).
-In both cases the resulting meta-model classes will contain DB Objects names (There are Naming Strategies available but they are limited).
+<a name="QueryDslSql"></a> 5) **Vanilla QueryDSL-SQL** - it relies on generating Static Meta Model by reverse engineering your Schema. Their workflows demand that you create your Database Schema before your code.
+The resulting meta-model classes will contain DB Objects names (There are Naming Strategies available but they are limited).
 Most of Java developers (especially ones used to dealing with JPA) like to create their Schema in a form of JPA Entities first, and then export them to Database. 
 EntityQL lets you keep your Schema management in Java Code, allows the same level of integration testing as Hibernate (you can still use Hibernate to generate your 
 test in-memory H2 Database) and at the same time offers convenient, fluent Java API that constructs Native Queries and runs them directly on JDBC level, making whole thing extremely fast.
 You have also an ability to choose between dynamic ad-hoc meta models and the static generated classes.
 
-It is also worth mentioning that JOOQ is not free for Enterprise Databases like Oracle or SQL Server Enterprise. EntityQL relies on an open-source stack that is free to use
+<a name="jOOQ"></a> 6) **jOOQ** - It is a huge Java framework with lots of SQL features (has a parser, supports stored procedures, DDL, procedural languages, can translate between dialects, can interpret DDL to build a meta model, 
+has schema diff tool, supports multi tenancy, SQL transformation, row level type safety etc). However its focus was (and propably will never be) on generating Meta Models from Java classes
+and on working with JPA. When it comes to using jOOQ simply as a Query Builder it offers similar feature set as QueryDSL and relies on generating Static Meta Model by reverse engineering 
+your Schema. It is also worth mentioning that JOOQ is not free for Enterprise Databases like Oracle or SQL Server Enterprise. EntityQL relies on an open-source stack that is free to use
 for everyone and everywhere.
+
+Please keep in mind that the above differences are sourced in my personal experiences and as such are my own subjective opinions. If you disagree with any of the comparison, please let me know.
+I will gladly update them to make them more informative and objective.
 
 ## <a name="Installation"></a> Installation 
 ([Contents](#Contents))
