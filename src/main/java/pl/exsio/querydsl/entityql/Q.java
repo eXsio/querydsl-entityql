@@ -330,6 +330,19 @@ public class Q<E> extends QBase<E> {
     }
 
     /**
+     * Returns BooleanPath Expression for given Column Field name
+     *
+     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
+     * @throws ClassCastException if the resulting Expression cannot be casted to BooleanPath
+     * @param fieldName - entity Field name
+     * @return - corresponding StringPath expressions
+     */
+    public BooleanPath bool(String fieldName) {
+        checkIfColumnExists(fieldName);
+        return (BooleanPath) this.columns.get(fieldName).get();
+    }
+
+    /**
      * Returns DatePath<LocalDate> Expression for given Column Field name
      *
      * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model

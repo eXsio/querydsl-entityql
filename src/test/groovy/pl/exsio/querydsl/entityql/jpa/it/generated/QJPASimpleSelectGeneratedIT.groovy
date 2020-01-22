@@ -140,20 +140,36 @@ class QJPASimpleSelectGeneratedIT extends Specification {
                 .from(user).fetchOne()
 
         then:
-        type != null
+        type == UserTypeByName.ADMIN
     }
 
-    def "should get enum Fields in DTO projection"() {
+    def "should get boolean Fields"() {
+        given:
+        QUser user = QUser.INSTANCE
+
+        when:
+        Boolean enabled = queryFactory.query()
+                .select(user.enabled)
+                .where(user.typeStr.eq(UserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        enabled
+    }
+
+    def "should get enum and boolean Fields in DTO projection"() {
         given:
         QUser user = QUser.INSTANCE
 
         when:
         UserDto userDto = queryFactory.query()
-                .select(constructor(UserDto, user.id, user.name, user.typeStr))
+                .select(constructor(UserDto, user.id, user.name, user.typeStr, user.enabled))
                 .where(user.typeStr.eq(UserTypeByName.ADMIN))
                 .from(user).fetchOne()
 
         then:
         userDto != null
+        userDto.enabled
+        userDto.type == UserTypeByName.ADMIN
     }
 }

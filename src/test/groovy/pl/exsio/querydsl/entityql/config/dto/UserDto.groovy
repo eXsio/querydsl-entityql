@@ -10,9 +10,28 @@ class UserDto {
     
     private final UserTypeByName type;
 
-    UserDto(Long id, String name, UserTypeByName type) {
+    private final Boolean enabled;
+
+    UserDto(Long id, String name, UserTypeByName type, Boolean enabled) {
         this.id = id
         this.name = name
         this.type = type
+        this.enabled = enabled;
+    }
+
+    Long getId() {
+        return id
+    }
+
+    String getName() {
+        return name
+    }
+
+    UserTypeByName getType() {
+        return type
+    }
+
+    Boolean getEnabled() {
+        return enabled
     }
 }

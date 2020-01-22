@@ -1,6 +1,7 @@
 package pl.exsio.querydsl.entityql.spring_data_jdbc.entity.it.generated
 
 import com.querydsl.core.types.Path
+import com.querydsl.core.types.dsl.BooleanPath
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.sql.ForeignKey
@@ -38,6 +39,8 @@ public final class QUser extends QStaticModel<User> {
   public final QObjectPath<Object> createdBy;
 
   public final QObjectPath<Date> createdAt;
+
+  public final BooleanPath enabled;
 
   public final NumberPath<Long> orderId;
 
@@ -107,6 +110,15 @@ public final class QUser extends QStaticModel<User> {
       this.createdAt = QPathFactory.<QObjectPath<Date>>create(this, config);
 
       addMetadata(this.createdAt, QColumnMetadataFactory.create(config));
+    }
+
+    enabled:
+    {
+      QPathConfig config = new QPathConfig(Boolean.class, Boolean.class, "ENABLED", true, 8, 1111);
+
+      this.enabled = QPathFactory.<BooleanPath>create(this, config);
+
+      addMetadata(this.enabled, QColumnMetadataFactory.create(config));
     }
 
     orderId:

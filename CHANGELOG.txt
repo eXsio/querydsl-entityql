@@ -1,3 +1,9 @@
+- 2.2.4
+    - add bool() method to Q class
+    - make QEntityPath extend EntityPath
+    - more tests
+- 2.2.3
+    - fix BooleanPath
 - 2.2.2
     - add missing Boolean path
     - fix ObjectPath type

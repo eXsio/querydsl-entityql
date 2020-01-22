@@ -36,6 +36,9 @@ public class User<T> {
     @Temporal(TemporalType.DATE)
     private Date createdAt;
 
+    @Column(name="ENABLED")
+    private Boolean enabled;
+
     public User() {
     }
 

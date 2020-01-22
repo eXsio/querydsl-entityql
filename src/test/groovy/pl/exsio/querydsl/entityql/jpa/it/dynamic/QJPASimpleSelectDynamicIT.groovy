@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.config.SpringContext
+import pl.exsio.querydsl.entityql.config.dto.UserDto
 import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
 import pl.exsio.querydsl.entityql.jpa.entity.it.Book
@@ -127,5 +128,49 @@ class QJPASimpleSelectDynamicIT extends Specification {
 
         then:
         createdBy != null
+    }
+
+    def "should get enum Fields"() {
+        given:
+        Q<User> user = qEntity(User)
+
+        when:
+        UserTypeByName type = queryFactory.query()
+                .select(user.<UserTypeByName>enumerated("typeStr"))
+                .where(user.<UserTypeByName>enumerated("typeStr").eq(UserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        type == UserTypeByName.ADMIN
+    }
+
+    def "should get boolean Fields"() {
+        given:
+        Q<User> user = qEntity(User)
+
+        when:
+        Boolean enabled = queryFactory.query()
+                .select(user.bool("enabled"))
+                .where(user.<UserTypeByName>enumerated("typeStr").eq(UserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        enabled
+    }
+
+    def "should get enum and boolean Fields in DTO projection"() {
+        given:
+        Q<User> user = qEntity(User)
+
+        when:
+        UserDto userDto = queryFactory.query()
+                .select(constructor(UserDto, user.longNumber("id"), user.string("name"), user.<UserTypeByName>enumerated("typeStr"), user.bool("enabled")))
+                .where(user.<UserTypeByName>enumerated("typeStr").eq(UserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        then:
+        userDto != null
+        userDto.enabled
+        userDto.type == UserTypeByName.ADMIN
     }
 }
