@@ -141,5 +141,32 @@ class QSpec extends Specification {
 
         orderItem.columns().size() == 4
         orderItem.joinColumns().size() == 2
+
+        orderItem.dynamic() != null
+        orderItem.dynamic("var") != null
+        orderItem.column("id") instanceof NumberPath
+        orderItem.joinColumn("book") instanceof ForeignKey
+    }
+
+    def "should correctly handle non existent generated columns"() {
+        given:
+
+        QOrderItem orderItem = QOrderItem.INSTANCE
+
+        when:
+        orderItem.column("id2")
+        then:
+        thrown InvalidArgumentException
+    }
+
+    def "should correctly handle non existent generated join columns"() {
+        given:
+
+        QOrderItem orderItem = QOrderItem.INSTANCE
+
+        when:
+        orderItem.joinColumn("id2")
+        then:
+        thrown InvalidArgumentException
     }
 }
