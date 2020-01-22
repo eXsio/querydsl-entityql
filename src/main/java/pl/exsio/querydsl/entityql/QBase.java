@@ -20,6 +20,11 @@ abstract class QBase<E> extends RelationalPathBase<E> {
     }
 
     @Override
+    protected BooleanPath createBoolean(String property) {
+        return super.createBoolean(property);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected <A extends Number & Comparable<?>> NumberPath<A> createNumber(String property, Class<? super A> type) {
         return super.createNumber(property, (Class<A>)type);

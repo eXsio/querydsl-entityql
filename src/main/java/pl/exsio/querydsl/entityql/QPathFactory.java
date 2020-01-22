@@ -28,6 +28,7 @@ public abstract class QPathFactory {
 
     static {
         pathFactory.put(Array.class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Boolean.class, (q, config) -> new QPath(q.createBoolean(config.getName()), config, Boolean.class));
         pathFactory.put(Long.class, (q, config) -> new QPath(q.createNumber(config.getName(), Long.class), config, Long.class));
         pathFactory.put(Float.class, (q, config) -> new QPath(q.createNumber(config.getName(), Float.class), config, Float.class));
         pathFactory.put(Double.class, (q, config) -> new QPath(q.createNumber(config.getName(), Double.class), config, Double.class));
@@ -55,7 +56,7 @@ public abstract class QPathFactory {
 
     @SuppressWarnings(value = "unchecked")
     private static Class<Object> getType(QPathConfig config) {
-        return (Class<Object>) config.getComputedFieldType();
+        return (Class<Object>) config.getOriginalFieldType();
     }
 
     @SuppressWarnings(value = "unchecked")
