@@ -1,3 +1,5 @@
+- 2.2.1
+    - fix DTO projection with enum Constructor parameter
 - 2.2.0
     - Spring Data JDBC integration
     - Handle Named and Ordinal Enums in the same way

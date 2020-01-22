@@ -265,7 +265,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1</version>
 </dependency>
 
 <!-- QueryDSL itself -->

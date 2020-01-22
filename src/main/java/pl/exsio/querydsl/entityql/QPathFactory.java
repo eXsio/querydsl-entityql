@@ -50,7 +50,7 @@ public abstract class QPathFactory {
 
     @SuppressWarnings(value = "unchecked")
     private static QEnumPath<?> createEnumeratedPath(QBase<?> q, QPathConfig config) {
-        return new QEnumPath(config.getComputedFieldType(), q, config.getName());
+        return new QEnumPath(config.getOriginalFieldType(), q, config.getName());
     }
 
     @SuppressWarnings(value = "unchecked")
