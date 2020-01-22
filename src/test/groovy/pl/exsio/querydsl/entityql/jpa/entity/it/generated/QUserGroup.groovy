@@ -48,6 +48,7 @@ public final class QUserGroup extends QStaticModel<UserGroup> {
       this.groupId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.groupId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("groupId", this.groupId);
     }
 
     userId:
@@ -57,16 +58,19 @@ public final class QUserGroup extends QStaticModel<UserGroup> {
       this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("userId", this.userId);
     }
 
     group:
     {
       this.group = this.<Group>createForeignKey(this.groupId, "GROUP_ID");
+      this.joinColumnsMap.put("group", this.group);
     }
 
     user:
     {
       this.user = this.<User>createForeignKey(this.userId, "USER_ID");
+      this.joinColumnsMap.put("user", this.user);
     }
 
     _primaryKey:

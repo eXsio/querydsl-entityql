@@ -42,6 +42,7 @@ public final class QGroupAdmin extends QStaticModel<GroupAdmin> {
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     name:
@@ -51,6 +52,7 @@ public final class QGroupAdmin extends QStaticModel<GroupAdmin> {
       this.name = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.name, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("name", this.name);
     }
 
     _primaryKey:

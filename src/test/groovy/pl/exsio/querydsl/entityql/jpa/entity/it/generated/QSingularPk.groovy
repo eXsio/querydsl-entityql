@@ -44,6 +44,7 @@ public final class QSingularPk extends QStaticModel<SingularPk> {
       this.id1 = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id1, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id1", this.id1);
     }
 
     id2:
@@ -53,6 +54,7 @@ public final class QSingularPk extends QStaticModel<SingularPk> {
       this.id2 = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.id2, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id2", this.id2);
     }
 
     desc:
@@ -62,6 +64,7 @@ public final class QSingularPk extends QStaticModel<SingularPk> {
       this.desc = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.desc, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("desc", this.desc);
     }
 
     _primaryKey:

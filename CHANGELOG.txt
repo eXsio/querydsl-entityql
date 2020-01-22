@@ -1,3 +1,5 @@
+- 2.2.5
+    - add more dynamic features to the Static Models
 - 2.2.4
     - add bool() method to Q class
     - make QEntityPath extend EntityPath

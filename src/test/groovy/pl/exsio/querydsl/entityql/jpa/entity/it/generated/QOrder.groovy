@@ -45,6 +45,7 @@ public final class QOrder extends QStaticModel<Order> {
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     userId:
@@ -54,11 +55,13 @@ public final class QOrder extends QStaticModel<Order> {
       this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("userId", this.userId);
     }
 
     user:
     {
       this.user = this.<User>createForeignKey(this.userId, "USER_ID");
+      this.joinColumnsMap.put("user", this.user);
     }
 
     _primaryKey:

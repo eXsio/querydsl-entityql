@@ -44,6 +44,7 @@ public final class QUploadedFile extends QStaticModel<UploadedFile> {
       this.id = QPathFactory.<QUuidPath>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     data:
@@ -53,6 +54,7 @@ public final class QUploadedFile extends QStaticModel<UploadedFile> {
       this.data = QPathFactory.<ArrayPath<byte[], Byte>>create(this, config);
 
       addMetadata(this.data, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("data", this.data);
     }
 
     _primaryKey:

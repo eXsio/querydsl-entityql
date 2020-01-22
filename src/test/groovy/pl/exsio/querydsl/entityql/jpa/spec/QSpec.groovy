@@ -9,6 +9,7 @@ import com.querydsl.sql.PrimaryKey
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 import pl.exsio.querydsl.entityql.ex.MissingIdException
+import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrderItem
 import pl.exsio.querydsl.entityql.jpa.entity.spec.NoIdSpec
 import pl.exsio.querydsl.entityql.jpa.entity.spec.NoTableSpec
 import pl.exsio.querydsl.entityql.jpa.entity.spec.Spec
@@ -124,5 +125,21 @@ class QSpec extends Specification {
 
         spec.columns().size() == 15
         subSpec.joinColumns().size() == 1
+    }
+
+    def "should correctly handle generated columns"() {
+        when:
+
+        QOrderItem orderItem = QOrderItem.INSTANCE
+
+        then:
+        orderItem.containsColumn("id")
+        !orderItem.containsColumn("id3")
+
+        orderItem.containsJoinColumn("book")
+        !orderItem.containsJoinColumn("fk")
+
+        orderItem.columns().size() == 4
+        orderItem.joinColumns().size() == 2
     }
 }

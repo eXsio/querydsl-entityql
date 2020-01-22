@@ -64,6 +64,7 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
             QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.simpleName}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
             this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
             addMetadata(this.{{name}}, QColumnMetadataFactory.create(config));
+            this.columnsMap.put("{{name}}",this.{{name}});
         }
         {% endfor %}
 
@@ -82,10 +83,12 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
                         foreignColumnNames.add("{{fcName}}");
                     {% endfor %}
                     this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(paths, foreignColumnNames);
+                    this.joinColumnsMap.put("{{name}}",this.{{name}});
                 }
             {% else %}
                 {{name}}: {
                     this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}");
+                    this.joinColumnsMap.put("{{name}}",this.{{name}});
                 }
             {% endif %}
         {% endfor %}

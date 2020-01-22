@@ -48,6 +48,7 @@ public final class QGroup extends QStaticModel<Group> {
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     name:
@@ -57,6 +58,7 @@ public final class QGroup extends QStaticModel<Group> {
       this.name = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.name, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("name", this.name);
     }
 
     adminId:
@@ -66,11 +68,13 @@ public final class QGroup extends QStaticModel<Group> {
       this.adminId = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.adminId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("adminId", this.adminId);
     }
 
     admin:
     {
       this.admin = this.<GroupAdmin>createForeignKey(this.adminId, "NAME");
+      this.joinColumnsMap.put("admin", this.admin);
     }
 
     _primaryKey:

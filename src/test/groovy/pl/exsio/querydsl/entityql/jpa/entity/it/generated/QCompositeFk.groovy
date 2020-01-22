@@ -49,6 +49,7 @@ public final class QCompositeFk extends QStaticModel<CompositeFk> {
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     desc:
@@ -58,6 +59,7 @@ public final class QCompositeFk extends QStaticModel<CompositeFk> {
       this.desc = QPathFactory.<StringPath>create(this, config);
 
       addMetadata(this.desc, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("desc", this.desc);
     }
 
     compositePk:
@@ -82,6 +84,7 @@ public final class QCompositeFk extends QStaticModel<CompositeFk> {
       foreignColumnNames.add("ID_2");
 
       this.compositePk = this.<CompositePk>createForeignKey(paths, foreignColumnNames);
+      this.joinColumnsMap.put("compositePk", this.compositePk);
     }
 
     singularPk:
@@ -106,6 +109,7 @@ public final class QCompositeFk extends QStaticModel<CompositeFk> {
       foreignColumnNames.add("ID_2");
 
       this.singularPk = this.<SingularPk>createForeignKey(paths, foreignColumnNames);
+      this.joinColumnsMap.put("singularPk", this.singularPk);
     }
 
     _primaryKey:
