@@ -11,7 +11,10 @@ import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,10 +32,6 @@ public class Q<E> extends QBase<E> {
     private final Map<String, QPath> rawColumns = new LinkedHashMap<>();
 
     private final Map<String, QForeignKey> rawJoinColumns = new LinkedHashMap<>();
-
-    private final Map<String, Path<?>> columnsMap = new HashMap<>();
-
-    private final Map<String, ForeignKey<?>> joinColumnsMap = new HashMap<>();
 
     private PrimaryKey<?> id;
 
@@ -130,38 +129,6 @@ public class Q<E> extends QBase<E> {
             }
             return  (Path<Object>) rawColumns.get(key).get();
         }, params);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, Path<?>> columns() {
-        return columnsMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<String, ForeignKey<?>> joinColumns() {
-        return joinColumnsMap;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean containsColumn(String fieldName) {
-        return rawColumns.containsKey(fieldName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean containsJoinColumn(String fieldName) {
-        return rawJoinColumns.containsKey(fieldName);
     }
 
     /**

@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +25,15 @@ import java.util.function.Function;
  * from the original RelationalPathBase and all base dynamic methods shared between Q and QStaticModel classes
  *
  */
-abstract class QBase<E> extends RelationalPathBase<E> {
+public abstract class QBase<E> extends RelationalPathBase<E> {
+
+    protected final Map<String, Path<?>> columnsMap = new HashMap<>();
+
+    protected final Map<String, ForeignKey<?>> joinColumnsMap = new HashMap<>();
 
     QBase(Class<? extends E> type, String variable, String schema, String table) {
         super(type, variable, schema, table);
     }
-
 
     protected <C extends StoreClause<C>> StoreClause<C> set(StoreClause<C> clause, Function<Object, Path<Object>> pathProvider, Object... params) {
         if (params.length % 2 != 0) {
@@ -344,27 +348,35 @@ abstract class QBase<E> extends RelationalPathBase<E> {
      *
      * @return Map of All Columns with their respective Java Names as keys
      */
-    public abstract Map<String, Path<?>> columns();
+    public Map<String, Path<?>> columns() {
+        return columnsMap;
+    }
 
     /**
      *
      * @return Map of All JOin Columns with their respective Java Names as keys
      */
-    public  abstract Map<String, ForeignKey<?>> joinColumns();
+    public Map<String, ForeignKey<?>> joinColumns() {
+        return joinColumnsMap;
+    }
 
     /**
      *
      * @param fieldName - entity Field name
      * @return - true if current model contains a Column corresponding to the fieldName
      */
-    public  abstract boolean containsColumn(String fieldName);
+    public boolean containsColumn(String fieldName) {
+        return columnsMap.containsKey(fieldName);
+    }
 
     /**
      *
      * @param fieldName - entity Field name
      * @return - true if current Model contains a JoinColumn corresponding to the fieldName
      */
-    public  abstract boolean containsJoinColumn(String fieldName);
+    public boolean containsJoinColumn(String fieldName) {
+        return joinColumnsMap.containsKey(fieldName);
+    }
 
     @Override
     protected <A, E1> ArrayPath<A, E1> createArray(String property, Class<? super A> type) {
