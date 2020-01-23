@@ -10,14 +10,14 @@ import com.querydsl.core.dml.StoreClause;
 import java.util.ArrayList;
 import java.util.List;
 import {{entityName}};
-{% for name, path in q.columns %}
+{% for name, path in q.rawColumns %}
     {% if (path.parametrized) %}
         import {{replace(path.parametrizedType.name, { '$': '.' })}};
     {% endif %}
     import {{path.config.computedFieldType.name}};
 {% endfor %}
 
-{% for name, fk in q.joinColumns %}
+{% for name, fk in q.rawJoinColumns %}
         import {{replace(fk.parametrizedType.name, { '$': '.' })}};
         {% for fkPath in fk.getPaths().keySet() %}
             import {{fkPath.config.computedFieldType.name}};
@@ -41,11 +41,11 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
 
     public static final {{ className }} INSTANCE = new {{ className }}();
 
-    {% for name, path in q.columns %}
+    {% for name, path in q.rawColumns %}
         public final {{macros.printColumnType(path)}} {{ name }};
     {% endfor %}
 
-    {% for name, fk in q.joinColumns %}
+    {% for name, fk in q.rawJoinColumns %}
         public final {{macros.printJoinColumnType(fk)}} {{ name }};
     {% endfor %}
 
@@ -59,7 +59,7 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
     public {{ className }}(String variable) {
         super({{entitySimpleName}}.class, variable, "{{q.schemaName }}", "{{ q.tableName }}");
 
-        {% for name, path in q.columns %}
+        {% for name, path in q.rawColumns %}
         {{name}}: {
             QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.simpleName}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
             this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
@@ -68,7 +68,7 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
         }
         {% endfor %}
 
-        {% for name, fk in q.joinColumns %}
+        {% for name, fk in q.rawJoinColumns %}
             {% if (fk.getPaths().size() > 1) %}
                 {{name}}: {
                     List paths = new ArrayList();

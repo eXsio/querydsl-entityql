@@ -1,9 +1,7 @@
 package pl.exsio.querydsl.entityql;
 
 import com.querydsl.core.dml.StoreClause;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.*;
 import com.querydsl.sql.ColumnMetadata;
 import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
@@ -12,17 +10,8 @@ import pl.exsio.querydsl.entityql.entity.metadata.QEntityCompositeJoinColumnMeta
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
-import pl.exsio.querydsl.entityql.path.QEnumPath;
-import pl.exsio.querydsl.entityql.path.QUuidPath;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,9 +26,13 @@ public class Q<E> extends QBase<E> {
 
     private final QEntityScanner scanner;
 
-    private final Map<String, QPath> columns = new LinkedHashMap<>();
+    private final Map<String, QPath> rawColumns = new LinkedHashMap<>();
 
-    private final Map<String, QForeignKey> joinColumns = new LinkedHashMap<>();
+    private final Map<String, QForeignKey> rawJoinColumns = new LinkedHashMap<>();
+
+    private final Map<String, Path<?>> columnsMap = new HashMap<>();
+
+    private final Map<String, ForeignKey<?>> joinColumnsMap = new HashMap<>();
 
     private PrimaryKey<?> id;
 
@@ -52,7 +45,8 @@ public class Q<E> extends QBase<E> {
 
     void addColumn(QEntityColumnMetadata column) {
         QColumn qColumn = new QColumn(this, column);
-        this.columns.put(column.getFieldName(), qColumn.getPath());
+        this.rawColumns.put(column.getFieldName(), qColumn.getPath());
+        this.columnsMap.put(column.getFieldName(), qColumn.getPath().get());
         addMetadata(qColumn.getPath().get(), qColumn.getMetadata());
     }
 
@@ -64,13 +58,16 @@ public class Q<E> extends QBase<E> {
             );
         }
         qColumn.getPaths().forEach((path, metadata) -> {
-            this.columns.put(String.format("%sId", column.getFieldName()), path);
+            String idColumnName = String.format("%sId", column.getFieldName());
+            this.rawColumns.put(idColumnName, path);
+            this.columnsMap.put(idColumnName, path.get());
             addMetadata(path.get(), metadata);
             ForeignKey<?> foreignKey = createForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
-            this.joinColumns.put(
+            this.rawJoinColumns.put(
                     column.getFieldName(),
                     new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
             );
+            this.joinColumnsMap.put(column.getFieldName(), foreignKey);
         });
     }
 
@@ -78,10 +75,11 @@ public class Q<E> extends QBase<E> {
         QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
-        this.joinColumns.put(
+        this.rawJoinColumns.put(
                 column.getFieldName(),
                 new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
         );
+        this.joinColumnsMap.put(column.getFieldName(), foreignKey);
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {
@@ -93,7 +91,7 @@ public class Q<E> extends QBase<E> {
     void addPrimaryKey(List<QEntityColumnMetadata> ids) {
         idColumns = ids;
         List<String> pkColumnNames = ids.stream().map(QEntityColumnMetadata::getFieldName).collect(Collectors.toList());
-        Path[] pkPaths = this.columns.entrySet().stream()
+        Path[] pkPaths = this.rawColumns.entrySet().stream()
                 .filter(e -> pkColumnNames.contains(e.getKey()))
                 .map(e -> e.getValue().get())
                 .toArray(Path[]::new);
@@ -126,351 +124,48 @@ public class Q<E> extends QBase<E> {
      */
     @SuppressWarnings(value = "unchecked")
     public <C extends StoreClause<C>> StoreClause<C> set(StoreClause<C> clause, Object... params) {
-        if (params.length % 2 != 0) {
-            throw new InvalidArgumentException("Odd number of parameters");
-        }
-        for (int i = 0; i < params.length - 1; i += 2) {
-            Object key = params[i];
-            Object value = params[i + 1];
+        return super.set(clause, key -> {
             if (!(key instanceof String)) {
                 throw new InvalidArgumentException("Param key has to be String");
             }
-            clause.set((Path<Object>) columns.get(key).get(), value);
-        }
-        return clause;
+            return  (Path<Object>) rawColumns.get(key).get();
+        }, params);
     }
 
-    /**
-     * Convenience method used for getting a list of column expressions
-     * that belong to this Model instance.
-     *
-     * Example usage:
-     *
-     * List<Book> books = queryFactory.query()
-     *                 .select(
-     *                         dto(Book.class, book.columns("id", "name", "desc", "price"))
-     *                 ).fetch();
-     *
-     * @param columns - column names
-     * @return - list of corresponding QueryDSL Expressions
-     */
-    public List<Expression<?>> columns(String... columns) {
-        List<Expression<?>> expressions = new LinkedList<>();
-        for (String column : columns) {
-            checkIfColumnExists(column);
-            expressions.add(this.columns.get(column).get());
-        }
-        return expressions;
+    @Override
+    public Map<String, Path<?>> columns() {
+        return columnsMap;
     }
 
-    /**
-     * Returns QEnumPath Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to QEnumPath
-     * @param fieldName - entity Field name
-     * @return - corresponding QEnumPath expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <T extends Enum<T>> QEnumPath<T> enumerated(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (QEnumPath<T>) this.columns.get(fieldName).get();
+    @Override
+    public Map<String, ForeignKey<?>> joinColumns() {
+        return joinColumnsMap;
     }
 
-    /**
-     * Returns QUuidPath Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to QUuidPath
-     * @param fieldName - entity Field name
-     * @return - corresponding QUuidPath expressions
-     */
-    public QUuidPath uuid(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (QUuidPath) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Long> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Long> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Long> longNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Long>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Float> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Float> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Float> floatNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Float>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Integer> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Integer> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Integer> intNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Integer>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Double> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Double> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Double> doubleNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Double>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Byte> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Byte> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Byte> byteNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Byte>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<Short> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<Short> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<Short> shortNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<Short>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<BigDecimal> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<BigDecimal> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<BigDecimal> decimalNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<BigDecimal>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<BigInteger> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<BigInteger> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public NumberPath<BigInteger> bigIntNumber(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<BigInteger>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns NumberPath<T> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to NumberPath
-     * @param fieldName - entity Field name
-     * @return - corresponding NumberPath<T> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <T extends Number & Comparable<?>> NumberPath<T> number(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (NumberPath<T>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns StringPath Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to StringPath
-     * @param fieldName - entity Field name
-     * @return - corresponding StringPath expressions
-     */
-    public StringPath string(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (StringPath) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns BooleanPath Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to BooleanPath
-     * @param fieldName - entity Field name
-     * @return - corresponding StringPath expressions
-     */
-    public BooleanPath bool(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (BooleanPath) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns DatePath<LocalDate> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to DatePath
-     * @param fieldName - entity Field name
-     * @return - corresponding DatePath<LocalDate> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public DatePath<LocalDate> date(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (DatePath<LocalDate>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns ArrayPath<A, AE> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to ArrayPath
-     * @param fieldName - entity Field name
-     * @param <A> - Array Type (for example byte[])
-     * @param <AE> - Array Element Type (for example Byte)
-     *
-     * @return - corresponding ArrayPath<A, AE> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <A, AE> ArrayPath<A, AE> array(String fieldName) {
-        return (ArrayPath<A, AE>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns DateTimePath<LocalDateTime> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to DateTimePath
-     * @param fieldName - entity Field name
-     * @return - corresponding DateTimePath<LocalDateTime> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public DateTimePath<LocalDateTime> dateTime(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (DateTimePath<LocalDateTime>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns ComparableExpressionBase<T> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to ComparableExpressionBase
-     * @param fieldName - entity Field name
-     * @return - corresponding ComparableExpressionBase<T> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <T extends Comparable> ComparableExpressionBase<T> comparableColumn(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (ComparableExpressionBase<T>) this.columns.get(fieldName).get();
-    }
-
-    /**
-     * Returns Path<T> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to Path<T>
-     * @param fieldName - entity Field name
-     * @return - corresponding Path<T> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <T extends Comparable> Path<T> column(String fieldName) {
-        checkIfColumnExists(fieldName);
-        return (Path<T>) this.columns.get(fieldName).get();
-    }
-
-    private void checkIfColumnExists(String fieldName) {
-        if (!columns.containsKey(fieldName)) {
-            throw new InvalidArgumentException(String.format("No Column with name %s, available columns: %s",
-                    fieldName, columns.keySet())
-            );
-        }
-    }
-
-    /**
-     * Returns ForeignKey<T> Expression for given JoinColumn Field name
-     *
-     * @throws InvalidArgumentException if the JoinColumn Field of that name doesn't exist in the current Model
-     * @param fieldName - entity Field name
-     * @return - corresponding ForeignKey<T> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <T> ForeignKey<T> joinColumn(String fieldName) {
-        if (!joinColumns.containsKey(fieldName)) {
-            throw new InvalidArgumentException(String.format("No FK with name %s, available FKs: %s",
-                    fieldName, joinColumns.keySet())
-            );
-        }
-        return (ForeignKey<T>) this.joinColumns.get(fieldName).get();
-    }
-
-    /**
-     *
-     * @param fieldName - entity Field name
-     * @return - true if current model contains a Column corresponding to the fieldName
-     */
+    @Override
     public boolean containsColumn(String fieldName) {
-        return columns.containsKey(fieldName);
+        return rawColumns.containsKey(fieldName);
     }
 
-    /**
-     *
-     * @param fieldName - entity Field name
-     * @return - true if current Model contains a JoinColumn corresponding to the fieldName
-     */
+    @Override
     public boolean containsJoinColumn(String fieldName) {
-        return joinColumns.containsKey(fieldName);
+        return rawJoinColumns.containsKey(fieldName);
     }
 
     /**
      *
-     * @return Map of all Columns for current Model
+     * @return Map of all raw Columns for current Model
      */
-    public Map<String, QPath> columns() {
-        return columns;
+    public Map<String, QPath> rawColumns() {
+        return rawColumns;
     }
 
     /**
      *
-     * @return Map of all JoinColumns for current Model
+     * @return Map of all raw JoinColumns for current Model
      */
-    public Map<String, QForeignKey> joinColumns() {
-        return joinColumns;
+    public Map<String, QForeignKey> rawJoinColumns() {
+        return rawJoinColumns;
     }
 
     /**

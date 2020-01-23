@@ -25,16 +25,16 @@ public class QStaticModel<E> extends QBase<E> {
     /**
      * Convenience method used to quiclky set values on insert/update/merge clauses.
      * Method requires the 'params' parameter to be of even size.
-     * Every other params array item has to be a Path
-     * <p>
+     * Every other params array item has to be a String
+     *
      * Example:
-     * <p>
-     * QBook book = QBook.INSTANCE;
+     *
+     * Q<Book> book = qEntity(Book);
      * book.set(
-     * queryFactory.insert(book),
-     * book.id, 11L,
-     * book.name, "newBook2",
-     * book.price, BigDecimal.ONE
+     *     queryFactory.insert(book),
+     *     "id", 11L,
+     *     "name", "newBook2",
+     *     "price", BigDecimal.ONE
      * ).execute();
      *
      * @param clause - insert/update/merge clause
@@ -43,18 +43,12 @@ public class QStaticModel<E> extends QBase<E> {
      */
     @SuppressWarnings(value = "unchecked")
     public <C extends StoreClause<C>> StoreClause<C> set(StoreClause<C> clause, Object... params) {
-        if (params.length % 2 != 0) {
-            throw new InvalidArgumentException("Odd number of parameters");
-        }
-        for (int i = 0; i < params.length - 1; i += 2) {
-            Object key = params[i];
-            Object value = params[i + 1];
+        return super.set(clause, key -> {
             if (!(key instanceof Path)) {
                 throw new InvalidArgumentException("Param key has to be Path");
             }
-            clause.set((Path<Object>) key, value);
-        }
-        return clause;
+            return (Path<Object>) key;
+        }, params);
     }
 
     /**
@@ -85,69 +79,23 @@ public class QStaticModel<E> extends QBase<E> {
         return EntityQL.qEntity(type, variable);
     }
 
-    /**
-     * Returns Path<R> Expression for given Column Field name
-     *
-     * @throws InvalidArgumentException if the Column Field of that name doesn't exist in the current Model
-     * @throws ClassCastException if the resulting Expression cannot be casted to Path<T>
-     * @param fieldName - entity Field name
-     * @return - corresponding Path<R> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <R> R column(String fieldName) {
-        Path<?> column = columnsMap.get(fieldName);
-        if (column == null) {
-            throw new InvalidArgumentException(String.format("There is no Column with Name '%s'", fieldName));
-        }
-        return (R) column;
-    }
 
-    /**
-     * Returns ForeignKey<R> Expression for given JoinColumn Field name
-     *
-     * @throws InvalidArgumentException if the JoinColumn Field of that name doesn't exist in the current Model
-     * @param fieldName - entity Field name
-     * @return - corresponding ForeignKey<R> expressions
-     */
-    @SuppressWarnings(value = "unchecked")
-    public <R> ForeignKey<R> joinColumn(String fieldName) {
-        ForeignKey<?> joinColumn = joinColumnsMap.get(fieldName);
-        if (joinColumn == null) {
-            throw new InvalidArgumentException(String.format("There is no Join Column with Name '%s'", fieldName));
-        }
-        return (ForeignKey<R>) joinColumn;
-    }
-
-    /**
-     *
-     * @return Map of All Columns with their respective Java Names as keys
-     */
+    @Override
     public Map<String, Path<?>> columns() {
         return columnsMap;
     }
 
-    /**
-     *
-     * @return Map of All JOin Columns with their respective Java Names as keys
-     */
+    @Override
     public Map<String, ForeignKey<?>> joinColumns() {
         return joinColumnsMap;
     }
 
-    /**
-     *
-     * @param fieldName - entity Field name
-     * @return - true if current model contains a Column corresponding to the fieldName
-     */
+    @Override
     public boolean containsColumn(String fieldName) {
         return columnsMap.containsKey(fieldName);
     }
 
-    /**
-     *
-     * @param fieldName - entity Field name
-     * @return - true if current Model contains a JoinColumn corresponding to the fieldName
-     */
+    @Override
     public boolean containsJoinColumn(String fieldName) {
         return joinColumnsMap.containsKey(fieldName);
     }
