@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 /**
  * Base QueryDSL Model class for EntityQL, contains all the protected methods EntityQL needs to properly work
- * from the original RelationalPathBase
+ * from the original RelationalPathBase and all base dynamic methods shared between Q and QStaticModel classes
  *
  */
 abstract class QBase<E> extends RelationalPathBase<E> {
