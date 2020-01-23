@@ -372,16 +372,18 @@ new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, 
 
 ```
 
-Generated classes are fully compatible with Java and Groovy. You can mix and match dynamic and static models:
+Generated classes are fully compatible with Java and Groovy. 
+
+**Since 2.3.0 Static Models contain all the dynamic features of the Dynamic Models!:**
 
 ```java
 
- //mix and match dynamic and static models
+ //use static QueryDSL Models pre-generated from your Entity classes
  QBook book = QBook.INSTANCE; 
  QOrder order = QOrder.INSTANCE;
- Q<OrderItem> orderItem = qEntity(OrderItem.class);
+ QOrderItem orderItem = QOrderItem.INSTANCE;
 
-//use them by creating and executing a Native Query using QueryDSL API
+ //mix and match dynamic and static access
 Long count = queryFactory.select(count())
                 .from(
                         select(
@@ -392,7 +394,7 @@ Long count = queryFactory.select(count())
                         .innerJoin(orderItem.<Book> joinColumn("book"), book)
                         .innerJoin(orderItem.<Order> joinColumn("order"), order)
                         .where(book.price.gt(new BigDecimal("80")))
-                        .groupBy(book.category) 
+                        .groupBy(book.longNumber("categoryId")) 
                 ).fetchOne();
 
 ```
