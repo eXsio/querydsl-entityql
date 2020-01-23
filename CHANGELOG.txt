@@ -1,3 +1,5 @@
+- 2.3.0
+    - move all dynamic features from Q to QBase so that the QStaticModel can use them as well
 - 2.2.5
     - add more dynamic features to the Static Models
 - 2.2.4

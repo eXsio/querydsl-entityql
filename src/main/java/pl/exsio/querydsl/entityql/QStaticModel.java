@@ -80,21 +80,33 @@ public class QStaticModel<E> extends QBase<E> {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Path<?>> columns() {
         return columnsMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, ForeignKey<?>> joinColumns() {
         return joinColumnsMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsColumn(String fieldName) {
         return columnsMap.containsKey(fieldName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsJoinColumn(String fieldName) {
         return joinColumnsMap.containsKey(fieldName);

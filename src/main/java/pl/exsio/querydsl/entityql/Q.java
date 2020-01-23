@@ -132,21 +132,33 @@ public class Q<E> extends QBase<E> {
         }, params);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, Path<?>> columns() {
         return columnsMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<String, ForeignKey<?>> joinColumns() {
         return joinColumnsMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsColumn(String fieldName) {
         return rawColumns.containsKey(fieldName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsJoinColumn(String fieldName) {
         return rawJoinColumns.containsKey(fieldName);
