@@ -7,8 +7,10 @@ import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
 import pl.exsio.querydsl.entityql.Q
+import pl.exsio.querydsl.entityql.entity.scanner.JpaQEntityScanner
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 import pl.exsio.querydsl.entityql.ex.MissingIdException
+import pl.exsio.querydsl.entityql.jpa.entity.it.Order
 import pl.exsio.querydsl.entityql.jpa.entity.it.generated.QOrderItem
 import pl.exsio.querydsl.entityql.jpa.entity.spec.NoIdSpec
 import pl.exsio.querydsl.entityql.jpa.entity.spec.NoTableSpec
@@ -168,5 +170,14 @@ class QSpec extends Specification {
         orderItem.joinColumn("id2")
         then:
         thrown InvalidArgumentException
+    }
+
+    def "exporter test" () {
+
+        when:
+        println(new JpaQEntityScanner().scanEntity(Order.class).toString())
+
+        then:
+        1 == 1
     }
 }

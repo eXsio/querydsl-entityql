@@ -110,4 +110,18 @@ public class QEntityMetadata {
     public void addIdColumn(QEntityColumnMetadata column) {
         idColumns.add(column);
     }
+
+    @Override
+    public String toString() {
+        return "QEntityMetadata{" +
+                "tableName='" + tableName + '\'' +
+                ", schemaName='" + schemaName + '\'' +
+                ", idColumns=" + idColumns +
+                ", columns=" + columns +
+                ", joinColumns=" + joinColumns +
+                ", compositeJoinColumns=" + compositeJoinColumns +
+                ", inverseJoinColumns=" + inverseJoinColumns +
+                ", inverseCompositeJoinColumns=" + inverseCompositeJoinColumns +
+                '}';
+    }
 }

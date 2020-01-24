@@ -105,4 +105,17 @@ public class QEntityColumnMetadata implements ColumnInfoMetadata {
         }
         return type;
     }
+
+    @Override
+    public String toString() {
+        return "QEntityColumnMetadata{" +
+                "originalFieldType=" + originalFieldType +
+                ", computedFieldType=" + computedFieldType +
+                ", fieldName='" + fieldName + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", nullable=" + nullable +
+                ", columnDefinition='" + columnDefinition + '\'' +
+                ", idx=" + idx +
+                '}';
+    }
 }

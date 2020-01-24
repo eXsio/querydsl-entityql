@@ -59,4 +59,14 @@ public class QEntityCompositeJoinColumnItemMetadata implements ReferenceColumnIn
     public String getColumnDefinition() {
         return columnDefinition;
     }
+
+    @Override
+    public String toString() {
+        return "QEntityCompositeJoinColumnItemMetadata{" +
+                "columnName='" + columnName + '\'' +
+                ", columnDefinition='" + columnDefinition + '\'' +
+                ", referencedColumnName='" + referencedColumnName + '\'' +
+                ", nullable=" + nullable +
+                '}';
+    }
 }

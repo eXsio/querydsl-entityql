@@ -90,4 +90,17 @@ public class QEntityJoinColumnMetadata implements ReferenceColumnInfoMetadata {
     public String getColumnDefinition() {
         return columnDefinition;
     }
+
+    @Override
+    public String toString() {
+        return "QEntityJoinColumnMetadata{" +
+                "fieldType=" + fieldType +
+                ", fieldName='" + fieldName + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", columnDefinition='" + columnDefinition + '\'' +
+                ", referencedColumnName='" + referencedColumnName + '\'' +
+                ", nullable=" + nullable +
+                ", idx=" + idx +
+                '}';
+    }
 }

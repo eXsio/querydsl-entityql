@@ -54,4 +54,14 @@ public class QEntityCompositeJoinColumnMetadata {
     public void addItem(QEntityCompositeJoinColumnItemMetadata item) {
         items.add(item);
     }
+
+    @Override
+    public String toString() {
+        return "QEntityCompositeJoinColumnMetadata{" +
+                "fieldType=" + fieldType +
+                ", fieldName='" + fieldName + '\'' +
+                ", items=" + items +
+                ", idx=" + idx +
+                '}';
+    }
 }

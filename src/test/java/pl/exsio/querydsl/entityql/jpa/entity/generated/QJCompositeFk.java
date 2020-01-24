@@ -103,7 +103,6 @@ public final class QJCompositeFk extends QStaticModel<JCompositeFk> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
       this._primaryKey =
           this.<JCompositeFk>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
