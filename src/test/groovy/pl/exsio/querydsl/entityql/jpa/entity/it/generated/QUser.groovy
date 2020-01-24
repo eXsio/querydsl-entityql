@@ -4,6 +4,7 @@ import com.querydsl.core.types.Path
 import com.querydsl.core.types.dsl.BooleanPath
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
+import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
 import groovy.transform.CompileStatic
 import pl.exsio.querydsl.entityql.QColumnMetadataFactory
@@ -12,6 +13,7 @@ import pl.exsio.querydsl.entityql.QPathFactory
 import pl.exsio.querydsl.entityql.QStaticModel
 import pl.exsio.querydsl.entityql.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.config.enums.by_ordinal.UserTypeByOrdinal
+import pl.exsio.querydsl.entityql.jpa.entity.it.Order
 import pl.exsio.querydsl.entityql.jpa.entity.it.User
 import pl.exsio.querydsl.entityql.path.QEnumPath
 import pl.exsio.querydsl.entityql.path.QObjectPath
@@ -39,6 +41,8 @@ public final class QUser extends QStaticModel<User> {
   public final QObjectPath<Date> createdAt;
 
   public final BooleanPath enabled;
+
+  public final ForeignKey<Order> order;
 
   public final PrimaryKey<User> _primaryKey;
 
@@ -120,6 +124,19 @@ public final class QUser extends QStaticModel<User> {
 
       addMetadata(this.enabled, QColumnMetadataFactory.create(config));
       this.columnsMap.put("enabled", this.enabled);
+    }
+
+    order:
+    {
+      QPathConfig config0 = new QPathConfig(Long.class, Long.class, "USER_ID", false, 3, -5);
+
+      Path<?> order0 = QPathFactory.<Path>create(this, config0);
+      addMetadata(order0, QColumnMetadataFactory.create(config0));
+
+      this.order =
+          this.<Order>createInvForeignKey(Arrays.<Path<?>>asList(order0), Arrays.asList("USER_ID"));
+
+      this.inverseJoinColumnsMap.put("order", this.order);
     }
 
     _primaryKey:

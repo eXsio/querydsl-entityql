@@ -24,6 +24,12 @@ import {{entityName}};
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}
 {% endfor %}
+{% for name, fk in q.rawInverseJoinColumns %}
+        import {{replace(fk.parametrizedType.name, { '$': '.' })}};
+        {% for fkPath in fk.getPaths().keySet() %}
+            import {{fkPath.config.computedFieldType.name}};
+        {% endfor %}
+{% endfor %}
 {% if(isGroovy) %}
 import groovy.transform.CompileStatic;
 {% endif %}
@@ -49,6 +55,10 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
     {% for name, fk in q.rawJoinColumns %}
         public final {{macros.printJoinColumnType(fk)}} {{ name }};
     {% endfor %}
+
+    {% for name, fk in q.rawInverseJoinColumns %}
+            public final {{macros.printJoinColumnType(fk)}} {{ name }};
+        {% endfor %}
 
     public final PrimaryKey<{{entitySimpleName}}> _primaryKey;
 
@@ -101,6 +111,33 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
                     this.joinColumnsMap.put("{{name}}",this.{{name}});
                 }
             {% endif %}
+        {% endfor %}
+
+        {% for name, fk in q.rawInverseJoinColumns %}
+            {{name}}: {
+
+                {% for fkPath in fk.getPaths().keySet() %}
+                    QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
+                    Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
+                    addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
+                {% endfor %}
+                this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createInvForeignKey(Arrays.<Path<?>>asList(
+                {% for fkPath in fk.getPaths().keySet() %}
+                    {{name}}{{loop.index0}}
+                    {% if (loop.last) %}{% else %}
+                        ,
+                    {% endif %}
+                {% endfor %}
+                ), Arrays.asList(
+                 {% for fcName in fk.foreignColumnNames %}
+                    "{{fcName}}"
+                    {% if (loop.last) %}{% else %}
+                        ,
+                    {% endif %}
+                {% endfor %}
+                ));
+                this.inverseJoinColumnsMap.put("{{name}}",this.{{name}});
+            }
         {% endfor %}
 
         _primaryKey: {

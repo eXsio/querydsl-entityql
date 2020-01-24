@@ -1,11 +1,9 @@
 package pl.exsio.querydsl.entityql.jpa.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "JCOMPOSITE_PK")
@@ -21,6 +19,9 @@ public class JCompositePk implements Serializable {
 
     @Column(name = "DESC")
     private String desc;
+
+    @OneToMany(mappedBy = "compositePk")
+    private List<JCompositeFk> compositeFks;
 
     public JCompositePk() {
     }

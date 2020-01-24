@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "JORDER_ITEMS", uniqueConstraints = {
         @UniqueConstraint(name = "junique_book_for_order",
-                columnNames = {"BOOK_ID", "ORDER_ID"})
+                columnNames = {"BOOK_ID", "ITEM_ORDER_ID"})
 })
 public class JOrderItem implements Serializable {
 
@@ -21,8 +21,12 @@ public class JOrderItem implements Serializable {
     private JBook book;
 
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false)
+    @JoinColumn(name = "ITEM_ORDER_ID", nullable = false)
     private JOrder order;
+
+    @ManyToOne
+    @JoinColumn(name = "ITEM_ORDER_ID", nullable = false, insertable = false, updatable = false, referencedColumnName = "ORDER_ID")
+    private JOrder orderReferenced;
 
     @Column(name = "QTY", nullable = false)
     private Long quantity;

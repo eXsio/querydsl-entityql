@@ -3,11 +3,13 @@ package pl.exsio.querydsl.entityql.jpa.entity.generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ForeignKey;
 import com.querydsl.sql.PrimaryKey;
 import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
 import pl.exsio.querydsl.entityql.QPathConfig;
 import pl.exsio.querydsl.entityql.QPathFactory;
 import pl.exsio.querydsl.entityql.QStaticModel;
+import pl.exsio.querydsl.entityql.jpa.entity.JOrder;
 import pl.exsio.querydsl.entityql.jpa.entity.JUser;
 import pl.exsio.querydsl.entityql.jpa.entity.JUser.Type;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
@@ -38,6 +40,8 @@ public final class QJUser extends QStaticModel<JUser> {
   public final QObjectPath<Object> createdBy;
 
   public final QObjectPath<Date> createdAt;
+
+  public final ForeignKey<JOrder> order;
 
   public final PrimaryKey<JUser> _primaryKey;
 
@@ -117,6 +121,20 @@ public final class QJUser extends QStaticModel<JUser> {
 
       addMetadata(this.createdAt, QColumnMetadataFactory.create(config));
       this.columnsMap.put("createdAt", this.createdAt);
+    }
+
+    order:
+    {
+      QPathConfig config0 = new QPathConfig(Long.class, Long.class, "USER_ID", false, 3, -5);
+
+      Path<?> order0 = QPathFactory.<Path>create(this, config0);
+      addMetadata(order0, QColumnMetadataFactory.create(config0));
+
+      this.order =
+          this.<JOrder>createInvForeignKey(
+              Arrays.<Path<?>>asList(order0), Arrays.asList("USER_ID"));
+
+      this.inverseJoinColumnsMap.put("order", this.order);
     }
 
     _primaryKey:

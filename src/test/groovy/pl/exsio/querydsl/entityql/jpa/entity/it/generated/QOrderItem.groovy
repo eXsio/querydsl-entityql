@@ -31,9 +31,13 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
 
   public final NumberPath<Long> orderId;
 
+  public final NumberPath<Long> orderReferencedId;
+
   public final ForeignKey<Book> book;
 
   public final ForeignKey<Order> order;
+
+  public final ForeignKey<Order> orderReferenced;
 
   public final PrimaryKey<OrderItem> _primaryKey;
 
@@ -57,7 +61,7 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
 
     quantity:
     {
-      QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 4, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 5, -5);
 
       this.quantity = QPathFactory.<NumberPath<Long>>create(this, config);
 
@@ -85,6 +89,16 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
       this.columnsMap.put("orderId", this.orderId);
     }
 
+    orderReferencedId:
+    {
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 4, -5);
+
+      this.orderReferencedId = QPathFactory.<NumberPath<Long>>create(this, config);
+
+      addMetadata(this.orderReferencedId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("orderReferencedId", this.orderReferencedId);
+    }
+
     book:
     {
       this.book = this.<Book>createForeignKey(this.bookId, "BOOK_ID");
@@ -95,6 +109,12 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
     {
       this.order = this.<Order>createForeignKey(this.orderId, "ORDER_ID");
       this.joinColumnsMap.put("order", this.order);
+    }
+
+    orderReferenced:
+    {
+      this.orderReferenced = this.<Order>createForeignKey(this.orderReferencedId, "ORDER_ID");
+      this.joinColumnsMap.put("orderReferenced", this.orderReferenced);
     }
 
     _primaryKey:

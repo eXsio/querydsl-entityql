@@ -78,4 +78,60 @@ class QJPACompositeFkGeneratedIT extends Specification {
         }
     }
 
+    def "should get all rows from an Entity based on an inverse Composite FK Join to Composite PK"() {
+        given:
+        QCompositePk compositePk = QCompositePk.INSTANCE
+        QCompositeFk compositeFk = QCompositeFk.INSTANCE
+
+        when:
+        List<CompositePk> pks = queryFactory.query()
+                .select(
+                        constructor(
+                                CompositePk,
+                                compositePk.id1,
+                                compositePk.id2,
+                                compositeFk.desc
+                        ))
+                .from(compositePk)
+                .innerJoin(compositePk.compositeFks, compositeFk)
+                .where(compositeFk.desc.eq("fkd2"))
+                .fetch()
+
+        then:
+        pks.size() == 1
+        pks.forEach { pk ->
+            assert pk.id1 == 2L
+            assert pk.id2 == "s2"
+            assert pk.desc == "fkd2"
+        }
+    }
+
+    def "should get all rows from an Entity based on an inverse Composite FK Join to Singular PK"() {
+        given:
+        QSingularPk singularPk = QSingularPk.INSTANCE
+        QCompositeFk compositeFk = QCompositeFk.INSTANCE
+
+        when:
+        List<SingularPk> pks = queryFactory.query()
+                .select(
+                        constructor(
+                                SingularPk,
+                                singularPk.id1,
+                                singularPk.id2,
+                                compositeFk.desc
+                        ))
+                .from(singularPk)
+                .innerJoin(singularPk.compositeFks, compositeFk)
+                .where(compositeFk.desc.eq("fkd2"))
+                .fetch()
+
+        then:
+        pks.size() == 1
+        pks.forEach { pk ->
+            assert pk.id1 == 2L
+            assert pk.id2 == "s2"
+            assert pk.desc == "fkd2"
+        }
+    }
+
 }

@@ -22,6 +22,9 @@ public class JOrder implements Serializable {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<JOrderItem> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "orderReferenced", cascade = CascadeType.ALL)
+    private List<JOrderItem> itemsReferenced = new ArrayList<>();
+
 
     public Long getId() {
         return id;

@@ -141,8 +141,8 @@ class QSpec extends Specification {
         orderItem.containsJoinColumn("book")
         !orderItem.containsJoinColumn("fk")
 
-        orderItem.columns().size() == 4
-        orderItem.joinColumns().size() == 2
+        orderItem.columns().size() == 5
+        orderItem.joinColumns().size() == 3
 
         orderItem.dynamic() != null
         orderItem.dynamic("var") != null

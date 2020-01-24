@@ -31,9 +31,13 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
 
   public final NumberPath<Long> orderId;
 
+  public final NumberPath<Long> orderReferencedId;
+
   public final ForeignKey<JBook> book;
 
   public final ForeignKey<JOrder> order;
+
+  public final ForeignKey<JOrder> orderReferenced;
 
   public final PrimaryKey<JOrderItem> _primaryKey;
 
@@ -57,7 +61,7 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
 
     quantity:
     {
-      QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 4, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 5, -5);
 
       this.quantity = QPathFactory.<NumberPath<Long>>create(this, config);
 
@@ -77,12 +81,22 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
 
     orderId:
     {
-      QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 3, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 3, -5);
 
       this.orderId = QPathFactory.<NumberPath<Long>>create(this, config);
 
       addMetadata(this.orderId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("orderId", this.orderId);
+    }
+
+    orderReferencedId:
+    {
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 4, -5);
+
+      this.orderReferencedId = QPathFactory.<NumberPath<Long>>create(this, config);
+
+      addMetadata(this.orderReferencedId, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("orderReferencedId", this.orderReferencedId);
     }
 
     book:
@@ -95,6 +109,12 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
     {
       this.order = this.<JOrder>createForeignKey(this.orderId, "ORDER_ID");
       this.joinColumnsMap.put("order", this.order);
+    }
+
+    orderReferenced:
+    {
+      this.orderReferenced = this.<JOrder>createForeignKey(this.orderReferencedId, "ORDER_ID");
+      this.joinColumnsMap.put("orderReferenced", this.orderReferenced);
     }
 
     _primaryKey:

@@ -3,12 +3,14 @@ package pl.exsio.querydsl.entityql.jpa.entity.it.generated
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
+import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
 import groovy.transform.CompileStatic
 import pl.exsio.querydsl.entityql.QColumnMetadataFactory
 import pl.exsio.querydsl.entityql.QPathConfig
 import pl.exsio.querydsl.entityql.QPathFactory
 import pl.exsio.querydsl.entityql.QStaticModel
+import pl.exsio.querydsl.entityql.jpa.entity.it.CompositeFk
 import pl.exsio.querydsl.entityql.jpa.entity.it.CompositePk
 
 /**
@@ -26,6 +28,8 @@ public final class QCompositePk extends QStaticModel<CompositePk> {
   public final StringPath id2;
 
   public final StringPath desc;
+
+  public final ForeignKey<CompositeFk> compositeFks;
 
   public final PrimaryKey<CompositePk> _primaryKey;
 
@@ -65,6 +69,26 @@ public final class QCompositePk extends QStaticModel<CompositePk> {
 
       addMetadata(this.desc, QColumnMetadataFactory.create(config));
       this.columnsMap.put("desc", this.desc);
+    }
+
+    compositeFks:
+    {
+      QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ID_1", false, 4, -5);
+
+      Path<?> compositeFks0 = QPathFactory.<Path>create(this, config0);
+      addMetadata(compositeFks0, QColumnMetadataFactory.create(config0));
+
+      QPathConfig config1 = new QPathConfig(String.class, String.class, "ID_2", false, 4, 12);
+
+      Path<?> compositeFks1 = QPathFactory.<Path>create(this, config1);
+      addMetadata(compositeFks1, QColumnMetadataFactory.create(config1));
+
+      this.compositeFks =
+          this.<CompositeFk>createInvForeignKey(
+              Arrays.<Path<?>>asList(compositeFks0, compositeFks1),
+              Arrays.asList("CPK_ID_1", "CPK_ID_2"));
+
+      this.inverseJoinColumnsMap.put("compositeFks", this.compositeFks);
     }
 
     _primaryKey:

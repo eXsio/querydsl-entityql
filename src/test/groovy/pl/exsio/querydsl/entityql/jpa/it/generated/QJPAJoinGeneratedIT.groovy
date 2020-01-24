@@ -197,4 +197,68 @@ class QJPAJoinGeneratedIT extends Specification {
             assert g.name == "G1"
         }
     }
+
+    def "should get all rows from an Entity based on na inverse FK Join"() {
+        given:
+        QBook book = QBook.INSTANCE
+        QOrder order = QOrder.INSTANCE
+        QOrderItem orderItem = QOrderItem.INSTANCE
+
+        when:
+        List<Book> books = queryFactory.query()
+                .select(
+                        constructor(
+                                Book,
+                                book.id,
+                                book.name,
+                                book.desc,
+                                book.price
+                        ))
+                .from(order)
+                .innerJoin(order.items, orderItem)
+                .innerJoin(orderItem.book, book)
+                .where(order.id.eq(2L))
+                .fetch()
+
+        then:
+        books.size() == 5
+        books.forEach { p ->
+            assert p.id != null
+            assert p.name != null
+            assert p.desc != null
+            assert p.price != null
+        }
+    }
+
+    def "should get all rows from an Entity based on na inverse FK Join and referenced column name"() {
+        given:
+        QBook book = QBook.INSTANCE
+        QOrder order = QOrder.INSTANCE
+        QOrderItem orderItem = QOrderItem.INSTANCE
+
+        when:
+        List<Book> books = queryFactory.query()
+                .select(
+                        constructor(
+                                Book,
+                                book.id,
+                                book.name,
+                                book.desc,
+                                book.price
+                        ))
+                .from(order)
+                .innerJoin(order.itemsReferenced, orderItem)
+                .innerJoin(orderItem.book, book)
+                .where(order.id.eq(2L))
+                .fetch()
+
+        then:
+        books.size() == 5
+        books.forEach { p ->
+            assert p.id != null
+            assert p.name != null
+            assert p.desc != null
+            assert p.price != null
+        }
+    }
 }

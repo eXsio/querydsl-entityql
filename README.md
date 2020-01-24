@@ -265,7 +265,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.3.1</version>
+    <version>2.4.0</version>
 </dependency>
 
 <!-- QueryDSL itself -->
@@ -374,7 +374,7 @@ new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, 
 
 Generated classes are fully compatible with Java and Groovy. 
 
-**Since 2.3.1 Static Models contain all the dynamic features of the Dynamic Models!:**
+**Since 2.4.0 Static Models contain all the dynamic features of the Dynamic Models!:**
 
 ```java
 
@@ -435,9 +435,9 @@ Hibernate contains a lot of magical features like auto-generation of table and c
 To work properly, EntityQL needs to work with well-formatted and completely/explicitly described Entities.
 
  - Entity must have a valid ```@Table``` Annotation containing the Table name and (optionally) Schema name
- - Only fields containing ```@Column```, ```@JoinColumn``` or ```@JoinColumns``` Annotations will be visible to EntityQL
- - When dealing with bidirectional mappings, only the sides that actually contain columns (```@JoinColumn```) will be supported,
-   other sides will be ignored (```@OneToMany``` and the reversed ```@OneToOne```)
+ - Only fields containing ```@Column```, ```@JoinColumn``` or ```@JoinColumns``` Annotations will be visible to EntityQL as DB Metadata source
+ - When dealing with JPA Relations, inverse join columns will be generated. Bidirectional ```@OneToOne``` and ```@OneToMany```
+   are fully supported for both simple and composite keys
  - In order to use Java Enums in queries, Enum classes have to be registered with QueryDSL's ```Configuration::register```
    using ```EnumType```. Alternatively you can use the provided ```EntityQlQueryFactory```. It will register all Enums from 
    the packages you want. 
