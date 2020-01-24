@@ -384,7 +384,7 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
      * @return Map of All inverse Join Columns with their respective Java Names as keys
      */
     public Map<String, ForeignKey<?>> inverseJoinColumns() {
-        return joinColumnsMap;
+        return inverseJoinColumnsMap;
     }
 
     /**

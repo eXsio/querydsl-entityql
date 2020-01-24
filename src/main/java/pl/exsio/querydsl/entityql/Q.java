@@ -52,7 +52,7 @@ public class Q<E> extends QBase<E> {
     }
 
     void addJoinColumn(QEntityJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, false);
         if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s",
                     column.getFieldName())
@@ -84,7 +84,7 @@ public class Q<E> extends QBase<E> {
     }
 
     void addInverseJoinColumn(QEntityJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, true);
         if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single inverse JoinColumn mapped to a Composite Primary Key: %s",
                     column.getFieldName())

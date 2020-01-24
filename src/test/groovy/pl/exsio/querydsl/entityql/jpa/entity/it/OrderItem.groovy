@@ -22,6 +22,10 @@ public class OrderItem implements Serializable {
     @JoinColumn(name = "ORDER_ID", nullable = false)
     private Order order;
 
+    @ManyToOne
+    @JoinColumn(name = "ORDER_ID", nullable = false, insertable = false, updatable = false, referencedColumnName = "ORDER_ID")
+    private Order orderReferenced;
+
     @Column(name = "QTY", nullable = false)
     private Long quantity;
 

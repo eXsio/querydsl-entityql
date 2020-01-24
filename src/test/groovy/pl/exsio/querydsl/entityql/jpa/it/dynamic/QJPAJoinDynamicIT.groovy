@@ -193,4 +193,68 @@ class QJPAJoinDynamicIT extends Specification {
         }
     }
 
+    def "should get all rows from an Entity based on na inverse FK Join"() {
+        given:
+        Q<Book> book = qEntity(Book)
+        Q<Order> order = qEntity(Order)
+        Q<OrderItem> orderItem = qEntity(OrderItem)
+
+        when:
+        List<Book> books = queryFactory.query()
+                .select(
+                        constructor(
+                                Book,
+                                book.longNumber("id"),
+                                book.string("name"),
+                                book.string("desc"),
+                                book.decimalNumber("price")
+                        ))
+                .from(order)
+                .innerJoin(order.<OrderItem> inverseJoinColumn("items"), orderItem)
+                .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                .where(order.longNumber("id").eq(2L))
+                .fetch()
+
+        then:
+        books.size() == 5
+        books.forEach { p ->
+            assert p.id != null
+            assert p.name != null
+            assert p.desc != null
+            assert p.price != null
+        }
+    }
+
+    def "should get all rows from an Entity based on na inverse FK Join and referenced column name"() {
+        given:
+        Q<Book> book = qEntity(Book)
+        Q<Order> order = qEntity(Order)
+        Q<OrderItem> orderItem = qEntity(OrderItem)
+
+        when:
+        List<Book> books = queryFactory.query()
+                .select(
+                        constructor(
+                                Book,
+                                book.longNumber("id"),
+                                book.string("name"),
+                                book.string("desc"),
+                                book.decimalNumber("price")
+                        ))
+                .from(order)
+                .innerJoin(order.<OrderItem> inverseJoinColumn("itemsReferenced"), orderItem)
+                .innerJoin(orderItem.<Book> joinColumn("book"), book)
+                .where(order.longNumber("id").eq(2L))
+                .fetch()
+
+        then:
+        books.size() == 5
+        books.forEach { p ->
+            assert p.id != null
+            assert p.name != null
+            assert p.desc != null
+            assert p.price != null
+        }
+    }
+
 }

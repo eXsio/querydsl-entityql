@@ -23,9 +23,9 @@ class QJoinColumn {
 
     private final QEntityScanner scanner;
 
-    QJoinColumn(Q<?> parent, QEntityJoinColumnMetadata column, QEntityScanner scanner) {
+    QJoinColumn(Q<?> parent, QEntityJoinColumnMetadata column, QEntityScanner scanner, boolean inverse) {
         this.scanner = scanner;
-        foreignColumns = getForeignColumns(column);
+        foreignColumns = getForeignColumns(parent, column, inverse);
         foreignColumns.forEach(foreignColumn -> createPath(parent, column.getFieldName(), column.getIdx(), column, foreignColumn));
     }
 
@@ -40,7 +40,7 @@ class QJoinColumn {
         }
     }
 
-    private void createPath(Q<?> parent,String fieldName, int idx, ReferenceColumnInfoMetadata column, QEntityColumnMetadata foreignColumn) {
+    private void createPath(Q<?> parent, String fieldName, int idx, ReferenceColumnInfoMetadata column, QEntityColumnMetadata foreignColumn) {
         QEntityColumnMetadata computedColumn = new QEntityColumnMetadata(foreignColumn.getOriginalFieldType(),
                 fieldName, column.getColumnName(), column.isNullable(), column.getColumnDefinition(), idx);
         int sqlType = getSqlType(computedColumn);
@@ -49,12 +49,12 @@ class QJoinColumn {
         paths.put(qPath, metadata);
     }
 
-    private List<QEntityColumnMetadata> getForeignColumns(QEntityJoinColumnMetadata column) {
-        Q<?> foreign = EntityQL.qEntityWithoutMappings(column.getFieldType(), scanner);
+    private List<QEntityColumnMetadata> getForeignColumns(Q<?> parent, QEntityJoinColumnMetadata column, boolean inverse) {
+        Q<?> foreign = inverse ?  EntityQL.qEntityWithoutMappings(parent.getType(), scanner) : EntityQL.qEntityWithoutMappings(column.getFieldType(), scanner);
         List<QEntityColumnMetadata> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
             result = new ArrayList<>();
-            result.add(createCustomForeignColumn(column.getFieldType(), column));
+            result.add(createCustomForeignColumn(inverse ? parent.getType() : column.getFieldType(), column));
         }
         return result;
     }

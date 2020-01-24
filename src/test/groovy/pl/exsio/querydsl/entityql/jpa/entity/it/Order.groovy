@@ -18,6 +18,9 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "orderReferenced", cascade = CascadeType.ALL)
+    private List<OrderItem> itemsReferenced = new ArrayList<>();
+
 
     public Long getId() {
         return id;

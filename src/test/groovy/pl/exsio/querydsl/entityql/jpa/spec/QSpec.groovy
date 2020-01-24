@@ -6,8 +6,8 @@ import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
 import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
+import pl.exsio.querydsl.entityql.EntityQL
 import pl.exsio.querydsl.entityql.Q
-import pl.exsio.querydsl.entityql.entity.scanner.JpaQEntityScanner
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException
 import pl.exsio.querydsl.entityql.ex.MissingIdException
 import pl.exsio.querydsl.entityql.jpa.entity.it.Order
@@ -175,7 +175,7 @@ class QSpec extends Specification {
     def "exporter test" () {
 
         when:
-        println(new JpaQEntityScanner().scanEntity(Order.class).toString())
+        EntityQL.qEntity(Order.class)
 
         then:
         1 == 1
