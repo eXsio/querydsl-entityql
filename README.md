@@ -436,7 +436,7 @@ To work properly, EntityQL needs to work with well-formatted and completely/expl
 
  - Entity must have a valid ```@Table``` Annotation containing the Table name and (optionally) Schema name
  - Only fields containing ```@Column```, ```@JoinColumn``` or ```@JoinColumns``` Annotations will be visible to EntityQL as DB Metadata source
- - When dealing with JPA Relations, inverse join columns will be generated. Bidirectional ```@OneToOne``` and ```@OneToMany```
+ - When dealing with JPA Relations, inverse join columns will be generated. Bidirectional and unidirectional ```@OneToOne``` and ```@OneToMany```
    are fully supported for both simple and composite keys
  - In order to use Java Enums in queries, Enum classes have to be registered with QueryDSL's ```Configuration::register```
    using ```EnumType```. Alternatively you can use the provided ```EntityQlQueryFactory```. It will register all Enums from 
