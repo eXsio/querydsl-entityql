@@ -78,4 +78,61 @@ class QJPACompositeFkDynamicIT extends Specification {
         }
     }
 
+
+    def "should get all rows from an Entity based on an inverse Composite FK Join to Composite PK"() {
+        given:
+        Q<CompositePk> compositePk = qEntity(CompositePk)
+        Q<CompositeFk> compositeFk = qEntity(CompositeFk)
+
+        when:
+        List<CompositePk> pks = queryFactory.query()
+                .select(
+                        constructor(
+                                CompositePk,
+                                compositePk.longNumber("id1"),
+                                compositePk.string("id2"),
+                                compositeFk.string("desc")
+                        ))
+                .from(compositePk)
+                .innerJoin(compositePk.<CompositeFk> inverseJoinColumn("compositeFks"), compositeFk)
+                .where(compositeFk.string("desc").eq("fkd2"))
+                .fetch()
+
+        then:
+        pks.size() == 1
+        pks.forEach { pk ->
+            assert pk.id1 == 2L
+            assert pk.id2 == "s2"
+            assert pk.desc == "fkd2"
+        }
+    }
+
+    def "should get all rows from an Entity based on an inverse Composite FK Join to Singular PK"() {
+        given:
+        Q<SingularPk> singularPk = qEntity(SingularPk)
+        Q<CompositeFk> compositeFk = qEntity(CompositeFk)
+
+        when:
+        List<SingularPk> pks = queryFactory.query()
+                .select(
+                        constructor(
+                                SingularPk,
+                                singularPk.longNumber("id1"),
+                                singularPk.string("id2"),
+                                compositeFk.string("desc")
+                        ))
+                .from(singularPk)
+                .innerJoin(singularPk.<CompositeFk> inverseJoinColumn("compositeFks"), compositeFk)
+                .where(compositeFk.string("desc").eq("fkd2"))
+                .fetch()
+
+        then:
+        pks.size() == 1
+        pks.forEach { pk ->
+            assert pk.id1 == 2L
+            assert pk.id2 == "s2"
+            assert pk.desc == "fkd2"
+        }
+    }
+
 }

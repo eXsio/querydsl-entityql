@@ -77,7 +77,7 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
 
     orderId:
     {
-      QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 3, -5);
+      QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 3, -5);
 
       this.orderId = QPathFactory.<NumberPath<Long>>create(this, config);
 

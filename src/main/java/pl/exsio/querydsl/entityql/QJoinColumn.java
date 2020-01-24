@@ -1,5 +1,6 @@
 package pl.exsio.querydsl.entityql;
 
+import com.google.common.collect.Lists;
 import com.querydsl.sql.ColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityCompositeJoinColumnMetadata;
@@ -23,14 +24,26 @@ class QJoinColumn {
 
     private final QEntityScanner scanner;
 
+    private final boolean inverse;
+
+    private final LinkedList<String> columnNames = Lists.newLinkedList();
+
+    private final Q<?> parent;
+
     QJoinColumn(Q<?> parent, QEntityJoinColumnMetadata column, QEntityScanner scanner, boolean inverse) {
         this.scanner = scanner;
-        foreignColumns = getForeignColumns(parent, column, inverse);
+        this.inverse = inverse;
+        this.parent = parent;
+        this.columnNames.add(column.getColumnName());
+        foreignColumns = getForeignColumns(column);
         foreignColumns.forEach(foreignColumn -> createPath(parent, column.getFieldName(), column.getIdx(), column, foreignColumn));
     }
 
-    QJoinColumn(Q<?> parent, QEntityCompositeJoinColumnMetadata column, QEntityScanner scanner) {
+    QJoinColumn(Q<?> parent, QEntityCompositeJoinColumnMetadata column, QEntityScanner scanner, boolean inverse) {
         this.scanner = scanner;
+        this.inverse = inverse;
+        this.parent = parent;
+        column.getItems().forEach(item -> this.columnNames.add(item.getColumnName()));
         foreignColumns = getForeignColumns(column);
         if (foreignColumns.size() != column.getItems().size()) {
             throw new InvalidArgumentException(String.format("Unable to construct Foreign Columns out of: %s", column.getItems()));
@@ -42,14 +55,15 @@ class QJoinColumn {
 
     private void createPath(Q<?> parent, String fieldName, int idx, ReferenceColumnInfoMetadata column, QEntityColumnMetadata foreignColumn) {
         QEntityColumnMetadata computedColumn = new QEntityColumnMetadata(foreignColumn.getOriginalFieldType(),
-                fieldName, column.getColumnName(), column.isNullable(), column.getColumnDefinition(), idx);
+                fieldName, inverse ? foreignColumn.getColumnName() : column.getColumnName(), column.isNullable(), column.getColumnDefinition(), idx);
+
         int sqlType = getSqlType(computedColumn);
         QPath qPath = QPathFactory.create(parent, computedColumn, sqlType);
         ColumnMetadata metadata = QColumnMetadataFactory.create(computedColumn, sqlType);
         paths.put(qPath, metadata);
     }
 
-    private List<QEntityColumnMetadata> getForeignColumns(Q<?> parent, QEntityJoinColumnMetadata column, boolean inverse) {
+    private List<QEntityColumnMetadata> getForeignColumns(QEntityJoinColumnMetadata column) {
         Q<?> foreign = inverse ?  EntityQL.qEntityWithoutMappings(parent.getType(), scanner) : EntityQL.qEntityWithoutMappings(column.getFieldType(), scanner);
         List<QEntityColumnMetadata> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
@@ -66,7 +80,7 @@ class QJoinColumn {
                 throw new InvalidArgumentException(String.format("Composite FK requires a non-empty referencedColumnName: %s",
                         item.getColumnName()));
             }
-            result.add(createCustomForeignColumn(column.getFieldType(), item));
+            result.add(createCustomForeignColumn(inverse ? parent.getType() : column.getFieldType(), item));
         });
         return result;
     }
@@ -101,7 +115,7 @@ class QJoinColumn {
     }
 
     LinkedList<String> getForeignColumnNames() {
-        return foreignColumns.stream()
+        return inverse ? columnNames : foreignColumns.stream()
                 .map(QEntityColumnMetadata::getColumnName)
                 .collect(Collectors.toCollection(LinkedList::new));
     }

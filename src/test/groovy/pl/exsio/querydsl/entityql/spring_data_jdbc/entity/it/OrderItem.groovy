@@ -14,6 +14,7 @@ public class OrderItem implements Serializable {
     @Column("BOOK_ID")
     private final Book book;
     @Nonnull
+    @Column("ITEM_ORDER_ID")
     private final Order order;
     @Nonnull
     @Column("QTY")

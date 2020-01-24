@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "ORDER_ITEMS", uniqueConstraints = [
         @UniqueConstraint(name = "unique_book_for_order",
-                columnNames = ["BOOK_ID", "ORDER_ID"])
+                columnNames = ["BOOK_ID", "ITEM_ORDER_ID"])
 ])
 public class OrderItem implements Serializable {
 
@@ -19,11 +19,11 @@ public class OrderItem implements Serializable {
     private Book book;
 
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false)
+    @JoinColumn(name = "ITEM_ORDER_ID", nullable = false)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID", nullable = false, insertable = false, updatable = false, referencedColumnName = "ORDER_ID")
+    @JoinColumn(name = "ITEM_ORDER_ID", nullable = false, insertable = false, updatable = false, referencedColumnName = "ORDER_ID")
     private Order orderReferenced;
 
     @Column(name = "QTY", nullable = false)

@@ -72,17 +72,6 @@ public class Q<E> extends QBase<E> {
         });
     }
 
-    void addCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
-        qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
-        ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
-        this.rawJoinColumns.put(
-                column.getFieldName(),
-                new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
-        );
-        this.joinColumnsMap.put(column.getFieldName(), foreignKey);
-    }
-
     void addInverseJoinColumn(QEntityJoinColumnMetadata column) {
         QJoinColumn qColumn = new QJoinColumn(this, column, scanner, true);
         if (qColumn.getPaths().size() > 1) {
@@ -101,8 +90,26 @@ public class Q<E> extends QBase<E> {
         });
     }
 
-    void addInverseCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
+    void addCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, false);
+        qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
+        ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
+        this.rawJoinColumns.put(
+                column.getFieldName(),
+                new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
+        );
+        this.joinColumnsMap.put(column.getFieldName(), foreignKey);
+    }
 
+    void addInverseCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, true);
+        qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
+        ForeignKey<?> foreignKey = createInvForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
+        this.rawInverseJoinColumns.put(
+                column.getFieldName(),
+                new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
+        );
+        this.inverseJoinColumnsMap.put(column.getFieldName(), foreignKey);
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {
