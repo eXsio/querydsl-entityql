@@ -146,11 +146,9 @@ public final class QUser extends QStaticModel<User> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<User>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<User>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

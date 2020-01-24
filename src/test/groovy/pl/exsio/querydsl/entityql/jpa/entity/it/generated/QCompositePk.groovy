@@ -69,13 +69,10 @@ public final class QCompositePk extends QStaticModel<CompositePk> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id1, this.id2);
 
-      paths.add(this.id1);
-
-      paths.add(this.id2);
-
-      this._primaryKey = this.<CompositePk>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<CompositePk>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

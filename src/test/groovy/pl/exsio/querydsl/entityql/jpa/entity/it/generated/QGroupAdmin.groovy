@@ -57,11 +57,10 @@ public final class QGroupAdmin extends QStaticModel<GroupAdmin> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<GroupAdmin>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<GroupAdmin>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

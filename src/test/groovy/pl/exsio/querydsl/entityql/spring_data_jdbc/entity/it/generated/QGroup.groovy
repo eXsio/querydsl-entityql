@@ -79,11 +79,9 @@ public final class QGroup extends QStaticModel<Group> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<Group>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey = this.<Group>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

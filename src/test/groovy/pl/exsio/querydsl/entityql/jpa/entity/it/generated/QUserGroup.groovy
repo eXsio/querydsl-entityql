@@ -75,13 +75,10 @@ public final class QUserGroup extends QStaticModel<UserGroup> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.groupId, this.userId);
 
-      paths.add(this.groupId);
-
-      paths.add(this.userId);
-
-      this._primaryKey = this.<UserGroup>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<UserGroup>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

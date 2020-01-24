@@ -99,11 +99,10 @@ public final class QOrderItem extends QStaticModel<OrderItem> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<OrderItem>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<OrderItem>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

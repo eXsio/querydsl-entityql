@@ -59,11 +59,10 @@ public final class QUploadedFile extends QStaticModel<UploadedFile> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<UploadedFile>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<UploadedFile>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

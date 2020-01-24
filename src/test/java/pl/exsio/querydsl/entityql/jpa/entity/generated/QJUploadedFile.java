@@ -11,8 +11,7 @@ import pl.exsio.querydsl.entityql.jpa.entity.JUploadedFile;
 import pl.exsio.querydsl.entityql.path.QUuidPath;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -45,6 +44,7 @@ public final class QJUploadedFile extends QStaticModel<JUploadedFile> {
       this.id = QPathFactory.<QUuidPath>create(this, config);
 
       addMetadata(this.id, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("id", this.id);
     }
 
     data:
@@ -54,15 +54,15 @@ public final class QJUploadedFile extends QStaticModel<JUploadedFile> {
       this.data = QPathFactory.<ArrayPath<byte[], Byte>>create(this, config);
 
       addMetadata(this.data, QColumnMetadataFactory.create(config));
+      this.columnsMap.put("data", this.data);
     }
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
 
-      paths.add(this.id);
-
-      this._primaryKey = this.<JUploadedFile>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<JUploadedFile>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

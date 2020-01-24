@@ -40,6 +40,16 @@ public class QEntityMetadata {
      */
     private final List<QEntityCompositeJoinColumnMetadata> compositeJoinColumns = new LinkedList<>();
 
+    /**
+     * Column Metadata of all inverse Join Columns (Foreign Keys) for the Table
+     */
+    private final List<QEntityJoinColumnMetadata> inverseJoinColumns = new LinkedList<>();
+
+    /**
+     * Column Metadata of all inverse Composite Join Columns (Composite Foreign Keys) for the Table
+     */
+    private final List<QEntityCompositeJoinColumnMetadata> inverseCompositeJoinColumns = new LinkedList<>();
+
     public QEntityMetadata(String tableName, String schemaName) {
         this.tableName = tableName;
         this.schemaName = schemaName;
@@ -65,6 +75,14 @@ public class QEntityMetadata {
         return compositeJoinColumns;
     }
 
+    public List<QEntityJoinColumnMetadata> getInverseJoinColumns() {
+        return inverseJoinColumns;
+    }
+
+    public List<QEntityCompositeJoinColumnMetadata> getInverseCompositeJoinColumns() {
+        return inverseCompositeJoinColumns;
+    }
+
     public List<QEntityColumnMetadata> getIdColumns() {
         return idColumns;
     }
@@ -79,6 +97,14 @@ public class QEntityMetadata {
 
     public void addCompositeJoinColumn(QEntityCompositeJoinColumnMetadata joinColumn) {
         compositeJoinColumns.add(joinColumn);
+    }
+
+    public void addInverseJoinColumn(QEntityJoinColumnMetadata joinColumn) {
+        inverseJoinColumns.add(joinColumn);
+    }
+
+    public void addInverseCompositeJoinColumn(QEntityCompositeJoinColumnMetadata joinColumn) {
+        inverseCompositeJoinColumns.add(joinColumn);
     }
 
     public void addIdColumn(QEntityColumnMetadata column) {

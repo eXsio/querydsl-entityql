@@ -69,11 +69,10 @@ public final class QSingularPk extends QStaticModel<SingularPk> {
 
     _primaryKey:
     {
-      List<Path> paths = new ArrayList();
+      this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id1);
 
-      paths.add(this.id1);
-
-      this._primaryKey = this.<SingularPk>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+      this._primaryKey =
+          this.<SingularPk>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
     }
   }
 }

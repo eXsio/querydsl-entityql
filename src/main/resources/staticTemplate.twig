@@ -8,6 +8,7 @@ import pl.exsio.querydsl.entityql.path.*;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.dml.StoreClause;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import {{entityName}};
 {% for name, path in q.rawColumns %}
@@ -71,18 +72,27 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
         {% for name, fk in q.rawJoinColumns %}
             {% if (fk.getPaths().size() > 1) %}
                 {{name}}: {
-                    List paths = new ArrayList();
-                    List<String> foreignColumnNames = new ArrayList<>();
+
                     {% for fkPath in fk.getPaths().keySet() %}
                         QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
                         Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
                         addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
-                        paths.add({{name}}{{loop.index0}});
                     {% endfor %}
-                    {% for fcName in fk.foreignColumnNames %}
-                        foreignColumnNames.add("{{fcName}}");
+                    this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(Arrays.<Path<?>>asList(
+                    {% for fkPath in fk.getPaths().keySet() %}
+                        {{name}}{{loop.index0}}
+                        {% if (loop.last) %}{% else %}
+                            ,
+                        {% endif %}
                     {% endfor %}
-                    this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(paths, foreignColumnNames);
+                    ), Arrays.asList(
+                     {% for fcName in fk.foreignColumnNames %}
+                        "{{fcName}}"
+                        {% if (loop.last) %}{% else %}
+                            ,
+                        {% endif %}
+                    {% endfor %}
+                    ));
                     this.joinColumnsMap.put("{{name}}",this.{{name}});
                 }
             {% else %}
@@ -94,11 +104,16 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
         {% endfor %}
 
         _primaryKey: {
-             List<Path> paths = new ArrayList();
+             this.primaryKeyColumns = Arrays.<Path<?>>asList(
              {% for id in q.idColumns %}
-                 paths.add(this.{{id.fieldName}});
+                  this.{{id.fieldName}}
+                   {% if (loop.last) %}{% else %}
+                      ,
+                  {% endif %}
              {% endfor %}
-             this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(paths.<Path>toArray(new Path[0]));
+             );
+             this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+
         }
     }
 }
