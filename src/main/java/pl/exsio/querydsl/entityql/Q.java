@@ -33,6 +33,8 @@ public class Q<E> extends QBase<E> {
 
     private final Map<String, QForeignKey> rawJoinColumns = new LinkedHashMap<>();
 
+    private final Map<String, QForeignKey> rawInverseJoinColumns = new LinkedHashMap<>();
+
     private PrimaryKey<?> id;
 
     List<QEntityColumnMetadata> idColumns = new LinkedList<>();
@@ -79,6 +81,28 @@ public class Q<E> extends QBase<E> {
                 new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
         );
         this.joinColumnsMap.put(column.getFieldName(), foreignKey);
+    }
+
+    void addInverseJoinColumn(QEntityJoinColumnMetadata column) {
+        QJoinColumn qColumn = new QJoinColumn(this, column, scanner);
+        if (qColumn.getPaths().size() > 1) {
+            throw new InvalidArgumentException(String.format("Single inverse JoinColumn mapped to a Composite Primary Key: %s",
+                    column.getFieldName())
+            );
+        }
+        qColumn.getPaths().forEach((path, metadata) -> {
+            addMetadata(path.get(), metadata);
+            ForeignKey<?> foreignKey = createInvForeignKey(path.get(), qColumn.getForeignColumnNames().getFirst());
+            this.rawInverseJoinColumns.put(
+                    column.getFieldName(),
+                    new QForeignKey(foreignKey, column.getFieldType(), qColumn.getPaths(), qColumn.getForeignColumnNames())
+            );
+            this.inverseJoinColumnsMap.put(column.getFieldName(), foreignKey);
+        });
+    }
+
+    void addInverseCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
+
     }
 
     private List<Path<?>> getPaths( QJoinColumn qColumn) {
@@ -145,6 +169,14 @@ public class Q<E> extends QBase<E> {
      */
     public Map<String, QForeignKey> rawJoinColumns() {
         return rawJoinColumns;
+    }
+
+    /**
+     *
+     * @return Map of all raw inverse JoinColumns for current Model
+     */
+    public Map<String, QForeignKey> rawInverseJoinColumns() {
+        return rawInverseJoinColumns;
     }
 
     /**

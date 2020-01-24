@@ -31,6 +31,8 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
 
     protected final Map<String, ForeignKey<?>> joinColumnsMap = new HashMap<>();
 
+    protected final Map<String, ForeignKey<?>> inverseJoinColumnsMap = new HashMap<>();
+
     QBase(Class<? extends E> type, String variable, String schema, String table) {
         super(type, variable, schema, table);
     }
@@ -345,6 +347,23 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
     }
 
     /**
+     * Returns ForeignKey<T> Expression for given inverse JoinColumn Field name
+     *
+     * @throws InvalidArgumentException if the inverse JoinColumn Field of that name doesn't exist in the current Model
+     * @param fieldName - entity Field name
+     * @return - corresponding ForeignKey<T> expressions
+     */
+    @SuppressWarnings(value = "unchecked")
+    public <T> ForeignKey<T> inverseJoinColumn(String fieldName) {
+        if (!containsInverseJoinColumn(fieldName)) {
+            throw new InvalidArgumentException(String.format("No inverse FK with name %s, available FKs: %s",
+                    fieldName, inverseJoinColumns().keySet())
+            );
+        }
+        return (ForeignKey<T>) inverseJoinColumns().get(fieldName);
+    }
+
+    /**
      *
      * @return Map of All Columns with their respective Java Names as keys
      */
@@ -357,6 +376,14 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
      * @return Map of All JOin Columns with their respective Java Names as keys
      */
     public Map<String, ForeignKey<?>> joinColumns() {
+        return joinColumnsMap;
+    }
+
+    /**
+     *
+     * @return Map of All inverse Join Columns with their respective Java Names as keys
+     */
+    public Map<String, ForeignKey<?>> inverseJoinColumns() {
         return joinColumnsMap;
     }
 
@@ -376,6 +403,15 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
      */
     public boolean containsJoinColumn(String fieldName) {
         return joinColumnsMap.containsKey(fieldName);
+    }
+
+    /**
+     *
+     * @param fieldName - entity Field name
+     * @return - true if current Model contains an inverse JoinColumn corresponding to the fieldName
+     */
+    public boolean containsInverseJoinColumn(String fieldName) {
+        return inverseJoinColumnsMap.containsKey(fieldName);
     }
 
     @Override

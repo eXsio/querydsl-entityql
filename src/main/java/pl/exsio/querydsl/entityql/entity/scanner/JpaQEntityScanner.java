@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Default QEntityScanner implementation based on JPA Metadata Annotations
@@ -72,7 +73,7 @@ public class JpaQEntityScanner implements QEntityScanner {
     }
 
     private void parseOneToOne(Field field, int index, QEntityMetadata metadata, OneToOne oneToOne) {
-        Class<?> foreignType = getForeignType(field);
+        Class<?> foreignType = field.getType();
         Field foreignField = getForeignField(foreignType, oneToOne.mappedBy());
         JoinColumn foreignJoinColumn = foreignField.getDeclaredAnnotation(JoinColumn.class);
         if (foreignJoinColumn != null) {
@@ -86,8 +87,11 @@ public class JpaQEntityScanner implements QEntityScanner {
     }
 
     private void parseOneToMany(Field field, int index, QEntityMetadata metadata, OneToMany oneToMany, JoinColumn joinColumn, JoinColumns joinColumns) {
+        if(!Collection.class.isAssignableFrom(field.getType())) {
+            return;
+        }
+        Class<?> foreignType = getCollectionType(field);
         if (!oneToMany.mappedBy().equals("")) {
-            Class<?> foreignType = getForeignType(field);
             Field foreignField = getForeignField(foreignType, oneToMany.mappedBy());
             JoinColumn foreignJoinColumn = foreignField.getDeclaredAnnotation(JoinColumn.class);
             if (foreignJoinColumn != null) {
@@ -99,9 +103,9 @@ public class JpaQEntityScanner implements QEntityScanner {
                 }
             }
         } else if (joinColumn != null) {
-            metadata.addInverseJoinColumn(getJoinColumnMetadata(field.getType(), field.getName(), index, joinColumn));
+            metadata.addInverseJoinColumn(getJoinColumnMetadata(foreignType, field.getName(), index, joinColumn));
         } else if (joinColumns != null) {
-            metadata.addInverseCompositeJoinColumn(getCompositeJoinColumnMetadata(field.getType(), field.getName(), index, joinColumns));
+            metadata.addInverseCompositeJoinColumn(getCompositeJoinColumnMetadata(foreignType, field.getName(), index, joinColumns));
         }
     }
 
@@ -113,7 +117,7 @@ public class JpaQEntityScanner implements QEntityScanner {
         }
     }
 
-    private Class<?> getForeignType(Field field) {
+    private Class<?> getCollectionType(Field field) {
         Type type = field.getGenericType();
         ParameterizedType pt = (ParameterizedType) type;
         return (Class<?>) pt.getActualTypeArguments()[0];

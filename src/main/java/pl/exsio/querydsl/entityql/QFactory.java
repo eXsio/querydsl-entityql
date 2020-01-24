@@ -43,6 +43,8 @@ class QFactory<E> {
         if (withMappings) {
             metadata.getJoinColumns().forEach(type::addJoinColumn);
             metadata.getCompositeJoinColumns().forEach(type::addCompositeJoinColumn);
+            metadata.getInverseJoinColumns().forEach(type::addInverseJoinColumn);
+            metadata.getInverseCompositeJoinColumns().forEach(type::addInverseCompositeJoinColumn);
         }
         type.addPrimaryKey(metadata.getIdColumns());
         return type;
