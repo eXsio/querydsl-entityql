@@ -445,9 +445,9 @@ To work properly, EntityQL needs to work with well-formatted and completely/expl
  - In order to use Booleans you have to register ```BooleanType``` with QueryDSL's ```Configuration::register```
  - Composite Primary Keys are supported only in a form of ```Serializable @Entity``` having multiple fields annotated with ```@Id```. Embedded classes and Ids are not supported.
  - Composite Foreign Keys are supported via the ```@JoinColumns``` Annotation.
- - ```@JoinTable``` Annotation is not supported. If you want to use EntityQL with ```@ManyToMany``` mapping, 
-    you can create an ```@Immutable @Entity``` that matches the table configured in ```@JoinTable```, for example:
-    
+ - The only unsupported JPA Relation is ```@ManyToMany``` along with```@JoinTable```. The reason is that the auto-generated Join Table
+   has no physical Entity class and there is no possibility to generate the Model without a whole lot of magic that I would rather like to avoid.
+   If you want to use EntityQL with ```@ManyToMany``` mapping, you can create an ```@Immutable @Entity``` that matches the table configured in ```@JoinTable```, for example:
     
 ```java
     
