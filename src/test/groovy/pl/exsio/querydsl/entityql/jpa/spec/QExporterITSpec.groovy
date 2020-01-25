@@ -1,5 +1,6 @@
 package pl.exsio.querydsl.entityql.jpa.spec
 
+import org.junit.Ignore
 import pl.exsio.querydsl.entityql.QExporter
 import pl.exsio.querydsl.entityql.jpa.entity.it.*
 import spock.lang.Specification
@@ -18,7 +19,7 @@ public class QExporterITSpec extends Specification {
 
     QExporter exporter = new QExporter();
 
-    //@Ignore
+    @Ignore
     def "should export integration q classes to static meta models"() {
         when:
         exporter.export(qEntity(Book), fileNamePattern, pkgName, destinationPath)

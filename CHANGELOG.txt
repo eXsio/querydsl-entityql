@@ -1,3 +1,5 @@
+ - 2.4.1
+    - speed up dynamic model generation by caching the non-mappings helper models
  - 2.4.0
     - generate inverse join columns for @OneToMany and bidirectional @OneToOne
  - 2.3.1

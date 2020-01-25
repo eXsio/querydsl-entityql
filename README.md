@@ -265,7 +265,7 @@ In the most basic form you just need EntityQL, JPA API and QueryDSL-SQL:
 <dependency>
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>2.4.0</version>
+    <version>2.4.1</version>
 </dependency>
 
 <!-- QueryDSL itself -->
@@ -374,7 +374,7 @@ new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, 
 
 Generated classes are fully compatible with Java and Groovy. 
 
-**Since 2.4.0 Static Models contain all the dynamic features of the Dynamic Models!:**
+**Since 2.4.1 Static Models contain all the dynamic features of the Dynamic Models!:**
 
 ```java
 

@@ -6,13 +6,17 @@ import com.querydsl.core.types.Projections;
 import pl.exsio.querydsl.entityql.entity.scanner.JpaQEntityScanner;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Convenience class for obtaining instances of the Q class - dynamic QueryDSL Models
  */
 public class EntityQL {
+
+    private final static Map<Class<?>, Q<?>> NO_MAPPINGS_CACHE = new HashMap<>();
 
     /**
      * @param entityClass - source Entity class
@@ -68,8 +72,11 @@ public class EntityQL {
         return QFactory.get(entityClass, scanner).create(variable, true);
     }
 
+    @SuppressWarnings("unchecked")
     static <E> Q<E> qEntityWithoutMappings(Class<E> entityClass, QEntityScanner scanner) {
-        return QFactory.get(entityClass, scanner).create(false);
+        return( Q<E>) NO_MAPPINGS_CACHE.compute(entityClass, (eClass, q) ->
+                q != null ? q : QFactory.get(entityClass, scanner).create(false)
+        );
     }
 
     /**
