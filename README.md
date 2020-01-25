@@ -16,6 +16,7 @@ Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC
 
 **EntityQL can:**
 - **serve as an addition to any existent JPA configuration or as a standalone Data Access Layer**
+- **work without any additional bootstrap and warmup, which makes it a perfect choice for scalable microservices**
 - **be a lightweight alternative to using JPA/Hibernate**
 - **generate both dynamic and static Query Models, preserving the original JPA Entity field names**
 - **completely replace the usage of Criteria API and/or JPQL**
