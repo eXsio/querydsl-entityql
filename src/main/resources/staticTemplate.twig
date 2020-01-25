@@ -1,23 +1,26 @@
 {% import "macros.twig" as macros %}
 package {{ package }};
 
-import com.querydsl.core.types.dsl.*;
-import com.querydsl.sql.*;
-import pl.exsio.querydsl.entityql.*;
-import pl.exsio.querydsl.entityql.path.*;
+import com.querydsl.core.types.Path;
+import com.querydsl.sql.PrimaryKey;
+import pl.exsio.querydsl.entityql.QColumnMetadataFactory;
+import pl.exsio.querydsl.entityql.QPathConfig;
+import pl.exsio.querydsl.entityql.QPathFactory;
+import pl.exsio.querydsl.entityql.QStaticModel;
+{% if(q.rawJoinColumns.size() > 0 or q.rawInverseJoinColumns.size() > 0) %}
+    import com.querydsl.sql.ForeignKey;
+{% endif %}
 import com.querydsl.core.types.Path;
 import com.querydsl.core.dml.StoreClause;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import {{entityName}};
 {% for name, path in q.rawColumns %}
     {% if (path.parametrized) %}
         import {{replace(path.parametrizedType.name, { '$': '.' })}};
     {% endif %}
+    import {{ path.get().class.name }};
     import {{path.config.computedFieldType.name}};
 {% endfor %}
-
 {% for name, fk in q.rawJoinColumns %}
         import {{replace(fk.parametrizedType.name, { '$': '.' })}};
         {% for fkPath in fk.getPaths().keySet() %}
@@ -32,6 +35,10 @@ import {{entityName}};
 {% endfor %}
 {% if(isGroovy) %}
 import groovy.transform.CompileStatic;
+{% else %}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 {% endif %}
 
 /**

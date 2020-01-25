@@ -1,8 +1,8 @@
 package pl.exsio.querydsl.entityql.jpa.spec
 
-import org.junit.Ignore
 import pl.exsio.querydsl.entityql.QExporter
 import pl.exsio.querydsl.entityql.jpa.entity.it.*
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import java.nio.file.Paths
