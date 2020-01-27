@@ -37,6 +37,8 @@ public abstract class QBase<E> extends RelationalPathBase<E> {
         super(type, variable, schema, table);
     }
 
+
+
     protected <C extends StoreClause<C>> StoreClause<C> set(StoreClause<C> clause, Function<Object, Path<Object>> pathProvider, Object... params) {
         if (params.length % 2 != 0) {
             throw new InvalidArgumentException("Odd number of parameters");

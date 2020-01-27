@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Utility Class used to generate Static Java classes from the Dynamic Q Models.
@@ -80,11 +81,14 @@ public class QExporter {
     private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, boolean isGroovy) {
         String className = FilenameUtils.removeExtension(fileName);
         JtwigTemplate template = JtwigTemplate.classpathTemplate("staticTemplate.twig", configuration);
+        int hash = Objects.hash(q.columns().keySet(), q.joinColumns().keySet(), q.inverseJoinColumns().keySet());
         return template.render(JtwigModel.newModel()
                 .with("package", pkgName)
                 .with("className", className)
                 .with("entityName", type.getName())
                 .with("entitySimpleName", type.getSimpleName())
+                .with("exporterName", getClass().getName())
+                .with("uid", hash)
                 .with("q", q)
                 .with("isGroovy", isGroovy)
         );

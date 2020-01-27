@@ -20,6 +20,8 @@ public class QStaticModel<E> extends QBase<E> {
         super(type, variable, schema, table);
     }
 
+
+
     /**
      * Convenience method used to quiclky set values on insert/update/merge clauses.
      * Method requires the 'params' parameter to be of even size.

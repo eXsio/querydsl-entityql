@@ -33,6 +33,7 @@ import {{entityName}};
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}
 {% endfor %}
+import javax.annotation.Generated;
 {% if(isGroovy) %}
 import groovy.transform.CompileStatic;
 {% else %}
@@ -51,9 +52,14 @@ import java.util.List;
 {% if(isGroovy) %}
 @CompileStatic
 {% endif %}
+@Generated("{{exporterName}}")
 public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
 
+    private static final long serialVersionUID = {{uid}};
+
     public static final {{ className }} INSTANCE = new {{ className }}();
+
+    public static final {{ className }} q{{entitySimpleName}} = INSTANCE;
 
     {% for name, path in q.rawColumns %}
         public final {{macros.printColumnType(path)}} {{ name }};

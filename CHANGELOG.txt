@@ -1,3 +1,7 @@
+ - 2.4.3
+    - added @Generated annotation
+    - added alternative static field
+    - added serialVersionUid
  - 2.4.2
     - don't use wildcards in imports of static models
  - 2.4.1
