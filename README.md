@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/eXsio/querydsl-entityql.svg?branch=master)](https://travis-ci.org/eXsio/querydsl-entityql)
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
-
+[![](https://jitpack.io/v/eXsio/querydsl-entityql.svg)](https://jitpack.io/#eXsio/querydsl-entityql)
 
 
 ## <a name="TLDR"></a> TL;DR 
