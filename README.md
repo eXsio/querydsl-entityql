@@ -79,6 +79,8 @@ Long count = queryFactory.select(count())
 
  **Interested? Keep on reading or jump straight to the [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) for some code!**
 
+ **Like what you see? Let me know by leaving a Star!**
+
 ## <a name="Contents"></a> Contents
 
 1. [TL;DR](#TLDR)
