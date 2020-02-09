@@ -12,12 +12,12 @@ Have you ever had a situation where you had to perform a SQL operation that was 
 The only solution was to create an ugly String with Native SQL, right? Well, not anymore!
 With EntityQL you can create Native Queries using your own JPA Entities and a beautiful, fluent Java API. 
 
-Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC!
+Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC and its metadata!
 
 **EntityQL can:**
-- **serve as an addition to any existent JPA configuration or as a standalone Data Access Layer**
+- **serve as an addition to any existent JPA / Spring Data JDBC configuration or as a standalone Data Access Layer**
 - **work without any additional bootstrap and warmup, which makes it a perfect choice for scalable microservices**
-- **be a lightweight alternative to using JPA/Hibernate**
+- **be a lightweight alternative to using JPA/Hibernate/Spring Data JDBC**
 - **generate both dynamic and static Query Models, preserving the original JPA Entity field names**
 - **completely replace the usage of Criteria API and/or JPQL**
 - **support Native SQL features not available in JPA using fluent Java API**
