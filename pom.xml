@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
-        <jacoco.maven.plugin.version>0.8.3</jacoco.maven.plugin.version>
+        <jacoco.maven.plugin.version>0.8.5</jacoco.maven.plugin.version>
 
         <querydsl.version>4.2.2</querydsl.version>
         <jpa.version>1.0.2.Final</jpa.version>

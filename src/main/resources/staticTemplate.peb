@@ -180,7 +180,8 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
                   {% endif %}
              {% endfor %}
              );
-             this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+             Path[] pkArray = primaryKeyColumns.<Path>toArray(new Path[0]);
+             this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(pkArray);
 
         }
     }

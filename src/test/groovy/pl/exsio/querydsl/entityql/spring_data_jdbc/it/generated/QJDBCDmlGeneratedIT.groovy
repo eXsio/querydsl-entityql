@@ -117,9 +117,7 @@ class QJDBCDmlGeneratedIT extends Specification {
         QUploadedFile file = QUploadedFile.INSTANCE
 
         UUID id = UUID.randomUUID()
-        int size = 10
-        byte[] data = new byte[size]
-        IntStream.range(0, size).forEach { i -> data[i] = 2 }
+        byte[] data = "someData".getBytes()
 
         when:
         queryFactory.insert(file)
@@ -141,7 +139,7 @@ class QJDBCDmlGeneratedIT extends Specification {
         uploadedFile != null
         uploadedFile.id != null
         uploadedFile.data != null
-        uploadedFile.data.size() == size
+        uploadedFile.data.length == data.length
         Arrays.equals(uploadedFile.data, data)
     }
 
