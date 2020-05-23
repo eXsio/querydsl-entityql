@@ -29,9 +29,7 @@ public final class QJGroup extends QStaticModel<JGroup> {
   public static final QJGroup qJGroup = INSTANCE;
 
   public final NumberPath<Long> id;
-
   public final StringPath name;
-
   public final StringPath adminId;
 
   public final ForeignKey<JGroupAdmin> admin;
@@ -49,29 +47,21 @@ public final class QJGroup extends QStaticModel<JGroup> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "GROUP_ID", true, 1, -5);
-
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
-
     name:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
-
       this.name = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.name, QColumnMetadataFactory.create(config));
       this.columnsMap.put("name", this.name);
     }
-
     adminId:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "ADMIN_NAME", false, 4, 12);
-
       this.adminId = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.adminId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("adminId", this.adminId);
     }
@@ -85,9 +75,8 @@ public final class QJGroup extends QStaticModel<JGroup> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
-      this._primaryKey =
-          this.<JGroup>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<JGroup>createPrimaryKey(pkArray);
     }
   }
 }

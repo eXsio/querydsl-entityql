@@ -29,7 +29,6 @@ public final class QJUploadedFile extends QStaticModel<JUploadedFile> {
   public static final QJUploadedFile qJUploadedFile = INSTANCE;
 
   public final QUuidPath id;
-
   public final ArrayPath<byte[], Byte> data;
 
   public final PrimaryKey<JUploadedFile> _primaryKey;
@@ -45,17 +44,13 @@ public final class QJUploadedFile extends QStaticModel<JUploadedFile> {
     id:
     {
       QPathConfig config = new QPathConfig(UUID.class, UUID.class, "FILE_ID", false, 1, 12);
-
       this.id = QPathFactory.<QUuidPath>create(this, config);
-
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
-
     data:
     {
       QPathConfig config = new QPathConfig(byte[].class, Array.class, "DATA", false, 2, 2003);
-
       this.data = QPathFactory.<ArrayPath<byte[], Byte>>create(this, config);
 
       addMetadata(this.data, QColumnMetadataFactory.create(config));
@@ -65,9 +60,8 @@ public final class QJUploadedFile extends QStaticModel<JUploadedFile> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
-      this._primaryKey =
-          this.<JUploadedFile>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<JUploadedFile>createPrimaryKey(pkArray);
     }
   }
 }

@@ -152,7 +152,7 @@ public class QExporter {
             String target = (String) args.get("target");
             String toReplace = (String) args.get("toReplace");
             String replaceWith = (String) args.get("replaceWith");
-            return target.replaceAll(toReplace, replaceWith);
+            return target.replace(toReplace, replaceWith);
         }
     }
 

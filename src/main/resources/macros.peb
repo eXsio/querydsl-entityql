@@ -1,7 +1,7 @@
 {% macro printColumnType(path) %}
     {{ path.get().class.simpleName }}
     {% if (path.parametrized) %}
-        <{{replace(path.parametrizedType.simpleName, '\\$', '.')}}>
+        <{{replace(path.parametrizedType.simpleName, '$', '.')}}>
     {% endif %}
     {% if (path.config.originalFieldType.array) %}
         {% if (path.config.originalFieldType.componentType.primitive) %}
@@ -21,6 +21,6 @@
     {% if (path.config.originalFieldType.array) %}
         {{path.config.originalFieldType.componentType}}[].class
     {% else %}
-        {{replace(path.config.originalFieldType.simpleName, '\\$', '.' )}}.class
+        {{replace(path.config.originalFieldType.simpleName, '$', '.' )}}.class
     {% endif %}
 {% endmacro %}

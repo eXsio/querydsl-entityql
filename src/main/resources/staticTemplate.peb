@@ -18,7 +18,7 @@ import {{entityName}};
     {% set name = entry.key %}
     {% set path = entry.value %}
     {% if (path.parametrized) %}
-        import {{replace(path.parametrizedType.name, '\\$', '.')}};
+        import {{replace(path.parametrizedType.name, '$', '.')}};
     {% endif %}
     import {{ path.get().class.name }};
     import {{path.config.computedFieldType.name}};
@@ -26,7 +26,7 @@ import {{entityName}};
 {% for entry in q.rawJoinColumns %}
         {% set name = entry.key %}
         {% set fk = entry.value %}
-        import {{replace(fk.parametrizedType.name, '\\$', '.' )}};
+        import {{replace(fk.parametrizedType.name, '$', '.' )}};
         {% for fkPath in fk.getPaths().keySet() %}
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}
@@ -34,7 +34,7 @@ import {{entityName}};
 {% for entry in q.rawInverseJoinColumns %}
         {% set name = entry.key %}
         {% set fk = entry.value %}
-        import {{replace(fk.parametrizedType.name, '\\$', '.')}};
+        import {{replace(fk.parametrizedType.name, '$', '.')}};
         {% for fkPath in fk.getPaths().keySet() %}
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}

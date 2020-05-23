@@ -29,9 +29,7 @@ public final class QJSingularPk extends QStaticModel<JSingularPk> {
   public static final QJSingularPk qJSingularPk = INSTANCE;
 
   public final NumberPath<Long> id1;
-
   public final StringPath id2;
-
   public final StringPath desc;
 
   public final ForeignKey<JCompositeFk> compositeFks;
@@ -49,29 +47,21 @@ public final class QJSingularPk extends QStaticModel<JSingularPk> {
     id1:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ID_1", true, 1, -5);
-
       this.id1 = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.id1, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id1", this.id1);
     }
-
     id2:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "ID_2", true, 2, 12);
-
       this.id2 = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.id2, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id2", this.id2);
     }
-
     desc:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "DESC", true, 3, 12);
-
       this.desc = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.desc, QColumnMetadataFactory.create(config));
       this.columnsMap.put("desc", this.desc);
     }
@@ -79,29 +69,23 @@ public final class QJSingularPk extends QStaticModel<JSingularPk> {
     compositeFks:
     {
       QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ID_1", false, 4, -5);
-
       Path<?> compositeFks0 = QPathFactory.<Path>create(this, config0);
       addMetadata(compositeFks0, QColumnMetadataFactory.create(config0));
-
       QPathConfig config1 = new QPathConfig(String.class, String.class, "ID_2", false, 4, 12);
-
       Path<?> compositeFks1 = QPathFactory.<Path>create(this, config1);
       addMetadata(compositeFks1, QColumnMetadataFactory.create(config1));
-
       this.compositeFks =
           this.<JCompositeFk>createInvForeignKey(
               Arrays.<Path<?>>asList(compositeFks0, compositeFks1),
               Arrays.asList("SPK_ID_1", "SPK_ID_2"));
-
       this.inverseJoinColumnsMap.put("compositeFks", this.compositeFks);
     }
 
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id1);
-
-      this._primaryKey =
-          this.<JSingularPk>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<JSingularPk>createPrimaryKey(pkArray);
     }
   }
 }
