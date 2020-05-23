@@ -109,6 +109,7 @@ public class QExporter {
         context.put("exporterName", getClass().getName());
         context.put("uid", hash);
         context.put("q", q);
+        context.put("idCols", q.idColumns);
         context.put("isGroovy", isGroovy);
         return context;
     }

@@ -173,14 +173,12 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
 
         _primaryKey: {
              this.primaryKeyColumns = Arrays.<Path<?>>asList(
-             {% for id in q.idColumns %}
-                  this.{{id.fieldName}}
-                   {% if (loop.last) %}{% else %}
-                      ,
-                  {% endif %}
+             {% for idc in idCols %}
+                  this.{{idc.fieldName}}
+                  {% if not(loop.last) %},{% endif %}
              {% endfor %}
              );
-             Path[] pkArray = primaryKeyColumns.<Path>toArray(new Path[0]);
+             Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
              this._primaryKey = this.<{{entitySimpleName}}>createPrimaryKey(pkArray);
 
         }
