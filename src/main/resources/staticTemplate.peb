@@ -1,4 +1,4 @@
-{% import "macros.twig" as macros %}
+{% import 'macros.peb' as macros %}
 package {{ package }};
 
 import com.querydsl.core.types.Path;
@@ -14,21 +14,27 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.dml.StoreClause;
 
 import {{entityName}};
-{% for name, path in q.rawColumns %}
+{% for entry in q.rawColumns %}
+    {% set name = entry.key %}
+    {% set path = entry.value %}
     {% if (path.parametrized) %}
-        import {{replace(path.parametrizedType.name, { '$': '.' })}};
+        import {{replace(path.parametrizedType.name, '\\$', '.')}};
     {% endif %}
     import {{ path.get().class.name }};
     import {{path.config.computedFieldType.name}};
 {% endfor %}
-{% for name, fk in q.rawJoinColumns %}
-        import {{replace(fk.parametrizedType.name, { '$': '.' })}};
+{% for entry in q.rawJoinColumns %}
+        {% set name = entry.key %}
+        {% set fk = entry.value %}
+        import {{replace(fk.parametrizedType.name, '\\$', '.' )}};
         {% for fkPath in fk.getPaths().keySet() %}
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}
 {% endfor %}
-{% for name, fk in q.rawInverseJoinColumns %}
-        import {{replace(fk.parametrizedType.name, { '$': '.' })}};
+{% for entry in q.rawInverseJoinColumns %}
+        {% set name = entry.key %}
+        {% set fk = entry.value %}
+        import {{replace(fk.parametrizedType.name, '\\$', '.')}};
         {% for fkPath in fk.getPaths().keySet() %}
             import {{fkPath.config.computedFieldType.name}};
         {% endfor %}
@@ -61,17 +67,23 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
 
     public static final {{ className }} q{{entitySimpleName}} = INSTANCE;
 
-    {% for name, path in q.rawColumns %}
+    {% for entry in q.rawColumns %}
+        {% set name = entry.key %}
+        {% set path = entry.value %}
         public final {{macros.printColumnType(path)}} {{ name }};
     {% endfor %}
 
-    {% for name, fk in q.rawJoinColumns %}
+    {% for entry in q.rawJoinColumns %}
+        {% set name = entry.key %}
+        {% set fk = entry.value %}
         public final {{macros.printJoinColumnType(fk)}} {{ name }};
     {% endfor %}
 
-    {% for name, fk in q.rawInverseJoinColumns %}
-            public final {{macros.printJoinColumnType(fk)}} {{ name }};
-        {% endfor %}
+    {% for entry in q.rawInverseJoinColumns %}
+        {% set name = entry.key %}
+        {% set fk = entry.value %}
+        public final {{macros.printJoinColumnType(fk)}} {{ name }};
+    {% endfor %}
 
     public final PrimaryKey<{{entitySimpleName}}> _primaryKey;
 
@@ -83,27 +95,31 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
     public {{ className }}(String variable) {
         super({{entitySimpleName}}.class, variable, "{{q.schemaName }}", "{{ q.tableName }}");
 
-        {% for name, path in q.rawColumns %}
-        {{name}}: {
-            QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.simpleName}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
-            this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
-            addMetadata(this.{{name}}, QColumnMetadataFactory.create(config));
-            this.columnsMap.put("{{name}}",this.{{name}});
-        }
+        {% for entry in q.rawColumns %}
+            {% set name = entry.key %}
+            {% set path = entry.value %}
+            {{name}}: {
+                QPathConfig config = new QPathConfig({{macros.printOriginalType(path)}},{{path.config.computedFieldType.simpleName}}.class,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}});
+                this.{{name}} = QPathFactory.<{{macros.printColumnType(path)}}>create(this, config);
+                addMetadata(this.{{name}}, QColumnMetadataFactory.create(config));
+                this.columnsMap.put("{{name}}",this.{{name}});
+            }
         {% endfor %}
 
-        {% for name, fk in q.rawJoinColumns %}
+        {% for entry in q.rawJoinColumns %}
+            {% set name = entry.key %}
+            {% set fk = entry.value %}
             {% if (fk.getPaths().size() > 1) %}
                 {{name}}: {
 
                     {% for fkPath in fk.getPaths().keySet() %}
-                        QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
-                        Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
-                        addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
+                        QPathConfig config{{loop.index}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
+                        Path<?> {{name}}{{loop.index}}  = QPathFactory.<Path>create(this, config{{loop.index}});
+                        addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}));
                     {% endfor %}
                     this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createForeignKey(Arrays.<Path<?>>asList(
                     {% for fkPath in fk.getPaths().keySet() %}
-                        {{name}}{{loop.index0}}
+                        {{name}}{{loop.index}}
                         {% if (loop.last) %}{% else %}
                             ,
                         {% endif %}
@@ -126,17 +142,19 @@ public final class {{ className }} extends QStaticModel<{{entitySimpleName}}> {
             {% endif %}
         {% endfor %}
 
-        {% for name, fk in q.rawInverseJoinColumns %}
+        {% for entry in q.rawInverseJoinColumns %}
+            {% set name = entry.key %}
+            {% set fk = entry.value %}
             {{name}}: {
 
                 {% for fkPath in fk.getPaths().keySet() %}
-                    QPathConfig config{{loop.index0}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
-                    Path<?> {{name}}{{loop.index0}}  = QPathFactory.<Path>create(this, config{{loop.index0}});
-                    addMetadata({{name}}{{loop.index0}}, QColumnMetadataFactory.create(config{{loop.index0}}));
+                    QPathConfig config{{loop.index}} = new QPathConfig({{macros.printOriginalType(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}.class,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}});
+                    Path<?> {{name}}{{loop.index}}  = QPathFactory.<Path>create(this, config{{loop.index}});
+                    addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}));
                 {% endfor %}
                 this.{{name}} = this.<{{fk.parametrizedType.simpleName}}>createInvForeignKey(Arrays.<Path<?>>asList(
                 {% for fkPath in fk.getPaths().keySet() %}
-                    {{name}}{{loop.index0}}
+                    {{name}}{{loop.index}}
                     {% if (loop.last) %}{% else %}
                         ,
                     {% endif %}

@@ -1,25 +1,30 @@
 package pl.exsio.querydsl.entityql;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.primitives.Primitives;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.extension.AbstractExtension;
+import com.mitchellbosecke.pebble.extension.Function;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
-import org.jtwig.environment.EnvironmentConfiguration;
-import org.jtwig.environment.EnvironmentConfigurationBuilder;
-import org.jtwig.functions.FunctionRequest;
-import org.jtwig.functions.SimpleJtwigFunction;
+import pl.exsio.querydsl.entityql.ex.EntityQlExportException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,32 +34,30 @@ import java.util.Objects;
  */
 public class QExporter {
 
-    private final EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
-            .configuration()
-            .functions()
-            .add(new PrimitiveWrapper())
-            .and()
+    private final PebbleEngine engine = new PebbleEngine.Builder()
+            .extension(new EntityQlExtension())
+            .allowUnsafeMethods(true)
             .build();
 
     private final Formatter formatter = new Formatter();
 
     /**
      * Exports the given Q Model to physical Java source code file.
-     *
+     * <p>
      * Example:
-     *
+     * <p>
      * String fileNamePattern = "Q%s.java"; // file/class name pattern
      * String packageName = "com.example.yourpackage"; //package of the generated class
      * String destinationPath = "/some/destination/path"; //physical location of resulting *.java file
-     *
+     * <p>
      * //this will generate a Java class under "/some/destination/path/com/example/yourpackage/QYourEntity.java"
      * new QExporter().export(qEntity(YourEntity.class), fileNamePattern, packageName, destinationPath);
      *
-     * @param q - Q Model to be exported
+     * @param q               - Q Model to be exported
      * @param fileNamePattern - String patter of File/Class name, for example "Q%s.java"
-     * @param pkgName - package name of the resulting class
+     * @param pkgName         - package name of the resulting class
      * @param destinationPath - physical destination path
-     * @throws IOException -  when it is not possible to save the resulting .java file
+     * @throws IOException        -  when it is not possible to save the resulting .java file
      * @throws FormatterException - when the resulting Java class is malformed
      */
     public <E> void export(Q<E> q, String fileNamePattern,
@@ -80,30 +83,75 @@ public class QExporter {
 
     private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, boolean isGroovy) {
         String className = FilenameUtils.removeExtension(fileName);
-        JtwigTemplate template = JtwigTemplate.classpathTemplate("staticTemplate.twig", configuration);
+        PebbleTemplate template = engine.getTemplate("staticTemplate.peb");
+
         int hash = Objects.hash(q.columns().keySet(), q.joinColumns().keySet(), q.inverseJoinColumns().keySet());
-        return template.render(JtwigModel.newModel()
-                .with("package", pkgName)
-                .with("className", className)
-                .with("entityName", type.getName())
-                .with("entitySimpleName", type.getSimpleName())
-                .with("exporterName", getClass().getName())
-                .with("uid", hash)
-                .with("q", q)
-                .with("isGroovy", isGroovy)
-        );
+        Map<String, Object> context = getContext(q, pkgName, type, isGroovy, className, hash);
+        return doRender(template, context);
     }
 
-    public static class PrimitiveWrapper extends SimpleJtwigFunction {
+    private String doRender(PebbleTemplate template, Map<String, Object> context) {
+        Writer writer = new StringWriter();
+        try {
+            template.evaluate(writer, context);
+        } catch (Exception ex) {
+            throw new EntityQlExportException(ex);
+        }
+        return writer.toString();
+    }
+
+    private <E> Map<String, Object> getContext(Q<E> q, String pkgName, Class<? extends E> type, boolean isGroovy, String className, int hash) {
+        Map<String, Object> context = Maps.newHashMap();
+        context.put("package", pkgName);
+        context.put("className", className);
+        context.put("entityName", type.getName());
+        context.put("entitySimpleName", type.getSimpleName());
+        context.put("exporterName", getClass().getName());
+        context.put("uid", hash);
+        context.put("q", q);
+        context.put("isGroovy", isGroovy);
+        return context;
+    }
+
+    public static class EntityQlExtension extends AbstractExtension {
 
         @Override
-        public String name() {
-            return "wrapPrimitive";
+        public Map<String, Function> getFunctions() {
+            Map<String, Function> functions = Maps.newHashMap();
+            functions.put("wrapPrimitive", new PrimitiveWrapper());
+            functions.put("replace", new Replace());
+            return functions;
+        }
+    }
+
+    public static class PrimitiveWrapper implements Function {
+
+        @Override
+        public List<String> getArgumentNames() {
+            List<String> names = new ArrayList<>();
+            names.add("target");
+            return names;
         }
 
         @Override
-        public Object execute(FunctionRequest functionRequest) {
-            return Primitives.wrap((Class<?>) functionRequest.get(0));
+        public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+            return Primitives.wrap((Class<?>) args.get("target"));
+        }
+    }
+
+    public static class Replace implements Function {
+
+        @Override
+        public List<String> getArgumentNames() {
+            return Lists.newArrayList("target", "toReplace", "replaceWith");
+        }
+
+        @Override
+        public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+            String target = (String) args.get("target");
+            String toReplace = (String) args.get("toReplace");
+            String replaceWith = (String) args.get("replaceWith");
+            return target.replaceAll(toReplace, replaceWith);
         }
     }
 
