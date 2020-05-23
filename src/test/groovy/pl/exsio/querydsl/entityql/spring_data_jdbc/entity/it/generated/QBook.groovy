@@ -29,11 +29,8 @@ public final class QBook extends QStaticModel<Book> {
   public static final QBook qBook = INSTANCE;
 
   public final NumberPath<Long> id;
-
   public final StringPath name;
-
   public final StringPath desc;
-
   public final NumberPath<BigDecimal> price;
 
   public final PrimaryKey<Book> _primaryKey;
@@ -49,39 +46,28 @@ public final class QBook extends QStaticModel<Book> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", true, 1, -5);
-
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
-
     name:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
-
       this.name = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.name, QColumnMetadataFactory.create(config));
       this.columnsMap.put("name", this.name);
     }
-
     desc:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "DESC", true, 3, 12);
-
       this.desc = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.desc, QColumnMetadataFactory.create(config));
       this.columnsMap.put("desc", this.desc);
     }
-
     price:
     {
       QPathConfig config = new QPathConfig(BigDecimal.class, BigDecimal.class, "PRICE", true, 4, 3);
-
       this.price = QPathFactory.<NumberPath<BigDecimal>>create(this, config);
-
       addMetadata(this.price, QColumnMetadataFactory.create(config));
       this.columnsMap.put("price", this.price);
     }
@@ -89,8 +75,8 @@ public final class QBook extends QStaticModel<Book> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
-      this._primaryKey = this.<Book>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<Book>createPrimaryKey(pkArray);
     }
   }
 }

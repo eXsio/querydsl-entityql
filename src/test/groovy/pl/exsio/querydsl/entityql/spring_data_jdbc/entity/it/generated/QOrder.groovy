@@ -29,7 +29,6 @@ public final class QOrder extends QStaticModel<Order> {
   public static final QOrder qOrder = INSTANCE;
 
   public final NumberPath<Long> id;
-
   public final NumberPath<Long> userId;
 
   public final ForeignKey<User> user;
@@ -47,19 +46,14 @@ public final class QOrder extends QStaticModel<Order> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", true, 1, -5);
-
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
-
     userId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", false, 2, -5);
-
       this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("userId", this.userId);
     }
@@ -73,8 +67,8 @@ public final class QOrder extends QStaticModel<Order> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
-      this._primaryKey = this.<Order>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<Order>createPrimaryKey(pkArray);
     }
   }
 }

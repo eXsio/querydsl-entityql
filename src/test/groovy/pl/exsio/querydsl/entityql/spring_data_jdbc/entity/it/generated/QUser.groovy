@@ -36,19 +36,12 @@ public final class QUser extends QStaticModel<User> {
   public static final QUser qUser = INSTANCE;
 
   public final NumberPath<Long> id;
-
   public final StringPath name;
-
   public final QEnumPath<UserTypeByName> typeStr;
-
   public final QEnumPath<UserTypeByOrdinal> typeOrd;
-
   public final QObjectPath<Object> createdBy;
-
   public final QObjectPath<Date> createdAt;
-
   public final BooleanPath enabled;
-
   public final NumberPath<Long> orderId;
 
   public final ForeignKey<Order> order;
@@ -66,81 +59,58 @@ public final class QUser extends QStaticModel<User> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", true, 1, -5);
-
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
-
     name:
     {
       QPathConfig config = new QPathConfig(String.class, String.class, "NAME", true, 2, 12);
-
       this.name = QPathFactory.<StringPath>create(this, config);
-
       addMetadata(this.name, QColumnMetadataFactory.create(config));
       this.columnsMap.put("name", this.name);
     }
-
     typeStr:
     {
       QPathConfig config =
           new QPathConfig(UserTypeByName.class, Enum.class, "TYPE_STR", true, 4, 12);
-
       this.typeStr = QPathFactory.<QEnumPath<UserTypeByName>>create(this, config);
-
       addMetadata(this.typeStr, QColumnMetadataFactory.create(config));
       this.columnsMap.put("typeStr", this.typeStr);
     }
-
     typeOrd:
     {
       QPathConfig config =
           new QPathConfig(UserTypeByOrdinal.class, Enum.class, "TYPE_ORD", true, 5, 12);
-
       this.typeOrd = QPathFactory.<QEnumPath<UserTypeByOrdinal>>create(this, config);
-
       addMetadata(this.typeOrd, QColumnMetadataFactory.create(config));
       this.columnsMap.put("typeOrd", this.typeOrd);
     }
-
     createdBy:
     {
       QPathConfig config = new QPathConfig(Object.class, Object.class, "CREATED_BY", true, 6, 1111);
-
       this.createdBy = QPathFactory.<QObjectPath<Object>>create(this, config);
-
       addMetadata(this.createdBy, QColumnMetadataFactory.create(config));
       this.columnsMap.put("createdBy", this.createdBy);
     }
-
     createdAt:
     {
       QPathConfig config = new QPathConfig(Date.class, Object.class, "CREATED_AT", true, 7, 1111);
-
       this.createdAt = QPathFactory.<QObjectPath<Date>>create(this, config);
-
       addMetadata(this.createdAt, QColumnMetadataFactory.create(config));
       this.columnsMap.put("createdAt", this.createdAt);
     }
-
     enabled:
     {
       QPathConfig config = new QPathConfig(Boolean.class, Boolean.class, "ENABLED", true, 8, 1111);
-
       this.enabled = QPathFactory.<BooleanPath>create(this, config);
-
       addMetadata(this.enabled, QColumnMetadataFactory.create(config));
       this.columnsMap.put("enabled", this.enabled);
     }
-
     orderId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", true, 3, -5);
-
       this.orderId = QPathFactory.<NumberPath<Long>>create(this, config);
-
       addMetadata(this.orderId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("orderId", this.orderId);
     }
@@ -154,8 +124,8 @@ public final class QUser extends QStaticModel<User> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
-
-      this._primaryKey = this.<User>createPrimaryKey(primaryKeyColumns.<Path>toArray(new Path[0]));
+      Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
+      this._primaryKey = this.<User>createPrimaryKey(pkArray);
     }
   }
 }
