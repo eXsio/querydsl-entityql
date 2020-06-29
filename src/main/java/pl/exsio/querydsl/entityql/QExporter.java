@@ -37,9 +37,10 @@ public class QExporter {
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .extension(new EntityQlExtension())
             .allowUnsafeMethods(true)
+            .newLineTrimming(false)
             .build();
 
-    private final Formatter formatter = new Formatter();
+    private final Formatter javaFormatter = new Formatter();
 
     /**
      * Exports the given Q Model to physical Java source code file.
@@ -68,9 +69,10 @@ public class QExporter {
         Path filePath = getFilePath(pkgName, destinationPath, fileName);
         Lang lang = Lang.forName(fileName);
         String exportedClass = renderClass(q, pkgName, type, fileName, lang);
+        System.out.println(exportedClass);
         FileUtils.writeStringToFile(
                 new File(filePath.toUri()),
-                formatter.formatSourceAndFixImports(exportedClass),
+                lang.equals(Lang.KOTLIN) ? exportedClass : javaFormatter.formatSourceAndFixImports(exportedClass),
                 StandardCharsets.UTF_8
         );
     }
@@ -123,6 +125,7 @@ public class QExporter {
         public Map<String, Function> getFunctions() {
             Map<String, Function> functions = Maps.newHashMap();
             functions.put("wrapPrimitive", new PrimitiveWrapper());
+            functions.put("isNotJavaLang", new IsNotJavaLang());
             functions.put("replace", new Replace());
             return functions;
         }
@@ -140,6 +143,21 @@ public class QExporter {
         @Override
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
             return Primitives.wrap((Class<?>) args.get("target"));
+        }
+    }
+
+    public static class IsNotJavaLang implements Function {
+
+        @Override
+        public List<String> getArgumentNames() {
+            List<String> names = new ArrayList<>();
+            names.add("target");
+            return names;
+        }
+
+        @Override
+        public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+            return !((Class<?>) args.get("target")).getName().startsWith("java.lang");
         }
     }
 

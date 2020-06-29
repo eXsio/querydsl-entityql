@@ -24,3 +24,11 @@
         {{replace(path.config.originalFieldType.simpleName, '$', '.' )}}.class
     {% endif %}
 {% endmacro %}
+
+{% macro printOriginalTypeKt(path) %}
+    {% if (path.config.originalFieldType.array) %}
+        {{path.config.originalFieldType.componentType}}Array::class.java
+    {% else %}
+        {{replace(path.config.originalFieldType.simpleName, '$', '.' )}}::class.java
+    {% endif %}
+{% endmacro %}
