@@ -29,13 +29,19 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
   public static final QJOrderItem qJOrderItem = INSTANCE;
 
   public final NumberPath<Long> id;
+
   public final NumberPath<Long> quantity;
+
   public final NumberPath<Long> bookId;
+
   public final NumberPath<Long> orderId;
+
   public final NumberPath<Long> orderReferencedId;
 
   public final ForeignKey<JBook> book;
+
   public final ForeignKey<JOrder> order;
+
   public final ForeignKey<JOrder> orderReferenced;
 
   public final PrimaryKey<JOrderItem> _primaryKey;
@@ -51,35 +57,49 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ITEM_ID", true, 1, -5);
+
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
+
     quantity:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 5, -5);
+
       this.quantity = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.quantity, QColumnMetadataFactory.create(config));
       this.columnsMap.put("quantity", this.quantity);
     }
+
     bookId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", false, 2, -5);
+
       this.bookId = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.bookId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("bookId", this.bookId);
     }
+
     orderId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 3, -5);
+
       this.orderId = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.orderId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("orderId", this.orderId);
     }
+
     orderReferencedId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 4, -5);
+
       this.orderReferencedId = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.orderReferencedId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("orderReferencedId", this.orderReferencedId);
     }
@@ -89,11 +109,13 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
       this.book = this.<JBook>createForeignKey(this.bookId, "BOOK_ID");
       this.joinColumnsMap.put("book", this.book);
     }
+
     order:
     {
       this.order = this.<JOrder>createForeignKey(this.orderId, "ORDER_ID");
       this.joinColumnsMap.put("order", this.order);
     }
+
     orderReferenced:
     {
       this.orderReferenced = this.<JOrder>createForeignKey(this.orderReferencedId, "ORDER_ID");
@@ -103,6 +125,7 @@ public final class QJOrderItem extends QStaticModel<JOrderItem> {
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
+
       Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
       this._primaryKey = this.<JOrderItem>createPrimaryKey(pkArray);
     }

@@ -29,11 +29,13 @@ public final class QJOrder extends QStaticModel<JOrder> {
   public static final QJOrder qJOrder = INSTANCE;
 
   public final NumberPath<Long> id;
+
   public final NumberPath<Long> userId;
 
   public final ForeignKey<JUser> user;
 
   public final ForeignKey<JOrderItem> items;
+
   public final ForeignKey<JOrderItem> itemsReferenced;
 
   public final PrimaryKey<JOrder> _primaryKey;
@@ -49,14 +51,19 @@ public final class QJOrder extends QStaticModel<JOrder> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", true, 1, -5);
+
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
+
     userId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", false, 2, -5);
+
       this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("userId", this.userId);
     }
@@ -70,27 +77,35 @@ public final class QJOrder extends QStaticModel<JOrder> {
     items:
     {
       QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 3, -5);
+
       Path<?> items0 = QPathFactory.<Path>create(this, config0);
       addMetadata(items0, QColumnMetadataFactory.create(config0));
+
       this.items =
           this.<JOrderItem>createInvForeignKey(
               Arrays.<Path<?>>asList(items0), Arrays.asList("ITEM_ORDER_ID"));
+
       this.inverseJoinColumnsMap.put("items", this.items);
     }
+
     itemsReferenced:
     {
       QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 4, -5);
+
       Path<?> itemsReferenced0 = QPathFactory.<Path>create(this, config0);
       addMetadata(itemsReferenced0, QColumnMetadataFactory.create(config0));
+
       this.itemsReferenced =
           this.<JOrderItem>createInvForeignKey(
               Arrays.<Path<?>>asList(itemsReferenced0), Arrays.asList("ITEM_ORDER_ID"));
+
       this.inverseJoinColumnsMap.put("itemsReferenced", this.itemsReferenced);
     }
 
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
+
       Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
       this._primaryKey = this.<JOrder>createPrimaryKey(pkArray);
     }

@@ -30,11 +30,13 @@ public final class QOrder extends QStaticModel<Order> {
   public static final QOrder qOrder = INSTANCE;
 
   public final NumberPath<Long> id;
+
   public final NumberPath<Long> userId;
 
   public final ForeignKey<User> user;
 
   public final ForeignKey<OrderItem> items;
+
   public final ForeignKey<OrderItem> itemsReferenced;
 
   public final PrimaryKey<Order> _primaryKey;
@@ -50,14 +52,19 @@ public final class QOrder extends QStaticModel<Order> {
     id:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "ORDER_ID", true, 1, -5);
+
       this.id = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.id, QColumnMetadataFactory.create(config));
       this.columnsMap.put("id", this.id);
     }
+
     userId:
     {
       QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", false, 2, -5);
+
       this.userId = QPathFactory.<NumberPath<Long>>create(this, config);
+
       addMetadata(this.userId, QColumnMetadataFactory.create(config));
       this.columnsMap.put("userId", this.userId);
     }
@@ -71,27 +78,35 @@ public final class QOrder extends QStaticModel<Order> {
     items:
     {
       QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 3, -5);
+
       Path<?> items0 = QPathFactory.<Path>create(this, config0);
       addMetadata(items0, QColumnMetadataFactory.create(config0));
+
       this.items =
           this.<OrderItem>createInvForeignKey(
               Arrays.<Path<?>>asList(items0), Arrays.asList("ITEM_ORDER_ID"));
+
       this.inverseJoinColumnsMap.put("items", this.items);
     }
+
     itemsReferenced:
     {
       QPathConfig config0 = new QPathConfig(Long.class, Long.class, "ORDER_ID", false, 4, -5);
+
       Path<?> itemsReferenced0 = QPathFactory.<Path>create(this, config0);
       addMetadata(itemsReferenced0, QColumnMetadataFactory.create(config0));
+
       this.itemsReferenced =
           this.<OrderItem>createInvForeignKey(
               Arrays.<Path<?>>asList(itemsReferenced0), Arrays.asList("ITEM_ORDER_ID"));
+
       this.inverseJoinColumnsMap.put("itemsReferenced", this.itemsReferenced);
     }
 
     _primaryKey:
     {
       this.primaryKeyColumns = Arrays.<Path<?>>asList(this.id);
+
       Path[] pkArray = (Path[]) primaryKeyColumns.<Path>toArray(new Path[0]);
       this._primaryKey = this.<Order>createPrimaryKey(pkArray);
     }
