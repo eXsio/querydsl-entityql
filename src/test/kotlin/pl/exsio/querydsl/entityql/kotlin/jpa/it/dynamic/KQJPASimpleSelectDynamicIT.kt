@@ -3,6 +3,7 @@ package pl.exsio.querydsl.entityql.kotlin.jpa.it.dynamic
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLQueryFactory
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,12 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import pl.exsio.querydsl.entityql.EntityQL.qEntity
 import pl.exsio.querydsl.entityql.kotlin.config.KSpringContext
+import pl.exsio.querydsl.entityql.kotlin.config.dto.KUserDto
+import pl.exsio.querydsl.entityql.kotlin.config.enums.by_name.KUserTypeByName
+import pl.exsio.querydsl.entityql.kotlin.config.enums.by_ordinal.KUserTypeByOrdinal
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KBook
+import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KUser
+import java.util.Date
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -24,8 +30,8 @@ class KQJPASimpleSelectDynamicIT {
 
     @Test
     fun shouldGetAllRowsFromAnEntity() {
+        // given:
         val book = qEntity(KBook::class.java)
-        println(queryFactory != null)
         val books = queryFactory!!.query()
                 .select(
                         constructor(
@@ -37,6 +43,7 @@ class KQJPASimpleSelectDynamicIT {
                         ))
                 .from(book).fetch()
 
+        //then:
         assertEquals(books.size, 9)
         books.forEach { p ->
             assertNotNull(p.id)
@@ -46,128 +53,142 @@ class KQJPASimpleSelectDynamicIT {
         }
     }
 
-//    def "should get one row from an Entity"() {
-//        given:
-//        Q<Book> book = qEntity(Book)
-//
-//        when:
-//        Book p = queryFactory.query()
-//                .select(
-//                        constructor(
-//                                Book,
-//                                book.longNumber("id"),
-//                                book.string("name"),
-//                                book.string("desc"),
-//                                book.decimalNumber("price")
-//                        ))
-//                .where(book.longNumber("id").eq(1L))
-//                .from(book).fetchOne()
-//
-//        then:
-//        p != null
-//        p.id != null
-//        p.price != null
-//        p.desc != null
-//        p.name != null
-//    }
-//
-//    def "should get all rows from an Entity based on an Enum String filter"() {
-//        given:
-//        Q<User<String>> user = qEntity(User)
-//
-//        when:
-//        String userName = queryFactory.query()
-//                .select(user.string("name"))
-//                .where(user.<KUserTypeByName> enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        userName == "U1"
-//    }
-//
-//    def "should get all rows from an Entity based on an Enum Ordinal filter"() {
-//        given:
-//        Q<User<String>> user = qEntity(User)
-//
-//        when:
-//        String userName = queryFactory.query()
-//                .select(user.string("name"))
-//                .where(user.<KUserTypeByOrdinal>enumerated("typeOrd").eq(KUserTypeByOrdinal.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        userName == "U1"
-//    }
-//
-//    def "should get generic Fields"() {
-//        given:
-//        Q<User<String>> user = qEntity(User)
-//
-//        when:
-//        String createdBy = queryFactory.query()
-//                .select(user.<String> column("createdBy"))
-//                .where(user.<KUserTypeByName> enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        createdBy == "ADMIN"
-//    }
-//
-//    def "should get unknown Fields"() {
-//        given:
-//        Q<User<String>> user = qEntity(User)
-//
-//        when:
-//        Date createdBy = queryFactory.query()
-//                .select(user.<Date> column("createdAt"))
-//                .where(user.<KUserTypeByName> enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        createdBy != null
-//    }
-//
-//    def "should get enum Fields"() {
-//        given:
-//        Q<User> user = qEntity(User)
-//
-//        when:
-//        KUserTypeByName type = queryFactory.query()
-//                .select(user.<KUserTypeByName>enumerated("typeStr"))
-//                .where(user.<KUserTypeByName>enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        type == KUserTypeByName.ADMIN
-//    }
-//
-//    def "should get boolean Fields"() {
-//        given:
-//        Q<User> user = qEntity(User)
-//
-//        when:
-//        Boolean enabled = queryFactory.query()
-//                .select(user.bool("enabled"))
-//                .where(user.<KUserTypeByName>enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        enabled
-//    }
-//
-//    def "should get enum and boolean Fields in DTO projection"() {
-//        given:
-//        Q<User> user = qEntity(User)
-//
-//        when:
-//        KUserDto userDto = queryFactory.query()
-//                .select(constructor(KUserDto, user.longNumber("id"), user.string("name"), user.<KUserTypeByName>enumerated("typeStr"), user.bool("enabled")))
-//                .where(user.<KUserTypeByName>enumerated("typeStr").eq(KUserTypeByName.ADMIN))
-//                .from(user).fetchOne()
-//
-//        then:
-//        userDto != null
-//        userDto.enabled
-//        userDto.type == KUserTypeByName.ADMIN
-//    }
+    @Test
+    fun shouldGetOneRowFromAnEntity() {
+        // given:
+        val book = qEntity(KBook::class.java)
+
+        //when:
+        val p = queryFactory!!.query()
+                .select(
+                        constructor(
+                                KBook::class.java,
+                                book.longNumber("id"),
+                                book.string("name"),
+                                book.string("desc"),
+                                book.decimalNumber("price")
+                        ))
+                .where(book.longNumber("id").eq(1L))
+                .from(book).fetchOne()
+
+        //then:
+        assertNotNull(p)
+        assertNotNull(p.id)
+        assertNotNull(p.price)
+        assertNotNull(p.desc)
+        assertNotNull(p.name)
+    }
+
+    @Test
+    fun shouldGetAllRowsFromAnEntityBasedOnAnEnumStringfilter() {
+        // given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val userName = queryFactory!!.query()
+                .select(user.string("name"))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertEquals(userName, "U1")
+    }
+
+    @Test
+    fun shouldGetAllRowsFromAnEntityBasedOnAnEnumOrdinalfilter() {
+        // given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val userName = queryFactory!!.query()
+                .select(user.string("name"))
+                .where(user.enumerated<KUserTypeByOrdinal>("typeOrd").eq(KUserTypeByOrdinal.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertEquals(userName, "U1")
+    }
+
+    @Test
+    fun shouldGetGenericFields() {
+        // given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val createdBy = queryFactory!!.query()
+                .select(user.column<String>("createdBy"))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertEquals(createdBy, "ADMIN")
+    }
+
+    @Test
+    fun shouldGetUnknownFields() {
+        // given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val createdBy = queryFactory!!.query()
+                .select(user.column<Date>("createdAt"))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertNotNull(createdBy)
+    }
+
+    @Test
+    fun shouldGetEnumFields() {
+        //given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val type = queryFactory!!.query()
+                .select(user.enumerated<KUserTypeByName>("typeStr"))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertEquals(type, KUserTypeByName.ADMIN)
+    }
+
+    @Test
+    fun shouldGetBooleanFields() {
+        //given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val enabled = queryFactory!!.query()
+                .select(user.bool("enabled"))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertTrue(enabled)
+    }
+
+    @Test
+    fun shouldGetEnumAndBooleanFieldsInDTOProjection() {
+        // given:
+        val user = qEntity(KUser::class.java)
+
+        //when:
+        val userDto = queryFactory!!.query()
+                .select(
+                        constructor(
+                                KUserDto::class.java,
+                                user.longNumber("id"),
+                                user.string("name"),
+                                user.enumerated<KUserTypeByName>("typeStr"),
+                                user.bool("enabled")))
+                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+                .from(user).fetchOne()
+
+        //then:
+        assertNotNull(userDto)
+        assertTrue(userDto.enabled)
+        assertEquals(userDto.type, KUserTypeByName.ADMIN)
+    }
 }

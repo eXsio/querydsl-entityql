@@ -1,16 +1,14 @@
 package pl.exsio.querydsl.entityql.kotlin.jpa.entity
 
 
+import pl.exsio.querydsl.entityql.kotlin.config.enums.by_name.KUserTypeByName
+import pl.exsio.querydsl.entityql.kotlin.config.enums.by_ordinal.KUserTypeByOrdinal
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "USERS")
-public class KUser<T>() {
-
-    enum class Type {
-        ADMIN, CLIENT
-    }
+class KUser<T>() {
 
     @Id
     @Column(name = "USER_ID")
@@ -25,11 +23,11 @@ public class KUser<T>() {
 
     @Column(name = "TYPE_STR", nullable = false)
     @Enumerated(EnumType.STRING)
-    var typeStr: Type? = null
+    var typeStr: KUserTypeByName? = null
 
     @Column(name = "TYPE_ORD", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    var typeOrd: Type? = null
+    var typeOrd: KUserTypeByOrdinal? = null
 
     @Column(name = "CREATED_BY", columnDefinition = "varchar(15)")
     @org.hibernate.annotations.Type(type = "java.lang.String")
