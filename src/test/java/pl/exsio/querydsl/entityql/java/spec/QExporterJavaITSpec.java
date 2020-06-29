@@ -11,7 +11,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity;
 
 public class QExporterJavaITSpec {
 
-    String pkgName = "pl.exsio.querydsl.entityql.jpa.entity.generated";
+    String pkgName = "pl.exsio.querydsl.entityql.java.jpa.entity.generated";
 
     String fileNamePattern = "Q%s.java";
 
@@ -20,7 +20,7 @@ public class QExporterJavaITSpec {
     QExporter exporter = new QExporter();
 
     @Test
-   // @Ignore
+    @Ignore
     public void shouldExportIntegrationQClassesToStaticMetaModels() throws Exception {
         exporter.export(qEntity(JBook.class), fileNamePattern, pkgName, destinationPath);
         exporter.export(qEntity(JCompositePk.class), fileNamePattern, pkgName, destinationPath);

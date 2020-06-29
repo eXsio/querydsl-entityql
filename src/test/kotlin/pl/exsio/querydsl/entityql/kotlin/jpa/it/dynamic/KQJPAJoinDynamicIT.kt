@@ -2,7 +2,7 @@ package pl.exsio.querydsl.entityql.kotlin.jpa.it.dynamic
 
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLQueryFactory
-import junit.framework.Assert.assertEquals
+import kotlin.test.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired

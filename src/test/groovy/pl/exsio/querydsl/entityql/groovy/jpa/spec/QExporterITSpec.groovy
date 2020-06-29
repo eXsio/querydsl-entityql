@@ -11,11 +11,11 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 public class QExporterITSpec extends Specification {
 
-    String pkgName = "pl.exsio.querydsl.entityql.jpa.entity.it.generated"
+    String pkgName = "pl.exsio.querydsl.entityql.groovy.jpa.entity.it.generated"
 
     String fileNamePattern = "Q%s.groovy"
 
-    String destinationPath = Paths.get("src/test/groovy").toAbsolutePath()
+    String destinationPath = Paths.get("src/test/groovy").toAbsolutePath().toString()
 
     QExporter exporter = new QExporter();
 

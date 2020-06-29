@@ -66,8 +66,8 @@ public class QExporter {
         Class<? extends E> type = q.getType();
         String fileName = String.format(fileNamePattern, type.getSimpleName());
         Path filePath = getFilePath(pkgName, destinationPath, fileName);
-        boolean isGroovy = fileName.endsWith("groovy");
-        String exportedClass = renderClass(q, pkgName, type, fileName, isGroovy);
+        Lang lang = Lang.forName(fileName);
+        String exportedClass = renderClass(q, pkgName, type, fileName, lang);
         FileUtils.writeStringToFile(
                 new File(filePath.toUri()),
                 formatter.formatSourceAndFixImports(exportedClass),
@@ -81,12 +81,10 @@ public class QExporter {
         return Paths.get(destinationPath, pathElements.toArray(new String[0]));
     }
 
-    private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, boolean isGroovy) {
+    private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, Lang lang) {
         String className = FilenameUtils.removeExtension(fileName);
-        PebbleTemplate template = engine.getTemplate("staticTemplate.peb");
-
-        int hash = Objects.hash(q.columns().keySet(), q.joinColumns().keySet(), q.inverseJoinColumns().keySet());
-        Map<String, Object> context = getContext(q, pkgName, type, isGroovy, className, hash);
+        PebbleTemplate template = engine.getTemplate(lang.getTemplateName());
+        Map<String, Object> context = getContext(q, pkgName, type, lang, className);
         return doRender(template, context);
     }
 
@@ -100,18 +98,23 @@ public class QExporter {
         return writer.toString();
     }
 
-    private <E> Map<String, Object> getContext(Q<E> q, String pkgName, Class<? extends E> type, boolean isGroovy, String className, int hash) {
+    private <E> Map<String, Object> getContext(Q<E> q, String pkgName, Class<? extends E> type, Lang lang, String className) {
         Map<String, Object> context = Maps.newHashMap();
         context.put("package", pkgName);
         context.put("className", className);
         context.put("entityName", type.getName());
         context.put("entitySimpleName", type.getSimpleName());
         context.put("exporterName", getClass().getName());
-        context.put("uid", hash);
+        context.put("uid", getHash(q));
         context.put("q", q);
         context.put("idCols", q.idColumns);
-        context.put("isGroovy", isGroovy);
+        context.put("lang", lang);
+        context.put("isGroovy", lang.equals(Lang.GROOVY));
         return context;
+    }
+
+    private <E> int getHash(Q<E> q) {
+        return Objects.hash(q.columns().keySet(), q.joinColumns().keySet(), q.inverseJoinColumns().keySet());
     }
 
     public static class EntityQlExtension extends AbstractExtension {
@@ -153,6 +156,32 @@ public class QExporter {
             String toReplace = (String) args.get("toReplace");
             String replaceWith = (String) args.get("replaceWith");
             return target.replace(toReplace, replaceWith);
+        }
+    }
+
+    private enum Lang {
+        JAVA("staticTemplate.peb"),
+        GROOVY("staticTemplate.peb"),
+        KOTLIN("staticTemplateKt.peb");
+
+        private final String templateName;
+
+        Lang(String templateName) {
+            this.templateName = templateName;
+        }
+
+        public String getTemplateName() {
+            return templateName;
+        }
+
+        private static Lang forName(String fileName) {
+            if(fileName.endsWith("kt")) {
+                return KOTLIN;
+            } else if(fileName.endsWith("groovy")) {
+                return GROOVY;
+            } else {
+                return JAVA;
+            }
         }
     }
 
