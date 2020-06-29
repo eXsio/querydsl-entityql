@@ -77,6 +77,7 @@ class QKGroup : QStaticModel<KGroup> {
     // admin
     run {
       this.admin = this.createForeignKey<KGroupAdmin>(this.adminId, "NAME")
+
       this.joinColumnsMap.put("admin", this.admin)
     }
 

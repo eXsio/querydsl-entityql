@@ -29,7 +29,7 @@ import pl.exsio.querydsl.entityql.path.QObjectPath
  * class generation.
  */
 @Generated("pl.exsio.querydsl.entityql.QExporter")
-class QKUser : QStaticModel<KUser> {
+class QKUser : QStaticModel<KUser<*>> {
 
   companion object {
     val instance: QKUser = QKUser()
@@ -52,7 +52,7 @@ class QKUser : QStaticModel<KUser> {
 
   lateinit var order: ForeignKey<KOrder>
 
-  lateinit var _primaryKey: PrimaryKey<KUser>
+  lateinit var _primaryKey: PrimaryKey<KUser<*>>
 
   constructor() : this("USERS")
 

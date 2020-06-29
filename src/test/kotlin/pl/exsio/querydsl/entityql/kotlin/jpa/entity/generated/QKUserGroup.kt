@@ -36,7 +36,7 @@ class QKUserGroup : QStaticModel<KUserGroup> {
 
   lateinit var group: ForeignKey<KGroup>
 
-  lateinit var user: ForeignKey<KUser>
+  lateinit var user: ForeignKey<KUser<*>>
 
   lateinit var _primaryKey: PrimaryKey<KUserGroup>
 
@@ -67,12 +67,14 @@ class QKUserGroup : QStaticModel<KUserGroup> {
     // group
     run {
       this.group = this.createForeignKey<KGroup>(this.groupId, "GROUP_ID")
+
       this.joinColumnsMap.put("group", this.group)
     }
 
     // user
     run {
-      this.user = this.createForeignKey<KUser>(this.userId, "USER_ID")
+      this.user = this.createForeignKey<KUser<*>>(this.userId, "USER_ID")
+
       this.joinColumnsMap.put("user", this.user)
     }
 

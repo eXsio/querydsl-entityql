@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.ParameterizedType;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,7 +71,6 @@ public class QExporter {
         Path filePath = getFilePath(pkgName, destinationPath, fileName);
         Lang lang = Lang.forName(fileName);
         String exportedClass = renderClass(q, pkgName, type, fileName, lang);
-        System.out.println(exportedClass);
         FileUtils.writeStringToFile(
                 new File(filePath.toUri()),
                 format(lang, exportedClass),
@@ -113,6 +113,7 @@ public class QExporter {
         context.put("className", className);
         context.put("entityName", type.getName());
         context.put("entitySimpleName", type.getSimpleName());
+        context.put("entityClass", type);
         context.put("exporterName", getClass().getName());
         context.put("uid", getHash(q));
         context.put("q", q);
@@ -133,6 +134,7 @@ public class QExporter {
             Map<String, Function> functions = Maps.newHashMap();
             functions.put("wrapPrimitive", new PrimitiveWrapper());
             functions.put("isNotJavaLang", new IsNotJavaLang());
+            functions.put("isParametrized", new IsParametrized());
             functions.put("capitalize", new Capitalize());
             functions.put("replace", new Replace());
             return functions;
@@ -166,6 +168,21 @@ public class QExporter {
         @Override
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
             return !((Class<?>) args.get("target")).getName().startsWith("java.lang");
+        }
+    }
+
+    public static class IsParametrized implements Function {
+
+        @Override
+        public List<String> getArgumentNames() {
+            List<String> names = new ArrayList<>();
+            names.add("target");
+            return names;
+        }
+
+        @Override
+        public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+            return ((Class<?>) args.get("target")).getTypeParameters().length > 0;
         }
     }
 

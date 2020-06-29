@@ -25,25 +25,3 @@
     {% endif %}
 {% endmacro %}
 
-{% macro printOriginalTypeKt(path) %}
-    {% if (path.config.originalFieldType.array) %}
-        {{capitalize(path.config.originalFieldType.componentType.toString())}}Array::class.java
-    {% else %}
-        {{replace(path.config.originalFieldType.simpleName, '$', '.' )}}::class.java
-    {% endif %}
-{% endmacro %}
-
-{% macro printColumnTypeKt(path) %}
-    {{ path.get().class.simpleName }}
-    {% if (path.parametrized) %}
-        <{{replace(path.parametrizedType.simpleName, '$', '.')}}>
-    {% endif %}
-    {% if (path.config.originalFieldType.array) %}
-        {% if (path.config.originalFieldType.componentType.primitive) %}
-            <{{capitalize(path.config.originalFieldType.componentType.toString())}}Array, {{wrapPrimitive(path.config.originalFieldType.componentType).simpleName}}>
-        {% else %}
-            <Array<{{path.config.originalFieldType.componentType}}>, {{path.config.originalFieldType.componentType}}>
-        {% endif %}
-
-    {% endif %}
-{% endmacro %}

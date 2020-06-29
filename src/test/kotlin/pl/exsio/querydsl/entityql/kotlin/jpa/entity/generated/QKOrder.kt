@@ -34,7 +34,7 @@ class QKOrder : QStaticModel<KOrder> {
 
   lateinit var userId: NumberPath<Long>
 
-  lateinit var user: ForeignKey<KUser>
+  lateinit var user: ForeignKey<KUser<*>>
 
   lateinit var items: ForeignKey<KOrderItem>
 
@@ -68,7 +68,8 @@ class QKOrder : QStaticModel<KOrder> {
 
     // user
     run {
-      this.user = this.createForeignKey<KUser>(this.userId, "USER_ID")
+      this.user = this.createForeignKey<KUser<*>>(this.userId, "USER_ID")
+
       this.joinColumnsMap.put("user", this.user)
     }
 

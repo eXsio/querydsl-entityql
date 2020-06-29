@@ -51,7 +51,8 @@ class QKUploadedFile : QStaticModel<KUploadedFile> {
 
     // data
     run {
-      val config = QPathConfig(ByteArray::class.java, Array::class.java, "DATA", false, 2, 2003)
+      val config =
+          QPathConfig(ByteArray::class.java, Array<Byte>::class.java, "DATA", false, 2, 2003)
 
       this.data = QPathFactory.create<ArrayPath<ByteArray, Byte>>(this, config)
 

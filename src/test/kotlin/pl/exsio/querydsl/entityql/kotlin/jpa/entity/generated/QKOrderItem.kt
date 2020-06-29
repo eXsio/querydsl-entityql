@@ -105,18 +105,21 @@ class QKOrderItem : QStaticModel<KOrderItem> {
     // book
     run {
       this.book = this.createForeignKey<KBook>(this.bookId, "BOOK_ID")
+
       this.joinColumnsMap.put("book", this.book)
     }
 
     // order
     run {
       this.order = this.createForeignKey<KOrder>(this.orderId, "ORDER_ID")
+
       this.joinColumnsMap.put("order", this.order)
     }
 
     // orderReferenced
     run {
       this.orderReferenced = this.createForeignKey<KOrder>(this.orderReferencedId, "ORDER_ID")
+
       this.joinColumnsMap.put("orderReferenced", this.orderReferenced)
     }
 
