@@ -21,15 +21,15 @@ class KQExporterITSpec {
     @Test
     fun shouldExportIntegrationQClassesToStaticMetaModels() {
         exporter.export(qEntity(KBook::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KCompositePk::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KCompositeFk::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KGroup::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KGroupAdmin::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KOrder::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KOrderItem::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KSingularPk::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KUploadedFile::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KUser::class.java), fileNamePattern, pkgName, destinationPath)
-//        exporter.export(qEntity(KUserGroup::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KCompositePk::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KCompositeFk::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KGroup::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KGroupAdmin::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KOrder::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KOrderItem::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KSingularPk::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KUploadedFile::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KUser::class.java), fileNamePattern, pkgName, destinationPath)
+        exporter.export(qEntity(KUserGroup::class.java), fileNamePattern, pkgName, destinationPath)
     }
 }

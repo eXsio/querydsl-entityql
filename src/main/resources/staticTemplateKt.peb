@@ -72,7 +72,7 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
     {% for entry in q.rawColumns %}
         {% set name = entry.key %}
         {% set path = entry.value %}
-        lateinit var {{ name }}: {{macros.printColumnType(path)}}
+        lateinit var {{ name }}: {{macros.printColumnTypeKt(path)}}
     {% endfor %}
 
     {% for entry in q.rawJoinColumns %}
@@ -89,16 +89,16 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
 
     lateinit var _primaryKey:  PrimaryKey<{{entitySimpleName}}>
 
-    constructor(): this("{{ q.tableName }}")  {
-    }
+    constructor(): this("{{ q.tableName }}")
 
     constructor(variable: String): super({{entitySimpleName}}::class.java, variable, "{{q.schemaName }}", "{{ q.tableName }}") {
         {% for entry in q.rawColumns %}
             {% set name = entry.key %}
             {% set path = entry.value %}
+            //{{name}}
             run {
                 val config = QPathConfig({{macros.printOriginalTypeKt(path)}},{{path.config.computedFieldType.simpleName}}::class.java,"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})
-                this.{{name}} = QPathFactory.create<{{macros.printColumnType(path)}}>(this, config)
+                this.{{name}} = QPathFactory.create<{{macros.printColumnTypeKt(path)}}>(this, config)
                 addMetadata(this.{{name}}, QColumnMetadataFactory.create(config))
                 this.columnsMap.put("{{name}}",this.{{name}})
             }
@@ -108,21 +108,22 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
             {% set name = entry.key %}
             {% set fk = entry.value %}
             {% if (fk.getPaths().size() > 1) %}
+                //{{name}}
                 run {
 
                     {% for fkPath in fk.getPaths().keySet() %}
                         val config{{loop.index}} = QPathConfig({{macros.printOriginalTypeKt(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}::class.java,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})
-                        val {{name}}{{loop.index}}  = QPathFactory.create<Path>(this, config{{loop.index}})
+                        val {{name}}{{loop.index}}  = QPathFactory.create<Path<*>>(this, config{{loop.index}})
                         addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}))
                     {% endfor %}
-                    this.{{name}} = this.createForeignKey<{{fk.parametrizedType.simpleName}}>(Arrays.<Path<?>>asList(
+                    this.{{name}} = this.createForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
                     {% for fkPath in fk.getPaths().keySet() %}
                         {{name}}{{loop.index}}
                         {% if (loop.last) %}{% else %}
                             ,
                         {% endif %}
                     {% endfor %}
-                    ), Arrays.asList(
+                    ), listOf(
                      {% for fcName in fk.foreignColumnNames %}
                         "{{fcName}}"
                         {% if (loop.last) %}{% else %}
@@ -133,7 +134,8 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
                     this.joinColumnsMap.put("{{name}}",this.{{name}})
                 }
             {% else %}
-                run: {
+                //{{name}}
+                run {
                     this.{{name}} = this.createForeignKey<{{fk.parametrizedType.simpleName}}>(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}")
                     this.joinColumnsMap.put("{{name}}",this.{{name}})
                 }
@@ -143,21 +145,22 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
         {% for entry in q.rawInverseJoinColumns %}
             {% set name = entry.key %}
             {% set fk = entry.value %}
-            run: {
+            //{{name}}
+            run {
 
                 {% for fkPath in fk.getPaths().keySet() %}
                     val config{{loop.index}} = QPathConfig({{macros.printOriginalTypeKt(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}::class.java,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})
-                    val {{name}}{{loop.index}}  = QPathFactory.create<Path>(this, config{{loop.index}})
+                    val {{name}}{{loop.index}}  = QPathFactory.create<Path<*>>(this, config{{loop.index}})
                     addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}))
                 {% endfor %}
-                this.{{name}} = this.>createInvForeignKey<{{fk.parametrizedType.simpleName}}(Arrays.<Path<?>>asList(
+                this.{{name}} = this.createInvForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
                 {% for fkPath in fk.getPaths().keySet() %}
                     {{name}}{{loop.index}}
                     {% if (loop.last) %}{% else %}
                         ,
                     {% endif %}
                 {% endfor %}
-                ), Arrays.asList(
+                ), listOf(
                  {% for fcName in fk.foreignColumnNames %}
                     "{{fcName}}"
                     {% if (loop.last) %}{% else %}
@@ -168,10 +171,9 @@ class {{ className }} : QStaticModel<{{entitySimpleName}}> {
                 this.inverseJoinColumnsMap.put("{{name}}",this.{{name}})
             }
         {% endfor %}
-
+        //_primaryKey
         run {
-
-             val list = listOf(
+             val list = mutableListOf<Path<*>>(
              {% for idc in idCols %}
                   this.{{idc.fieldName}}
                   {% if not(loop.last) %},{% endif %}

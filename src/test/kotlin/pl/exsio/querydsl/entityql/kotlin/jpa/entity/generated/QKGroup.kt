@@ -4,8 +4,8 @@ import com.querydsl.core.dml.StoreClause
 import com.querydsl.core.types.Path
 import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.core.types.dsl.StringPath
+import com.querydsl.sql.ForeignKey
 import com.querydsl.sql.PrimaryKey
-import java.math.BigDecimal
 import java.util.ArrayList
 import java.util.Arrays
 import javax.annotation.Generated
@@ -13,7 +13,8 @@ import pl.exsio.querydsl.entityql.QColumnMetadataFactory
 import pl.exsio.querydsl.entityql.QPathConfig
 import pl.exsio.querydsl.entityql.QPathFactory
 import pl.exsio.querydsl.entityql.QStaticModel
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KBook
+import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KGroup
+import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KGroupAdmin
 
 /**
  *
@@ -22,30 +23,30 @@ import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KBook
  * class generation.
  */
 @Generated("pl.exsio.querydsl.entityql.QExporter")
-class QKBook : QStaticModel<KBook> {
+class QKGroup : QStaticModel<KGroup> {
 
   companion object {
-    val instance: QKBook = QKBook()
-    val qKBook: QKBook = QKBook.instance
+    val instance: QKGroup = QKGroup()
+    val qKGroup: QKGroup = QKGroup.instance
   }
 
   lateinit var id: NumberPath<Long>
 
   lateinit var name: StringPath
 
-  lateinit var desc: StringPath
+  lateinit var adminId: StringPath
 
-  lateinit var price: NumberPath<BigDecimal>
+  lateinit var admin: ForeignKey<KGroupAdmin>
 
-  lateinit var _primaryKey: PrimaryKey<KBook>
+  lateinit var _primaryKey: PrimaryKey<KGroup>
 
-  constructor() : this("BOOKS")
+  constructor() : this("GROUPS")
 
-  constructor(variable: String) : super(KBook::class.java, variable, "", "BOOKS") {
+  constructor(variable: String) : super(KGroup::class.java, variable, "", "GROUPS") {
 
     // id
     run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "BOOK_ID", true, 1, -5)
+      val config = QPathConfig(Long::class.java, Long::class.java, "GROUP_ID", true, 1, -5)
 
       this.id = QPathFactory.create<NumberPath<Long>>(this, config)
 
@@ -63,24 +64,20 @@ class QKBook : QStaticModel<KBook> {
       this.columnsMap.put("name", this.name)
     }
 
-    // desc
+    // adminId
     run {
-      val config = QPathConfig(String::class.java, String::class.java, "DESC", true, 3, 2005)
+      val config = QPathConfig(String::class.java, String::class.java, "ADMIN_NAME", false, 4, 12)
 
-      this.desc = QPathFactory.create<StringPath>(this, config)
+      this.adminId = QPathFactory.create<StringPath>(this, config)
 
-      addMetadata(this.desc, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("desc", this.desc)
+      addMetadata(this.adminId, QColumnMetadataFactory.create(config))
+      this.columnsMap.put("adminId", this.adminId)
     }
 
-    // price
+    // admin
     run {
-      val config = QPathConfig(BigDecimal::class.java, BigDecimal::class.java, "PRICE", true, 4, 3)
-
-      this.price = QPathFactory.create<NumberPath<BigDecimal>>(this, config)
-
-      addMetadata(this.price, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("price", this.price)
+      this.admin = this.createForeignKey<KGroupAdmin>(this.adminId, "NAME")
+      this.joinColumnsMap.put("admin", this.admin)
     }
 
     // _primaryKey

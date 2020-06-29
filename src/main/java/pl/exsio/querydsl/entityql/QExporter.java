@@ -1,5 +1,6 @@
 package pl.exsio.querydsl.entityql;
 
+import com.facebook.ktfmt.FormatterKt;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Primitives;
@@ -72,9 +73,13 @@ public class QExporter {
         System.out.println(exportedClass);
         FileUtils.writeStringToFile(
                 new File(filePath.toUri()),
-                lang.equals(Lang.KOTLIN) ? exportedClass : javaFormatter.formatSourceAndFixImports(exportedClass),
+                format(lang, exportedClass),
                 StandardCharsets.UTF_8
         );
+    }
+
+    private String format(Lang lang, String exportedClass) throws FormatterException {
+        return lang.equals(Lang.KOTLIN) ? FormatterKt.format(exportedClass) : javaFormatter.formatSourceAndFixImports(exportedClass);
     }
 
     private Path getFilePath(String pkgName, String destinationPath, String fileName) {
@@ -87,7 +92,9 @@ public class QExporter {
         String className = FilenameUtils.removeExtension(fileName);
         PebbleTemplate template = engine.getTemplate(lang.getTemplateName());
         Map<String, Object> context = getContext(q, pkgName, type, lang, className);
-        return doRender(template, context);
+        return doRender(template, context)
+                .replaceAll("\\r\\n", "\n")
+                .replaceAll("\\r", "\n");
     }
 
     private String doRender(PebbleTemplate template, Map<String, Object> context) {
@@ -126,6 +133,7 @@ public class QExporter {
             Map<String, Function> functions = Maps.newHashMap();
             functions.put("wrapPrimitive", new PrimitiveWrapper());
             functions.put("isNotJavaLang", new IsNotJavaLang());
+            functions.put("capitalize", new Capitalize());
             functions.put("replace", new Replace());
             return functions;
         }
@@ -161,6 +169,22 @@ public class QExporter {
         }
     }
 
+    public static class Capitalize implements Function {
+
+        @Override
+        public List<String> getArgumentNames() {
+            List<String> names = new ArrayList<>();
+            names.add("target");
+            return names;
+        }
+
+        @Override
+        public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+            String target = (String) args.get("target");
+            return target.substring(0, 1).toUpperCase() + target.substring(1);
+        }
+    }
+
     public static class Replace implements Function {
 
         @Override
@@ -193,9 +217,9 @@ public class QExporter {
         }
 
         private static Lang forName(String fileName) {
-            if(fileName.endsWith("kt")) {
+            if (fileName.endsWith("kt")) {
                 return KOTLIN;
-            } else if(fileName.endsWith("groovy")) {
+            } else if (fileName.endsWith("groovy")) {
                 return GROOVY;
             } else {
                 return JAVA;
