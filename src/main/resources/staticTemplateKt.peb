@@ -72,51 +72,27 @@ class {{ className }} : QStaticModel<{{macros.printSimpleNameKt(entityClass)}}> 
     {% for entry in q.rawColumns %}
         {% set name = entry.key %}
         {% set path = entry.value %}
-        lateinit var {{ name }}: {{macros.printColumnTypeKt(path)}}
+        val {{ name }}: {{macros.printColumnTypeKt(path)}} = run {
+                val config = QPathConfig({{macros.printOriginalTypeKt(path)}},{{macros.printComputedTypeKt(path)}},"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})
+                val {{name}} = QPathFactory.create<{{macros.printColumnTypeKt(path)}}>(this, config)
+                addMetadata({{name}}, QColumnMetadataFactory.create(config))
+                this.columnsMap.put("{{name}}",{{name}})
+                {{name}}
+            }
     {% endfor %}
 
     {% for entry in q.rawJoinColumns %}
         {% set name = entry.key %}
         {% set fk = entry.value %}
-        lateinit var {{ name }}: {{macros.printJoinColumnTypeKt(fk)}}
-    {% endfor %}
-
-    {% for entry in q.rawInverseJoinColumns %}
-        {% set name = entry.key %}
-        {% set fk = entry.value %}
-        lateinit var {{ name }}: {{macros.printJoinColumnTypeKt(fk)}}
-    {% endfor %}
-
-    lateinit var _primaryKey:  PrimaryKey<{{macros.printSimpleNameKt(entityClass)}}>
-
-    constructor(): this("{{ q.tableName }}")
-
-    constructor(variable: String): super({{entitySimpleName}}::class.java, variable, "{{q.schemaName }}", "{{ q.tableName }}") {
-        {% for entry in q.rawColumns %}
-            {% set name = entry.key %}
-            {% set path = entry.value %}
-            //{{name}}
-            run {
-                val config = QPathConfig({{macros.printOriginalTypeKt(path)}},{{macros.printComputedTypeKt(path)}},"{{path.config.name}}",{{path.config.nullable}},{{path.config.idx}},{{path.config.sqlType}})
-                this.{{name}} = QPathFactory.create<{{macros.printColumnTypeKt(path)}}>(this, config)
-                addMetadata(this.{{name}}, QColumnMetadataFactory.create(config))
-                this.columnsMap.put("{{name}}",this.{{name}})
-            }
-        {% endfor %}
-
-        {% for entry in q.rawJoinColumns %}
-            {% set name = entry.key %}
-            {% set fk = entry.value %}
-            {% if (fk.getPaths().size() > 1) %}
-                //{{name}}
+        val {{ name }}: {{macros.printJoinColumnTypeKt(fk)}} =
+        {% if (fk.getPaths().size() > 1) %}
                 run {
-
                     {% for fkPath in fk.getPaths().keySet() %}
                         val config{{loop.index}} = QPathConfig({{macros.printOriginalTypeKt(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}::class.java,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})
                         val {{name}}{{loop.index}}  = QPathFactory.create<Path<*>>(this, config{{loop.index}})
                         addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}))
                     {% endfor %}
-                    this.{{name}} = this.createForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
+                    val {{name}} = this.createForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
                     {% for fkPath in fk.getPaths().keySet() %}
                         {{name}}{{loop.index}}
                         {% if (loop.last) %}{% else %}
@@ -131,29 +107,28 @@ class {{ className }} : QStaticModel<{{macros.printSimpleNameKt(entityClass)}}> 
                         {% endif %}
                     {% endfor %}
                     ))
-                    this.joinColumnsMap.put("{{name}}",this.{{name}})
+                    this.joinColumnsMap.put("{{name}}",{{name}})
+                    {{name}}
                 }
             {% else %}
-                //{{name}}
                 run {
-                    this.{{name}} = this.createForeignKey<{{macros.printSimpleNameKt(fk.parametrizedType)}}>(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}")
-                    this.joinColumnsMap.put("{{name}}",this.{{name}})
+                    val {{name}} = this.createForeignKey<{{macros.printSimpleNameKt(fk.parametrizedType)}}>(this.{{name}}Id, "{{fk.foreignColumnNames.first()}}")
+                    this.joinColumnsMap.put("{{name}}",{{name}})
+                     {{name}}
                 }
             {% endif %}
-        {% endfor %}
+    {% endfor %}
 
-        {% for entry in q.rawInverseJoinColumns %}
-            {% set name = entry.key %}
-            {% set fk = entry.value %}
-            //{{name}}
-            run {
-
+    {% for entry in q.rawInverseJoinColumns %}
+        {% set name = entry.key %}
+        {% set fk = entry.value %}
+        val {{ name }}: {{macros.printJoinColumnTypeKt(fk)}} = run {
                 {% for fkPath in fk.getPaths().keySet() %}
                     val config{{loop.index}} = QPathConfig({{macros.printOriginalTypeKt(fkPath)}},{{fkPath.config.computedFieldType.simpleName}}::class.java,"{{fkPath.config.name}}",{{fkPath.config.nullable}},{{fkPath.config.idx}},{{fkPath.config.sqlType}})
                     val {{name}}{{loop.index}}  = QPathFactory.create<Path<*>>(this, config{{loop.index}})
                     addMetadata({{name}}{{loop.index}}, QColumnMetadataFactory.create(config{{loop.index}}))
                 {% endfor %}
-                this.{{name}} = this.createInvForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
+                val {{name}} = this.createInvForeignKey<{{fk.parametrizedType.simpleName}}>(listOf(
                 {% for fkPath in fk.getPaths().keySet() %}
                     {{name}}{{loop.index}}
                     {% if (loop.last) %}{% else %}
@@ -168,11 +143,12 @@ class {{ className }} : QStaticModel<{{macros.printSimpleNameKt(entityClass)}}> 
                     {% endif %}
                 {% endfor %}
                 ))
-                this.inverseJoinColumnsMap.put("{{name}}",this.{{name}})
+                this.inverseJoinColumnsMap.put("{{name}}",{{name}})
+                {{name}}
             }
-        {% endfor %}
-        //_primaryKey
-        run {
+    {% endfor %}
+
+    val _primaryKey:  PrimaryKey<{{macros.printSimpleNameKt(entityClass)}}> = run {
              val list = mutableListOf<Path<*>>(
              {% for idc in idCols %}
                   this.{{idc.fieldName}}
@@ -180,8 +156,10 @@ class {{ className }} : QStaticModel<{{macros.printSimpleNameKt(entityClass)}}> 
              {% endfor %}
              )
              this.primaryKeyColumns = list
-             this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-
+             this.createPrimaryKey(*list.toTypedArray())
         }
-    }
+
+    constructor(): this("{{ q.tableName }}")
+
+    constructor(variable: String): super({{entitySimpleName}}::class.java, variable, "{{q.schemaName }}", "{{ q.tableName }}")
 }

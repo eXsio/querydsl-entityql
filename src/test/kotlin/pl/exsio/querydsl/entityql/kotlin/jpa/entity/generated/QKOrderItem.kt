@@ -30,105 +30,94 @@ class QKOrderItem : QStaticModel<KOrderItem> {
     val qKOrderItem: QKOrderItem = QKOrderItem.instance
   }
 
-  lateinit var id: NumberPath<Long>
+  val id: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ITEM_ID", true, 1, -5)
 
-  lateinit var quantity: NumberPath<Long>
+        val id = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var bookId: NumberPath<Long>
+        addMetadata(id, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("id", id)
+        id
+      }
 
-  lateinit var orderId: NumberPath<Long>
+  val quantity: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "QTY", false, 5, -5)
 
-  lateinit var orderReferencedId: NumberPath<Long>
+        val quantity = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var book: ForeignKey<KBook>
+        addMetadata(quantity, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("quantity", quantity)
+        quantity
+      }
 
-  lateinit var order: ForeignKey<KOrder>
+  val bookId: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "BOOK_ID", false, 2, -5)
 
-  lateinit var orderReferenced: ForeignKey<KOrder>
+        val bookId = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var _primaryKey: PrimaryKey<KOrderItem>
+        addMetadata(bookId, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("bookId", bookId)
+        bookId
+      }
+
+  val orderId: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "ITEM_ORDER_ID", false, 3, -5)
+
+        val orderId = QPathFactory.create<NumberPath<Long>>(this, config)
+
+        addMetadata(orderId, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("orderId", orderId)
+        orderId
+      }
+
+  val orderReferencedId: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "ITEM_ORDER_ID", false, 4, -5)
+
+        val orderReferencedId = QPathFactory.create<NumberPath<Long>>(this, config)
+
+        addMetadata(orderReferencedId, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("orderReferencedId", orderReferencedId)
+        orderReferencedId
+      }
+
+  val book: ForeignKey<KBook> =
+      run {
+        val book = this.createForeignKey<KBook>(this.bookId, "BOOK_ID")
+
+        this.joinColumnsMap.put("book", book)
+        book
+      }
+
+  val order: ForeignKey<KOrder> =
+      run {
+        val order = this.createForeignKey<KOrder>(this.orderId, "ORDER_ID")
+
+        this.joinColumnsMap.put("order", order)
+        order
+      }
+
+  val orderReferenced: ForeignKey<KOrder> =
+      run {
+        val orderReferenced = this.createForeignKey<KOrder>(this.orderReferencedId, "ORDER_ID")
+
+        this.joinColumnsMap.put("orderReferenced", orderReferenced)
+        orderReferenced
+      }
+
+  val _primaryKey: PrimaryKey<KOrderItem> =
+      run {
+        val list = mutableListOf<Path<*>>(this.id)
+
+        this.primaryKeyColumns = list
+        this.createPrimaryKey(*list.toTypedArray())
+      }
 
   constructor() : this("ORDER_ITEMS")
 
-  constructor(variable: String) : super(KOrderItem::class.java, variable, "", "ORDER_ITEMS") {
-
-    // id
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ITEM_ID", true, 1, -5)
-
-      this.id = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.id, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("id", this.id)
-    }
-
-    // quantity
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "QTY", false, 5, -5)
-
-      this.quantity = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.quantity, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("quantity", this.quantity)
-    }
-
-    // bookId
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "BOOK_ID", false, 2, -5)
-
-      this.bookId = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.bookId, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("bookId", this.bookId)
-    }
-
-    // orderId
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "ITEM_ORDER_ID", false, 3, -5)
-
-      this.orderId = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.orderId, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("orderId", this.orderId)
-    }
-
-    // orderReferencedId
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "ITEM_ORDER_ID", false, 4, -5)
-
-      this.orderReferencedId = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.orderReferencedId, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("orderReferencedId", this.orderReferencedId)
-    }
-
-    // book
-    run {
-      this.book = this.createForeignKey<KBook>(this.bookId, "BOOK_ID")
-
-      this.joinColumnsMap.put("book", this.book)
-    }
-
-    // order
-    run {
-      this.order = this.createForeignKey<KOrder>(this.orderId, "ORDER_ID")
-
-      this.joinColumnsMap.put("order", this.order)
-    }
-
-    // orderReferenced
-    run {
-      this.orderReferenced = this.createForeignKey<KOrder>(this.orderReferencedId, "ORDER_ID")
-
-      this.joinColumnsMap.put("orderReferenced", this.orderReferenced)
-    }
-
-    // _primaryKey
-    run {
-      val list = mutableListOf<Path<*>>(this.id)
-
-      this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-    }
-  }
+  constructor(variable: String) : super(KOrderItem::class.java, variable, "", "ORDER_ITEMS")
 }

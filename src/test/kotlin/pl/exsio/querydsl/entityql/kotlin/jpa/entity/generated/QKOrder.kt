@@ -30,80 +30,72 @@ class QKOrder : QStaticModel<KOrder> {
     val qKOrder: QKOrder = QKOrder.instance
   }
 
-  lateinit var id: NumberPath<Long>
+  val id: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", true, 1, -5)
 
-  lateinit var userId: NumberPath<Long>
+        val id = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var user: ForeignKey<KUser<*>>
+        addMetadata(id, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("id", id)
+        id
+      }
 
-  lateinit var items: ForeignKey<KOrderItem>
+  val userId: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", false, 2, -5)
 
-  lateinit var itemsReferenced: ForeignKey<KOrderItem>
+        val userId = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var _primaryKey: PrimaryKey<KOrder>
+        addMetadata(userId, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("userId", userId)
+        userId
+      }
+
+  val user: ForeignKey<KUser<*>> =
+      run {
+        val user = this.createForeignKey<KUser<*>>(this.userId, "USER_ID")
+
+        this.joinColumnsMap.put("user", user)
+        user
+      }
+
+  val items: ForeignKey<KOrderItem> =
+      run {
+        val config0 = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", false, 3, -5)
+
+        val items0 = QPathFactory.create<Path<*>>(this, config0)
+        addMetadata(items0, QColumnMetadataFactory.create(config0))
+
+        val items = this.createInvForeignKey<KOrderItem>(listOf(items0), listOf("ITEM_ORDER_ID"))
+
+        this.inverseJoinColumnsMap.put("items", items)
+        items
+      }
+
+  val itemsReferenced: ForeignKey<KOrderItem> =
+      run {
+        val config0 = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", false, 4, -5)
+
+        val itemsReferenced0 = QPathFactory.create<Path<*>>(this, config0)
+        addMetadata(itemsReferenced0, QColumnMetadataFactory.create(config0))
+
+        val itemsReferenced =
+            this.createInvForeignKey<KOrderItem>(listOf(itemsReferenced0), listOf("ITEM_ORDER_ID"))
+
+        this.inverseJoinColumnsMap.put("itemsReferenced", itemsReferenced)
+        itemsReferenced
+      }
+
+  val _primaryKey: PrimaryKey<KOrder> =
+      run {
+        val list = mutableListOf<Path<*>>(this.id)
+
+        this.primaryKeyColumns = list
+        this.createPrimaryKey(*list.toTypedArray())
+      }
 
   constructor() : this("ORDERS")
 
-  constructor(variable: String) : super(KOrder::class.java, variable, "", "ORDERS") {
-
-    // id
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", true, 1, -5)
-
-      this.id = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.id, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("id", this.id)
-    }
-
-    // userId
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", false, 2, -5)
-
-      this.userId = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.userId, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("userId", this.userId)
-    }
-
-    // user
-    run {
-      this.user = this.createForeignKey<KUser<*>>(this.userId, "USER_ID")
-
-      this.joinColumnsMap.put("user", this.user)
-    }
-
-    // items
-    run {
-      val config0 = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", false, 3, -5)
-
-      val items0 = QPathFactory.create<Path<*>>(this, config0)
-      addMetadata(items0, QColumnMetadataFactory.create(config0))
-
-      this.items = this.createInvForeignKey<KOrderItem>(listOf(items0), listOf("ITEM_ORDER_ID"))
-
-      this.inverseJoinColumnsMap.put("items", this.items)
-    }
-
-    // itemsReferenced
-    run {
-      val config0 = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", false, 4, -5)
-
-      val itemsReferenced0 = QPathFactory.create<Path<*>>(this, config0)
-      addMetadata(itemsReferenced0, QColumnMetadataFactory.create(config0))
-
-      this.itemsReferenced =
-          this.createInvForeignKey<KOrderItem>(listOf(itemsReferenced0), listOf("ITEM_ORDER_ID"))
-
-      this.inverseJoinColumnsMap.put("itemsReferenced", this.itemsReferenced)
-    }
-
-    // _primaryKey
-    run {
-      val list = mutableListOf<Path<*>>(this.id)
-
-      this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-    }
-  }
+  constructor(variable: String) : super(KOrder::class.java, variable, "", "ORDERS")
 }

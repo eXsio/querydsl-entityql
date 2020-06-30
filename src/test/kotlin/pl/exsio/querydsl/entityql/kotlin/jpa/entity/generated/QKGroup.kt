@@ -30,63 +30,56 @@ class QKGroup : QStaticModel<KGroup> {
     val qKGroup: QKGroup = QKGroup.instance
   }
 
-  lateinit var id: NumberPath<Long>
+  val id: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "GROUP_ID", true, 1, -5)
 
-  lateinit var name: StringPath
+        val id = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var adminId: StringPath
+        addMetadata(id, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("id", id)
+        id
+      }
 
-  lateinit var admin: ForeignKey<KGroupAdmin>
+  val name: StringPath =
+      run {
+        val config = QPathConfig(String::class.java, String::class.java, "NAME", true, 2, 12)
 
-  lateinit var _primaryKey: PrimaryKey<KGroup>
+        val name = QPathFactory.create<StringPath>(this, config)
+
+        addMetadata(name, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("name", name)
+        name
+      }
+
+  val adminId: StringPath =
+      run {
+        val config = QPathConfig(String::class.java, String::class.java, "ADMIN_NAME", false, 4, 12)
+
+        val adminId = QPathFactory.create<StringPath>(this, config)
+
+        addMetadata(adminId, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("adminId", adminId)
+        adminId
+      }
+
+  val admin: ForeignKey<KGroupAdmin> =
+      run {
+        val admin = this.createForeignKey<KGroupAdmin>(this.adminId, "NAME")
+
+        this.joinColumnsMap.put("admin", admin)
+        admin
+      }
+
+  val _primaryKey: PrimaryKey<KGroup> =
+      run {
+        val list = mutableListOf<Path<*>>(this.id)
+
+        this.primaryKeyColumns = list
+        this.createPrimaryKey(*list.toTypedArray())
+      }
 
   constructor() : this("GROUPS")
 
-  constructor(variable: String) : super(KGroup::class.java, variable, "", "GROUPS") {
-
-    // id
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "GROUP_ID", true, 1, -5)
-
-      this.id = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.id, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("id", this.id)
-    }
-
-    // name
-    run {
-      val config = QPathConfig(String::class.java, String::class.java, "NAME", true, 2, 12)
-
-      this.name = QPathFactory.create<StringPath>(this, config)
-
-      addMetadata(this.name, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("name", this.name)
-    }
-
-    // adminId
-    run {
-      val config = QPathConfig(String::class.java, String::class.java, "ADMIN_NAME", false, 4, 12)
-
-      this.adminId = QPathFactory.create<StringPath>(this, config)
-
-      addMetadata(this.adminId, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("adminId", this.adminId)
-    }
-
-    // admin
-    run {
-      this.admin = this.createForeignKey<KGroupAdmin>(this.adminId, "NAME")
-
-      this.joinColumnsMap.put("admin", this.admin)
-    }
-
-    // _primaryKey
-    run {
-      val list = mutableListOf<Path<*>>(this.id)
-
-      this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-    }
-  }
+  constructor(variable: String) : super(KGroup::class.java, variable, "", "GROUPS")
 }
