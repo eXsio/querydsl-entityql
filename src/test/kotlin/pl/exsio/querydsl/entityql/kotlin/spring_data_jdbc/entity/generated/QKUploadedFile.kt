@@ -29,43 +29,38 @@ class QKUploadedFile : QStaticModel<KUploadedFile> {
     val qKUploadedFile: QKUploadedFile = QKUploadedFile.instance
   }
 
-  lateinit var id: QUuidPath
+  val id: QUuidPath =
+      run {
+        val config = QPathConfig(UUID::class.java, UUID::class.java, "FILE_ID", true, 1, 12)
 
-  lateinit var data: ArrayPath<ByteArray, Byte>
+        val id = QPathFactory.create<QUuidPath>(this, config)
 
-  lateinit var _primaryKey: PrimaryKey<KUploadedFile>
+        addMetadata(id, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("id", id)
+        id
+      }
+
+  val data: ArrayPath<ByteArray, Byte> =
+      run {
+        val config =
+            QPathConfig(ByteArray::class.java, Array<Byte>::class.java, "DATA", true, 2, 2003)
+
+        val data = QPathFactory.create<ArrayPath<ByteArray, Byte>>(this, config)
+
+        addMetadata(data, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("data", data)
+        data
+      }
+
+  val _primaryKey: PrimaryKey<KUploadedFile> =
+      run {
+        val list = mutableListOf<Path<*>>(this.id)
+
+        this.primaryKeyColumns = list
+        this.createPrimaryKey(*list.toTypedArray())
+      }
 
   constructor() : this("UPLOADED_FILES")
 
-  constructor(variable: String) : super(KUploadedFile::class.java, variable, "", "UPLOADED_FILES") {
-
-    // id
-    run {
-      val config = QPathConfig(UUID::class.java, UUID::class.java, "FILE_ID", true, 1, 12)
-
-      this.id = QPathFactory.create<QUuidPath>(this, config)
-
-      addMetadata(this.id, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("id", this.id)
-    }
-
-    // data
-    run {
-      val config =
-          QPathConfig(ByteArray::class.java, Array<Byte>::class.java, "DATA", true, 2, 2003)
-
-      this.data = QPathFactory.create<ArrayPath<ByteArray, Byte>>(this, config)
-
-      addMetadata(this.data, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("data", this.data)
-    }
-
-    // _primaryKey
-    run {
-      val list = mutableListOf<Path<*>>(this.id)
-
-      this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-    }
-  }
+  constructor(variable: String) : super(KUploadedFile::class.java, variable, "", "UPLOADED_FILES")
 }

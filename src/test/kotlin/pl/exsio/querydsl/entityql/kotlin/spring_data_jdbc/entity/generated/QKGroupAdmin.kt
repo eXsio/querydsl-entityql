@@ -28,42 +28,37 @@ class QKGroupAdmin : QStaticModel<KGroupAdmin> {
     val qKGroupAdmin: QKGroupAdmin = QKGroupAdmin.instance
   }
 
-  lateinit var id: NumberPath<Long>
+  val id: NumberPath<Long> =
+      run {
+        val config = QPathConfig(Long::class.java, Long::class.java, "GA_ID", true, 1, 1111)
 
-  lateinit var name: StringPath
+        val id = QPathFactory.create<NumberPath<Long>>(this, config)
 
-  lateinit var _primaryKey: PrimaryKey<KGroupAdmin>
+        addMetadata(id, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("id", id)
+        id
+      }
+
+  val name: StringPath =
+      run {
+        val config = QPathConfig(String::class.java, String::class.java, "NAME", true, 2, 12)
+
+        val name = QPathFactory.create<StringPath>(this, config)
+
+        addMetadata(name, QColumnMetadataFactory.create(config))
+        this.columnsMap.put("name", name)
+        name
+      }
+
+  val _primaryKey: PrimaryKey<KGroupAdmin> =
+      run {
+        val list = mutableListOf<Path<*>>(this.id)
+
+        this.primaryKeyColumns = list
+        this.createPrimaryKey(*list.toTypedArray())
+      }
 
   constructor() : this("GROUP_ADMINS")
 
-  constructor(variable: String) : super(KGroupAdmin::class.java, variable, "", "GROUP_ADMINS") {
-
-    // id
-    run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "GA_ID", true, 1, 1111)
-
-      this.id = QPathFactory.create<NumberPath<Long>>(this, config)
-
-      addMetadata(this.id, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("id", this.id)
-    }
-
-    // name
-    run {
-      val config = QPathConfig(String::class.java, String::class.java, "NAME", true, 2, 12)
-
-      this.name = QPathFactory.create<StringPath>(this, config)
-
-      addMetadata(this.name, QColumnMetadataFactory.create(config))
-      this.columnsMap.put("name", this.name)
-    }
-
-    // _primaryKey
-    run {
-      val list = mutableListOf<Path<*>>(this.id)
-
-      this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
-    }
-  }
+  constructor(variable: String) : super(KGroupAdmin::class.java, variable, "", "GROUP_ADMINS")
 }
