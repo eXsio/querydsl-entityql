@@ -98,7 +98,7 @@ class QKSingularPk : QStaticModel<KSingularPk> {
       val list = mutableListOf<Path<*>>(this.id1)
 
       this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(list.toTypedArray() as Path<*>)
+      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
     }
   }
 }

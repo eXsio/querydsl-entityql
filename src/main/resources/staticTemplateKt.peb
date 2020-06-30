@@ -180,7 +180,7 @@ class {{ className }} : QStaticModel<{{macros.printSimpleNameKt(entityClass)}}> 
              {% endfor %}
              )
              this.primaryKeyColumns = list
-             this._primaryKey = this.createPrimaryKey(list.toTypedArray() as Path<*>)
+             this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
 
         }
     }

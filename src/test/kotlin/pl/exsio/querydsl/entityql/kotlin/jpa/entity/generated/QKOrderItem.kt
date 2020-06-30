@@ -128,7 +128,7 @@ class QKOrderItem : QStaticModel<KOrderItem> {
       val list = mutableListOf<Path<*>>(this.id)
 
       this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(list.toTypedArray() as Path<*>)
+      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
     }
   }
 }

@@ -83,7 +83,7 @@ class QKUserGroup : QStaticModel<KUserGroup> {
       val list = mutableListOf<Path<*>>(this.groupId, this.userId)
 
       this.primaryKeyColumns = list
-      this._primaryKey = this.createPrimaryKey(list.toTypedArray() as Path<*>)
+      this._primaryKey = this.createPrimaryKey(*list.toTypedArray())
     }
   }
 }

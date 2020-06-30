@@ -1,6 +1,7 @@
 package pl.exsio.querydsl.entityql;
 
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
+import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
 import pl.exsio.querydsl.entityql.path.QEnumPath;
 import pl.exsio.querydsl.entityql.path.QObjectPath;
 import pl.exsio.querydsl.entityql.path.QUuidPath;
@@ -28,13 +29,36 @@ public abstract class QPathFactory {
 
     static {
         pathFactory.put(Array.class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(byte[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Byte[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(long[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Long[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(float[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Float[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(double[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Double[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(char[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Character[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(boolean[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Boolean[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(int[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Integer[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(short[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
+        pathFactory.put(Short[].class, (q, config) -> new QPath(q.createArray(config.getName(), getOriginalType(config)), config));
         pathFactory.put(Boolean.class, (q, config) -> new QPath(q.createBoolean(config.getName()), config));
+        pathFactory.put(boolean.class, (q, config) -> new QPath(q.createBoolean(config.getName()), config));
         pathFactory.put(Long.class, (q, config) -> new QPath(q.createNumber(config.getName(), Long.class), config, Long.class));
+        pathFactory.put(long.class, (q, config) -> new QPath(q.createNumber(config.getName(), Long.class), config, Long.class));
         pathFactory.put(Float.class, (q, config) -> new QPath(q.createNumber(config.getName(), Float.class), config, Float.class));
+        pathFactory.put(float.class, (q, config) -> new QPath(q.createNumber(config.getName(), Float.class), config, Float.class));
         pathFactory.put(Double.class, (q, config) -> new QPath(q.createNumber(config.getName(), Double.class), config, Double.class));
+        pathFactory.put(double.class, (q, config) -> new QPath(q.createNumber(config.getName(), Double.class), config, Double.class));
         pathFactory.put(Integer.class, (q, config) -> new QPath(q.createNumber(config.getName(), Integer.class), config, Integer.class));
+        pathFactory.put(int.class, (q, config) -> new QPath(q.createNumber(config.getName(), Integer.class), config, Integer.class));
         pathFactory.put(Byte.class, (q, config) -> new QPath(q.createNumber(config.getName(), Byte.class), config, Byte.class));
+        pathFactory.put(byte.class, (q, config) -> new QPath(q.createNumber(config.getName(), Byte.class), config, Byte.class));
         pathFactory.put(Short.class, (q, config) -> new QPath(q.createNumber(config.getName(), Short.class), config, Short.class));
+        pathFactory.put(short.class, (q, config) -> new QPath(q.createNumber(config.getName(), Short.class), config, Short.class));
         pathFactory.put(String.class, (q, config) -> new QPath(q.createString(config.getName()), config));
         pathFactory.put(BigDecimal.class, (q, config) -> new QPath(q.createNumber(config.getName(), BigDecimal.class), config, BigDecimal.class));
         pathFactory.put(BigInteger.class, (q, config) -> new QPath(q.createNumber(config.getName(), BigInteger.class), config, BigInteger.class));
@@ -77,7 +101,13 @@ public abstract class QPathFactory {
 
     @SuppressWarnings(value = "unchecked")
     public static <R> R create(QBase<?> q, QPathConfig config) {
-        return (R) pathFactory.get(config.getComputedFieldType()).createExpression(q, config).get();
+        System.out.println(pathFactory.keySet());
+        System.out.println(config.getComputedFieldType());
+        PathFactory pathFactory = QPathFactory.pathFactory.get(config.getComputedFieldType());
+        if (pathFactory == null) {
+            throw new InvalidArgumentException(String.format("Unable to locate PathFactory for class: %s", config.getComputedFieldType().getName()));
+        }
+        return (R) pathFactory.createExpression(q, config).get();
     }
 
     private interface PathFactory {
