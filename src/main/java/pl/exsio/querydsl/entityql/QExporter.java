@@ -167,7 +167,8 @@ public class QExporter {
 
         @Override
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
-            return !((Class<?>) args.get("target")).getName().startsWith("java.lang");
+            Class<?> target = (Class<?>) args.get("target");
+            return !target.getName().startsWith("java.lang") && !target.isPrimitive();
         }
     }
 

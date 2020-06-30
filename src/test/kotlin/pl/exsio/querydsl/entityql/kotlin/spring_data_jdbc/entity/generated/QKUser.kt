@@ -1,4 +1,4 @@
-package pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated
+package pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.entity.generated
 
 import com.querydsl.core.dml.StoreClause
 import com.querydsl.core.types.Path
@@ -17,8 +17,8 @@ import pl.exsio.querydsl.entityql.QPathFactory
 import pl.exsio.querydsl.entityql.QStaticModel
 import pl.exsio.querydsl.entityql.kotlin.config.enums.by_name.KUserTypeByName
 import pl.exsio.querydsl.entityql.kotlin.config.enums.by_ordinal.KUserTypeByOrdinal
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KOrder
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KUser
+import pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.entity.KOrder
+import pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.entity.KUser
 import pl.exsio.querydsl.entityql.path.QEnumPath
 import pl.exsio.querydsl.entityql.path.QObjectPath
 
@@ -50,6 +50,8 @@ class QKUser : QStaticModel<KUser<*>> {
 
   lateinit var enabled: BooleanPath
 
+  lateinit var orderId: NumberPath<Long>
+
   lateinit var order: ForeignKey<KOrder>
 
   lateinit var _primaryKey: PrimaryKey<KUser<*>>
@@ -60,7 +62,7 @@ class QKUser : QStaticModel<KUser<*>> {
 
     // id
     run {
-      val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", true, 1, -5)
+      val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", true, 1, 1111)
 
       this.id = QPathFactory.create<NumberPath<Long>>(this, config)
 
@@ -81,7 +83,7 @@ class QKUser : QStaticModel<KUser<*>> {
     // typeStr
     run {
       val config =
-          QPathConfig(KUserTypeByName::class.java, Enum::class.java, "TYPE_STR", false, 4, 12)
+          QPathConfig(KUserTypeByName::class.java, Enum::class.java, "TYPE_STR", true, 4, 12)
 
       this.typeStr = QPathFactory.create<QEnumPath<KUserTypeByName>>(this, config)
 
@@ -92,7 +94,7 @@ class QKUser : QStaticModel<KUser<*>> {
     // typeOrd
     run {
       val config =
-          QPathConfig(KUserTypeByOrdinal::class.java, Enum::class.java, "TYPE_ORD", false, 5, 12)
+          QPathConfig(KUserTypeByOrdinal::class.java, Enum::class.java, "TYPE_ORD", true, 5, 12)
 
       this.typeOrd = QPathFactory.create<QEnumPath<KUserTypeByOrdinal>>(this, config)
 
@@ -130,16 +132,21 @@ class QKUser : QStaticModel<KUser<*>> {
       this.columnsMap.put("enabled", this.enabled)
     }
 
+    // orderId
+    run {
+      val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", true, 3, 1111)
+
+      this.orderId = QPathFactory.create<NumberPath<Long>>(this, config)
+
+      addMetadata(this.orderId, QColumnMetadataFactory.create(config))
+      this.columnsMap.put("orderId", this.orderId)
+    }
+
     // order
     run {
-      val config0 = QPathConfig(Long::class.java, Long::class.java, "USER_ID", false, 3, -5)
+      this.order = this.createForeignKey<KOrder>(this.orderId, "ORDER_ID")
 
-      val order0 = QPathFactory.create<Path<*>>(this, config0)
-      addMetadata(order0, QColumnMetadataFactory.create(config0))
-
-      this.order = this.createInvForeignKey<KOrder>(listOf(order0), listOf("USER_ID"))
-
-      this.inverseJoinColumnsMap.put("order", this.order)
+      this.joinColumnsMap.put("order", this.order)
     }
 
     // _primaryKey

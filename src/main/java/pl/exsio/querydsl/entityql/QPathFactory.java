@@ -101,8 +101,6 @@ public abstract class QPathFactory {
 
     @SuppressWarnings(value = "unchecked")
     public static <R> R create(QBase<?> q, QPathConfig config) {
-        System.out.println(pathFactory.keySet());
-        System.out.println(config.getComputedFieldType());
         PathFactory pathFactory = QPathFactory.pathFactory.get(config.getComputedFieldType());
         if (pathFactory == null) {
             throw new InvalidArgumentException(String.format("Unable to locate PathFactory for class: %s", config.getComputedFieldType().getName()));

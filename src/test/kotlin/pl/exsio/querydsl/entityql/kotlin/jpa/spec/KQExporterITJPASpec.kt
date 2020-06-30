@@ -1,13 +1,13 @@
 package pl.exsio.querydsl.entityql.kotlin.jpa.spec
 
+import org.junit.Ignore
 import org.junit.Test
 import pl.exsio.querydsl.entityql.EntityQL.qEntity
 import pl.exsio.querydsl.entityql.QExporter
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.*
-import spock.lang.Ignore
 import java.nio.file.Paths
 
-class KQExporterITSpec {
+class KQExporterITJPASpec {
 
     val pkgName = "pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated"
 

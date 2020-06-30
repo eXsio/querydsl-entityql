@@ -6,7 +6,7 @@
             Array<{{capitalize(path.config.originalFieldType.componentType.toString())}}>::class.java
         {% endif %}
     {% else %}
-        {{replace(path.config.originalFieldType.simpleName, '$', '.' )}}::class.java
+        {{capitalize(replace(path.config.originalFieldType.simpleName, '$', '.' ))}}::class.java
     {% endif %}
 {% endmacro %}
 
@@ -14,14 +14,18 @@
     {% if (path.config.originalFieldType.array) %}
         Array<{{capitalize(path.config.originalFieldType.componentType.toString())}}>::class.java
     {% else %}
-        {{replace(path.config.computedFieldType.simpleName, '$', '.' )}}::class.java
+        {{capitalize(replace(path.config.computedFieldType.simpleName, '$', '.' ))}}::class.java
     {% endif %}
 {% endmacro %}
 
 {% macro printColumnTypeKt(path) %}
     {{ path.get().class.simpleName }}
     {% if (path.parametrized) %}
-        <{{replace(path.parametrizedType.simpleName, '$', '.')}}>
+         {% if (path.parametrizedType.simpleName == 'Object') %}
+            <Any>
+        {% else %}
+            <{{capitalize(replace(path.parametrizedType.simpleName, '$', '.'))}}>
+        {% endif %}
     {% endif %}
     {% if (path.config.originalFieldType.array) %}
         {% if (path.config.originalFieldType.componentType.primitive) %}
