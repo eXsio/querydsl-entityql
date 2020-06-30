@@ -1,4 +1,6 @@
-# QueryDSL EntityQL - JPA / Spring Data JDBC Native Query builder for Java, Groovy and Kotlin 
+# QueryDSL-EntityQL 
+
+##JPA & Spring Data JDBC Native Query builder for Java, Groovy and Kotlin 
 
 [![Build Status](https://travis-ci.org/eXsio/querydsl-entityql.svg?branch=master)](https://travis-ci.org/eXsio/querydsl-entityql)
 [![codecov](https://codecov.io/gh/eXsio/querydsl-entityql/branch/master/graph/badge.svg)](https://codecov.io/gh/eXsio/querydsl-entityql)
