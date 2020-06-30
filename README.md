@@ -93,17 +93,17 @@ Long count = queryFactory.select(count())
     * [Maven Plugin](#MavenPl)
     * [Gradle Plugin](#GradlePl)
     * [Examples Project](#ExamplesProj)
-5. [How it works](#HowItWorks)
-6. [Use Cases](#UseCases)
-7. [QueryDSL SQL Features](#QueryDslSqlFeatures)
-8. [How does the EntityQL differ from...](#HowDiffers)
+5. [Usage](#Usage)    
+6. [How it works](#HowItWorks)
+7. [Use Cases](#UseCases)
+8. [QueryDSL SQL Features](#QueryDslSqlFeatures)
+9. [How does the EntityQL differ from...](#HowDiffers)
     * [Hibernate / JPA in general](#HibernateInGeneral)
     * [Hibernate / JPA Native Queries](#HibernateNative)
     * [QueryDSL-JPA in general](#QueryDslJpaInGeneral)
     * [QueryDSL-JPA JpaSqlQuery class](#queryDslJpaSql)
     * [Vanilla QueryDSL-SQL](#QueryDslSql)
     * [jOOQ](#jOOQ)
-9. [Usage](#Usage)
 10. [Limitations and restrictions](#Limits)
 11. [Performance](#Performance)
     * [Obtaining Query Model](#Obtain)
@@ -154,6 +154,28 @@ There are 2 more Projects that make EntityQL a complete package:
 #### <a name="GradlePl"></a> [Gradle Plugin](https://github.com/eXsio/querydsl-entityql-gradle-plugin) designed to easily generate Static Query Models (WORK IN PROGRESS).
 
 #### <a name="ExamplesProj"></a> [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) created to show how to configure and use EntityQL.
+
+## <a name="Usage"></a> Usage 
+([Contents](#Contents))
+
+There are so many different ways you can use EntityQL, that describing them all here would be inefficient and impractical.
+Below you can find usage matrix with links to example projects:
+
+| Java  | Groovy | Kotlin |
+| ------------- | ------------- |------------- |
+|[Maven / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-maven-jpa-static) |[Maven / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-jpa-dynamic)|[Maven / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-jpa-dynamic)|
+|[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-maven-jpa-static) |[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-jpa-static)|[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-jpa-static)|
+|[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-maven-spring-data-jdbc-dynamic) |[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-dynamic)|[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-spring-data-jdbc-dynamic)|
+|[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-static) |[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-static)|[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-spring-data-jdbc-static)|
+|Gradle / JPA / Dynamic Models |Gradle / JPA / Dynamic Models|Gradle / JPA / Dynamic Models|
+|Gradle / JPA / Static Models |Gradle / JPA / Static Models|Gradle / JPA / Static Models|
+|Gradle / Spring Data JDBC / Dynamic Models |Gradle / Spring Data JDBC / Dynamic Models|Gradle / Spring Data JDBC / Dynamic Models|
+|Gradle / Spring Data JDBC / Static Models |Gradle / Spring Data JDBC / Static Models|Gradle / Spring Data JDBC / Static Models|
+
+Each Example Project contains a fully configured Spring Boot application that cotntains all required configuration and
+some practical use cases for you to check out. Pick the one that suits your needs and let the SQL be a first party member of your project.
+
+**Gradle integration is currently Work in Progress**
 
 ## <a name="HowItWorks"></a> How it works 
 ([Contents](#Contents))
@@ -251,24 +273,6 @@ for everyone and everywhere.
 
 Please keep in mind that the above differences are sourced in my personal experiences and as such are my own subjective opinions. If you disagree with any of the comparison, please let me know.
 I will gladly update them to make them more informative and objective.
-
-## <a name="Usage"></a> Usage 
-([Contents](#Contents))
-
-Below you can find usage matrix with links to example projects:
-
-| Java  | Groovy | Kotlin |
-| ------------- | ------------- |------------- |
-|Maven / JPA / Dynamic Models |Maven / JPA / Dynamic Models|Maven / JPA / Dynamic Models|
-|Maven / JPA / Static Models |Maven / JPA / Static Models|Maven / JPA / Static Models|
-|Maven / Spring Data JDBC / Dynamic Models |Maven / Spring Data JDBC / Dynamic Models|Maven / Spring Data JDBC / Dynamic Models|
-|Maven / Spring Data JDBC / Static Models |Maven / Spring Data JDBC / Static Models|Maven / Spring Data JDBC / Static Models|
-|Gradle / JPA / Dynamic Models |Gradle / JPA / Dynamic Models|Gradle / JPA / Dynamic Models|
-|Gradle / JPA / Static Models |Gradle / JPA / Static Models|Gradle / JPA / Static Models|
-|Gradle / Spring Data JDBC / Dynamic Models |Gradle / Spring Data JDBC / Dynamic Models|Gradle / Spring Data JDBC / Dynamic Models|
-|Gradle / Spring Data JDBC / Static Models |Gradle / Spring Data JDBC / Static Models|Gradle / Spring Data JDBC / Static Models|
-
-Pick the one that suits your needs and let the SQL be a first party member of your project.
 
 
 ## <a name="Limits"></a> Limitations and restrictions 
