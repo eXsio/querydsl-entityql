@@ -9,6 +9,7 @@
  import pl.exsio.querydsl.entityql.path.QUuidPath
  import java.util.UUID
  import com.querydsl.core.types.dsl.ArrayPath
+ import java.lang.reflect.Array
  import javax.annotation.Generated
  import com.querydsl.core.types.Path
  
@@ -37,7 +38,7 @@
      }
 
      val data: ArrayPath <ByteArray, Byte> = run {
-         val config = QPathConfig(ByteArray::class.java, Array<Byte>::class.java, "DATA", true, 2, 2003)
+         val config = QPathConfig(ByteArray::class.java, Array::class.java, "DATA", true, 2, 2003)
          val data = QPathFactory.create<ArrayPath <ByteArray, Byte>>(this, config)
          addMetadata(data, QColumnMetadataFactory.create(config))
          this.columnsMap.put("data", data)

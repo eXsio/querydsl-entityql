@@ -5,7 +5,7 @@
 
     <groupId>com.github.eXsio</groupId>
     <artifactId>querydsl-entityql</artifactId>
-    <version>3.0.3</version>
+    <version>3.0.4</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
@@ -164,6 +164,12 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>

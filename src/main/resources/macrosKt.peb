@@ -11,11 +11,7 @@
 {% endmacro %}
 
 {% macro printComputedTypeKt(path) %}
-    {% if (path.config.originalFieldType.array) %}
-        Array<{{capitalize(path.config.originalFieldType.componentType.toString())}}>::class.java
-    {% else %}
         {{capitalize(replace(path.config.computedFieldType.simpleName, '$', '.' ))}}::class.java
-    {% endif %}
 {% endmacro %}
 
 {% macro printColumnTypeKt(path) %}
