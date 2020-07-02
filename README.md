@@ -16,6 +16,8 @@ With EntityQL you can create Native Queries using your own JPA Entities and a be
 
 Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC and its metadata!
 
+Want to use Groovy or Kotlin? EntityQL supports them and is able to generate native code for those languages.
+
 **EntityQL can:**
 - **serve as an addition to any existent JPA / Spring Data JDBC configuration or as a standalone Data Access Layer**
 - **work without any additional bootstrap and warmup, which makes it a perfect choice for scalable microservices**
