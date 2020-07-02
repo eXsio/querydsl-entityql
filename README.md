@@ -148,7 +148,7 @@ EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL
 ## <a name="Supple"></a> Supplementary Projects
 ([Contents](#Contents))
 
-There are 2 more Projects that make EntityQL a complete package:
+There are 3 more Projects that make EntityQL a complete package:
 
 #### <a name="MavenPl"></a> [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin) designed to easily generate Static Query Models using Maven.
 
