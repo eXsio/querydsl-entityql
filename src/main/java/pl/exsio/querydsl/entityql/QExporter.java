@@ -1,11 +1,5 @@
 package pl.exsio.querydsl.entityql;
 
-import com.facebook.ktfmt.FormatterKt;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.primitives.Primitives;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
 import com.mitchellbosecke.pebble.extension.Function;
@@ -19,12 +13,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.ParameterizedType;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,13 +30,25 @@ import java.util.Objects;
  */
 public class QExporter {
 
+    private final static Map<Class<?>, Class<?>> PRIMITIVES = new HashMap<>();
+
+    static {
+        PRIMITIVES.put(Integer.TYPE, Integer.class);
+        PRIMITIVES.put(Float.TYPE, Float.class);
+        PRIMITIVES.put(Double.TYPE, Double.class);
+        PRIMITIVES.put(Byte.TYPE, Byte.class);
+        PRIMITIVES.put(Short.TYPE, Short.class);
+        PRIMITIVES.put(Character.TYPE, Character.class);
+        PRIMITIVES.put(Long.TYPE, Long.class);
+        PRIMITIVES.put(Boolean.TYPE, Boolean.class);
+        PRIMITIVES.put(Void.TYPE, Void.class);
+    }
+
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .extension(new EntityQlExtension())
             .allowUnsafeMethods(true)
             .newLineTrimming(false)
             .build();
-
-    private final Formatter javaFormatter = new Formatter();
 
     /**
      * Exports the given Q Model to physical Java source code file.
@@ -60,11 +66,10 @@ public class QExporter {
      * @param fileNamePattern - String patter of File/Class name, for example "Q%s.java"
      * @param pkgName         - package name of the resulting class
      * @param destinationPath - physical destination path
-     * @throws IOException        -  when it is not possible to save the resulting .java file
-     * @throws FormatterException - when the resulting Java class is malformed
+     * @throws IOException -  when it is not possible to save the resulting .java file
      */
     public <E> void export(Q<E> q, String fileNamePattern,
-                           String pkgName, String destinationPath) throws IOException, FormatterException {
+                           String pkgName, String destinationPath) throws IOException {
 
         Class<? extends E> type = q.getType();
         String fileName = String.format(fileNamePattern, type.getSimpleName());
@@ -78,8 +83,26 @@ public class QExporter {
         );
     }
 
-    private String format(Lang lang, String exportedClass) throws FormatterException {
-        return lang.equals(Lang.KOTLIN) ? FormatterKt.format(exportedClass) : javaFormatter.formatSourceAndFixImports(exportedClass);
+    private String format(Lang lang, String exportedClass) {
+        if (lang.isGroovy()) {
+            exportedClass = exportedClass.replaceAll(";", "");
+        }
+        return exportedClass
+                .replaceAll("\\r\\n", " ")
+                .replaceAll("\\r", " ")
+                .replaceAll("\\n", " ")
+                .replaceAll("\\s+", " ")
+                .replaceAll("~nl~", "\n")
+                .replaceAll("~", " ")
+                .replaceAll("\\( ", "(")
+                .replaceAll("< ", "<")
+                .replaceAll(" >", ">")
+                .replaceAll(">=", "> =")
+                .replaceAll(">\\{", "> {")
+                .replaceAll(" \\)", ")")
+                .replaceAll(" ,", ",")
+                .replaceAll(",", ", ")
+                .replaceAll(",\\s+", ", ");
     }
 
     private Path getFilePath(String pkgName, String destinationPath, String fileName) {
@@ -91,10 +114,8 @@ public class QExporter {
     private <E> String renderClass(Q<E> q, String pkgName, Class<? extends E> type, String fileName, Lang lang) {
         String className = FilenameUtils.removeExtension(fileName);
         PebbleTemplate template = engine.getTemplate(lang.getTemplateName());
-        Map<String, Object> context = getContext(q, pkgName, type, lang, className);
-        return doRender(template, context)
-                .replaceAll("\\r\\n", "\n")
-                .replaceAll("\\r", "\n");
+        Map<String, Object> context = getContext(q, pkgName, type, className, lang);
+        return doRender(template, context);
     }
 
     private String doRender(PebbleTemplate template, Map<String, Object> context) {
@@ -107,8 +128,8 @@ public class QExporter {
         return writer.toString();
     }
 
-    private <E> Map<String, Object> getContext(Q<E> q, String pkgName, Class<? extends E> type, Lang lang, String className) {
-        Map<String, Object> context = Maps.newHashMap();
+    private <E> Map<String, Object> getContext(Q<E> q, String pkgName, Class<? extends E> type, String className, Lang lang) {
+        Map<String, Object> context = new HashMap<>();
         context.put("package", pkgName);
         context.put("className", className);
         context.put("entityName", type.getName());
@@ -118,8 +139,8 @@ public class QExporter {
         context.put("uid", getHash(q));
         context.put("q", q);
         context.put("idCols", q.idColumns);
-        context.put("lang", lang);
-        context.put("isGroovy", lang.equals(Lang.GROOVY));
+        context.put("isGroovy", lang.isGroovy());
+        context.put("imports", new ArrayList<>());
         return context;
     }
 
@@ -131,9 +152,9 @@ public class QExporter {
 
         @Override
         public Map<String, Function> getFunctions() {
-            Map<String, Function> functions = Maps.newHashMap();
+            Map<String, Function> functions = new HashMap<>();
             functions.put("wrapPrimitive", new PrimitiveWrapper());
-            functions.put("isNotJavaLang", new IsNotJavaLang());
+            functions.put("isValidImport", new isValidImport());
             functions.put("isParametrized", new IsParametrized());
             functions.put("capitalize", new Capitalize());
             functions.put("replace", new Replace());
@@ -152,23 +173,33 @@ public class QExporter {
 
         @Override
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
-            return Primitives.wrap((Class<?>) args.get("target"));
+            Class<?> target = (Class<?>) args.get("target");
+            Class<?> wrapped = PRIMITIVES.get(target);
+            return wrapped != null ? wrapped : target;
         }
     }
 
-    public static class IsNotJavaLang implements Function {
+    public static class isValidImport implements Function {
 
         @Override
         public List<String> getArgumentNames() {
             List<String> names = new ArrayList<>();
             names.add("target");
+            names.add("imports");
             return names;
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
             Class<?> target = (Class<?>) args.get("target");
-            return !target.getName().startsWith("java.lang") && !target.isPrimitive();
+            List<String> imports = (List<String>) args.get("imports");
+            if (target.getPackageName().equals("java.lang") || target.isPrimitive() || imports.contains(target.getName())) {
+                return false;
+            } else {
+                imports.add(target.getName());
+                return true;
+            }
         }
     }
 
@@ -207,7 +238,11 @@ public class QExporter {
 
         @Override
         public List<String> getArgumentNames() {
-            return Lists.newArrayList("target", "toReplace", "replaceWith");
+            List<String> names = new ArrayList<>();
+            names.add("target");
+            names.add("toReplace");
+            names.add("replaceWith");
+            return names;
         }
 
         @Override
@@ -243,6 +278,9 @@ public class QExporter {
                 return JAVA;
             }
         }
-    }
 
+        public boolean isGroovy() {
+            return Lang.GROOVY.equals(this);
+        }
+    }
 }

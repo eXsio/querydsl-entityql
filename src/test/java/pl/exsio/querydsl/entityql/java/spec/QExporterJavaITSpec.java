@@ -20,7 +20,7 @@ public class QExporterJavaITSpec {
     QExporter exporter = new QExporter();
 
     @Test
-    @Ignore
+    //@Ignore
     public void shouldExportIntegrationQClassesToStaticMetaModels() throws Exception {
         exporter.export(qEntity(JBook.class), fileNamePattern, pkgName, destinationPath);
         exporter.export(qEntity(JCompositePk.class), fileNamePattern, pkgName, destinationPath);

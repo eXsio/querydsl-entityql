@@ -15,7 +15,7 @@ import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
 public class QExporterSpringDataJdbcITSpec extends Specification {
 
-    String pkgName = "pl.exsio.querydsl.entityql.spring_data_jdbc.entity.it.generated"
+    String pkgName = "pl.exsio.querydsl.entityql.groovy.spring_data_jdbc.entity.it.generated"
 
     String fileNamePattern = "Q%s.groovy"
 
