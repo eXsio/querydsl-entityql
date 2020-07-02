@@ -17,7 +17,7 @@ class KQExporterITJPASpec {
 
     val exporter = QExporter()
 
-    //@Ignore
+    @Ignore
     @Test
     fun shouldExportIntegrationQClassesToStaticMetaModels() {
         exporter.export(qEntity(KBook::class.java), fileNamePattern, pkgName, destinationPath)
