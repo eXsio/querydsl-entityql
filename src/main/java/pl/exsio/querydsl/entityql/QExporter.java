@@ -194,7 +194,7 @@ public class QExporter {
         public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
             Class<?> target = (Class<?>) args.get("target");
             List<String> imports = (List<String>) args.get("imports");
-            if (target.getPackageName().equals("java.lang") || target.isPrimitive() || imports.contains(target.getName())) {
+            if (target.getPackage().getName().equals("java.lang") || target.isPrimitive() || imports.contains(target.getName())) {
                 return false;
             } else {
                 imports.add(target.getName());
