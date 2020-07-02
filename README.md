@@ -25,6 +25,7 @@ Don't like JPA Annotations? Don't worry, EntityQL supports also Spring Data JDBC
 - **support Native SQL features not available in JPA using fluent Java API**
 - **construct QueryDSL Queries using both JPA and Spring Data JDBC Metadata systems**
 - **handle all commercial and enterprise databases without any additional costs**
+- **generate native Kotlin code using Maven and Gradle which makes it a perfect pick for Android development**
 
 #### <a name="QuickExample"></a> Quick example:
 ([Contents](#Contents))
@@ -149,9 +150,9 @@ EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL
 
 There are 2 more Projects that make EntityQL a complete package:
 
-#### <a name="MavenPl"></a> [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin) designed to easily generate Static Query Models.
+#### <a name="MavenPl"></a> [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin) designed to easily generate Static Query Models using Maven.
 
-#### <a name="GradlePl"></a> [Gradle Plugin](https://github.com/eXsio/querydsl-entityql-gradle-plugin) designed to easily generate Static Query Models (WORK IN PROGRESS).
+#### <a name="GradlePl"></a> [Gradle Plugin](https://github.com/eXsio/querydsl-entityql-gradle-plugin) designed to easily generate Static Query Models using Gradle.
 
 #### <a name="ExamplesProj"></a> [Examples Project](https://github.com/eXsio/querydsl-entityql-examples) created to show how to configure and use EntityQL.
 
@@ -167,15 +168,14 @@ Below you can find usage matrix with links to example projects:
 |[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-maven-jpa-static) |[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-jpa-static)|[Maven / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-jpa-static)|
 |[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-maven-spring-data-jdbc-dynamic) |[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-dynamic)|[Maven / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-spring-data-jdbc-dynamic)|
 |[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-static) |[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-maven-spring-data-jdbc-static)|[Maven / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-maven-spring-data-jdbc-static)|
-|Gradle / JPA / Dynamic Models |Gradle / JPA / Dynamic Models|Gradle / JPA / Dynamic Models|
-|Gradle / JPA / Static Models |Gradle / JPA / Static Models|Gradle / JPA / Static Models|
-|Gradle / Spring Data JDBC / Dynamic Models |Gradle / Spring Data JDBC / Dynamic Models|Gradle / Spring Data JDBC / Dynamic Models|
-|Gradle / Spring Data JDBC / Static Models |Gradle / Spring Data JDBC / Static Models|Gradle / Spring Data JDBC / Static Models|
+|[Gradle / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-gradle-jpa-dynamic) |[Gradle / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-gradle-jpa-dynamic)|[Gradle / JPA / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-gradle-jpa-dynamic)|
+|[Gradle / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-gradle-jpa-static) |[Gradle / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-gradle-jpa-static)|[Gradle / JPA / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-gradle-jpa-static)|
+|[Gradle / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-gradle-spring-data-jdbc-dynamic) |[Gradle / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-gradle-spring-data-jdbc-dynamic)|[Gradle / Spring Data JDBC / Dynamic Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-gradle-spring-data-jdbc-dynamic)|
+|[Gradle / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/java-gradle-spring-data-jdbc-static) |[Gradle / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/groovy-gradle-spring-data-jdbc-static)|[Gradle / Spring Data JDBC / Static Models](https://github.com/eXsio/querydsl-entityql-examples/tree/master/kotlin-gradle-spring-data-jdbc-static)|
 
 Each Example Project contains a fully configured Spring Boot application that cotntains all required configuration and
 some practical use cases for you to check out. Pick the one that suits your needs and let the SQL be a first party member of your project.
 
-**Gradle integration is currently Work in Progress**
 
 ## <a name="HowItWorks"></a> How it works 
 ([Contents](#Contents))
