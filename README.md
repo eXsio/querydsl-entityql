@@ -142,7 +142,7 @@ Below you can see a simple diagram that explains the role of EntityQL between JP
 
 ![Diagram](EntityQL.png)
 
-Red, italic, underlined is the final flow of using EntityQL in a project.
+Red, italic, underlined is the final flow of using EntityQL in a project. Yellow/Blue are the respective native flows of QueryDSL SQL and JPA.
 EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-SQL meta models.
 Those Models can be then used to construct Native SQL Queries based on JPA mappings, using QueryDSL fluent API.
 
