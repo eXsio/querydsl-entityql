@@ -138,12 +138,18 @@ makes it possible to meet all the above requirements.
 ## <a name="Overview"></a> Overview 
 ([Contents](#Contents))
 
+Below you can see a simple diagram that explains the role of EntityQL between JPA and QueryDSL:
+
+![Diagram](EntityQL.png)
+
+Red, italic, underlined is the final flow of using EntityQL in a project.
 EntityQL is a tool that is able to use JPA Entity mappings and create QueryDSL-SQL meta models.
 Those Models can be then used to construct Native SQL Queries based on JPA mappings, using QueryDSL fluent API.
 
+
 There are two distinct ways you can utilize the power of EntityQL:
 - **generate ad-hoc dynamic meta-models on the fly** using cached reflection and the ```EntityQL.qEntity``` method
-- **generate static meta-model Java classes** using the ```QExporter``` or **[designated Maven plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin)**
+- **generate static meta-model Java classes** using the **[Maven](https://github.com/eXsio/querydsl-entityql-maven-plugin)** / **[Gradle](https://github.com/eXsio/querydsl-entityql-gradle-plugin)** plugin
 
 EntityQL works with QueryDSL-SQL, not QueryDSL-JPA. I will use the term QueryDSL in the context of QueryDSL-SQL.
 
@@ -182,7 +188,7 @@ some practical use cases for you to check out. Pick the one that suits your need
 ## <a name="HowItWorks"></a> How it works 
 ([Contents](#Contents))
 
-There is a special method ```EntityQL::qEntity``` that uses Reflection to gather all DDL information required to construct 
+There is a special method ```EntityQL::qEntity``` that uses (cached) Reflection to gather all DDL information required to construct 
 QueryDSL meta-model and to sucessfuly perform all operations supported by QueryDSL. The scan occurs once per Entity class - 
 the Annotation metadata is cached in memory for further reuse.
 
@@ -193,8 +199,8 @@ QueryDSL-specific models that are used for constructing SQL Queries.
 Once we've obtained an instance of ```Q``` class, everything down the line is just plain QueryDSL API in motion. 
 Please see the examples section to see how easy it is in practice.
 
-**If you prefer more static approach**, you can generate Static Java classes with QueryDSL-SQL compatible Query Models by
-using this [Maven Plugin](https://github.com/eXsio/querydsl-entityql-maven-plugin).
+**If you prefer more static approach**, you can generate Static Java/Groovy/Kotlin classes with QueryDSL-SQL compatible Query Models by
+using this [Maven](https://github.com/eXsio/querydsl-entityql-maven-plugin) or [Gradle](https://github.com/eXsio/querydsl-entityql-gradle-plugin) plugin.
 
 ## <a name="UseCases"></a> Use Cases 
 ([Contents](#Contents))
