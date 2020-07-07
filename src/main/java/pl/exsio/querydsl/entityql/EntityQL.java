@@ -1,10 +1,15 @@
 package pl.exsio.querydsl.entityql;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import pl.exsio.querydsl.entityql.entity.scanner.JpaQEntityScanner;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.RuntimeQEntityScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.TableScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.Table;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.UnderscoreToCamelStrategy;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -102,4 +107,27 @@ public class EntityQL {
         }
         return Projections.constructor(dtoClass, allExpressions.toArray(new Expression[0]));
     }
+
+    /**
+     * Base method for fully runtime table metadata. Used when database metadata can only be obtained at runtime.
+     *
+     * @param table - source of database table
+     * @return - corresponding Q class for querydsl's Tuple
+     */
+    public static Q<Tuple> qEntity(Table table) {
+        RuntimeQEntityScanner scanner = new RuntimeQEntityScanner(UnderscoreToCamelStrategy.getInstance());
+        return qEntity(table, scanner);
+    }
+
+    /**
+     * Same with {@link #qEntity(Table)} with custom TableScanner
+     *
+     * @param table - source of database table
+     * @return - corresponding Q class for querydsl's Tuple
+     */
+    public static Q<Tuple> qEntity(Table table, TableScanner scanner) {
+        return QFactory.get(table, scanner)
+                .create(false);
+    }
+
 }

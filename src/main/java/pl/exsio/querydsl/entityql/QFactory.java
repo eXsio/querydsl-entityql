@@ -1,7 +1,11 @@
 package pl.exsio.querydsl.entityql;
 
+import com.querydsl.core.Tuple;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityMetadata;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.QObjectScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.TableScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.Table;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +14,13 @@ class QFactory<E> {
 
     private final Class<E> entityClass;
 
-    private final QEntityScanner scanner;
+    private final QObjectScanner scanner;
 
     private final QEntityMetadata metadata;
 
-    private static final Map<Class<?>, QFactory<?>> instances = new HashMap<>();
+    private static final Map<Object, QFactory<?>> instances = new HashMap<>();
 
-    private QFactory(Class<E> entityClass, QEntityScanner scanner, QEntityMetadata metadata) {
+    private QFactory(Class<E> entityClass, QObjectScanner scanner, QEntityMetadata metadata) {
         this.entityClass = entityClass;
         this.scanner = scanner;
         this.metadata = metadata;
@@ -25,7 +29,13 @@ class QFactory<E> {
     @SuppressWarnings(value = "unchecked")
     static <E> QFactory<E> get(Class<E> entityClass, QEntityScanner scanner) {
         return (QFactory<E>) instances.compute(entityClass,
-                (eClass, qFactory) -> qFactory == null ? fetch(eClass, scanner) : qFactory
+                (key, qFactory) -> qFactory == null ? fetch(entityClass, entityClass, scanner) : qFactory
+        );
+    }
+
+    static QFactory get(Table table, TableScanner scanner) {
+        return instances.compute(table.getTableName(),
+                (key, qFactory) -> qFactory == null ? fetch(Tuple.class, table, scanner) : qFactory
         );
     }
 
@@ -33,8 +43,9 @@ class QFactory<E> {
         return create(metadata.getTableName(), withMappings);
     }
 
-    private static <E> QFactory<E> fetch(Class<E> entityClass, QEntityScanner scanner) {
-        return new QFactory<>(entityClass, scanner, scanner.scanEntity(entityClass));
+    private static <T> QFactory fetch(Class<?> clazz, T source, QObjectScanner<T> scanner) {
+        QEntityMetadata metadata = scanner.scanEntity(source);
+        return new QFactory(clazz, scanner, metadata);
     }
 
     Q<E> create(String variable, boolean withMappings) {

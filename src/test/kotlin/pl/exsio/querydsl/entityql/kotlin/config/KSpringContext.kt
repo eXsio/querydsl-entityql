@@ -28,34 +28,34 @@ open class KSpringContext {
 
     @Bean
     open fun dataSource(): DataSource {
-        return EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).setName(UUID.randomUUID().toString()).build();
+        return EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).setName(UUID.randomUUID().toString()).build()
     }
 
     @Bean
     open fun entityManagerFactory(dataSource: DataSource): LocalContainerEntityManagerFactoryBean {
-        val em = LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
-        em.setPackagesToScan("pl.exsio.querydsl.entityql.kotlin");
-        em.setJpaVendorAdapter(HibernateJpaVendorAdapter());
+        val em = LocalContainerEntityManagerFactoryBean()
+        em.dataSource = dataSource
+        em.setPackagesToScan("pl.exsio.querydsl.entityql.kotlin")
+        em.jpaVendorAdapter = HibernateJpaVendorAdapter()
 
-        val properties = Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.hbm2ddl.import_files", "data.sql");
-        em.setJpaProperties(properties);
+        val properties = Properties()
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop")
+        properties.setProperty("hibernate.hbm2ddl.import_files", "data.sql,schema.sql")
+        em.setJpaProperties(properties)
 
-        return em;
+        return em
     }
 
     @Bean
     open fun transactionManager(emf: EntityManagerFactory): PlatformTransactionManager {
-        val transactionManager = JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
+        val transactionManager = JpaTransactionManager()
+        transactionManager.entityManagerFactory = emf
+        return transactionManager
     }
 
     @Bean
     open fun sqlTemplates(): SQLTemplates {
-        return H2Templates(); //choose the implementation that matches your database engine
+        return H2Templates() //choose the implementation that matches your database engine
     }
 
     @Bean
