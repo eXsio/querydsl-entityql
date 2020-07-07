@@ -28,9 +28,9 @@
          val qKBook: QKBook = QKBook.instance
      }
 
-     val id: NumberPath <Long> = run {
+     val id: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "BOOK_ID", true, 1, -5)
-         val id = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id", id)
          id
@@ -52,9 +52,9 @@
          desc
      }
 
-     val price: NumberPath <BigDecimal> = run {
+     val price: NumberPath<BigDecimal> = run {
          val config = QPathConfig(BigDecimal::class.java, BigDecimal::class.java, "PRICE", true, 4, 3)
-         val price = QPathFactory.create<NumberPath <BigDecimal>>(this, config)
+         val price = QPathFactory.create<NumberPath<BigDecimal>>(this, config)
          addMetadata(price, QColumnMetadataFactory.create(config))
          this.columnsMap.put("price", price)
          price

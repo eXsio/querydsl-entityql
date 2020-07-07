@@ -30,9 +30,9 @@
          val qKCompositeFk: QKCompositeFk = QKCompositeFk.instance
      }
 
-     val id: NumberPath <Long> = run {
+     val id: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "ID", true, 1, -5)
-         val id = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id", id)
          id

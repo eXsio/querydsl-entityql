@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.exsio.querydsl.entityql.EntityQL.qEntityWithoutMappings;
+
 class QJoinColumn {
 
     private final LinkedHashMap<QPath, ColumnMetadata> paths = new LinkedHashMap<>();
@@ -64,7 +66,7 @@ class QJoinColumn {
     }
 
     private List<QEntityColumnMetadata> getForeignColumns(QEntityJoinColumnMetadata column) {
-        Q<?> foreign = inverse ?  EntityQL.qEntityWithoutMappings(parent.getType(), scanner) : EntityQL.qEntityWithoutMappings(column.getFieldType(), scanner);
+        Q<?> foreign = inverse ?  qEntityWithoutMappings(parent.getType(), scanner) : qEntityWithoutMappings(column.getFieldType(), scanner);
         List<QEntityColumnMetadata> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
             result = new ArrayList<>();

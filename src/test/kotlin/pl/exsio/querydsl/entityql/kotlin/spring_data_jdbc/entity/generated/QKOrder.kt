@@ -28,17 +28,17 @@
          val qKOrder: QKOrder = QKOrder.instance
      }
 
-     val id: NumberPath <Long> = run {
+     val id: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ID", true, 1, 1111)
-         val id = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id", id)
          id
      }
 
-     val userId: NumberPath <Long> = run {
+     val userId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", true, 2, 1111)
-         val userId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val userId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(userId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("userId", userId)
          userId

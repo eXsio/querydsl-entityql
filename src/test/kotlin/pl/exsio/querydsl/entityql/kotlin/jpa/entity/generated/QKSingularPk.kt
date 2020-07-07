@@ -29,9 +29,9 @@
          val qKSingularPk: QKSingularPk = QKSingularPk.instance
      }
 
-     val id1: NumberPath <Long> = run {
+     val id1: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "ID_1", true, 1, -5)
-         val id1 = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id1 = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id1, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id1", id1)
          id1

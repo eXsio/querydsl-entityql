@@ -29,33 +29,33 @@
          val qKOrderItem: QKOrderItem = QKOrderItem.instance
      }
 
-     val id: NumberPath <Long> = run {
+     val id: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "ORDER_ITEM_ID", true, 1, 1111)
-         val id = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id", id)
          id
      }
 
-     val quantity: NumberPath <Long> = run {
+     val quantity: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "QTY", true, 4, 1111)
-         val quantity = QPathFactory.create<NumberPath <Long>>(this, config)
+         val quantity = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(quantity, QColumnMetadataFactory.create(config))
          this.columnsMap.put("quantity", quantity)
          quantity
      }
 
-     val bookId: NumberPath <Long> = run {
+     val bookId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "BOOK_ID", true, 2, 1111)
-         val bookId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val bookId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(bookId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("bookId", bookId)
          bookId
      }
 
-     val orderId: NumberPath <Long> = run {
+     val orderId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "ITEM_ORDER_ID", true, 3, 1111)
-         val orderId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val orderId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(orderId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("orderId", orderId)
          orderId

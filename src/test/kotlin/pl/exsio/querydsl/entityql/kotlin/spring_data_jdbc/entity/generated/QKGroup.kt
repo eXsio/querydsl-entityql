@@ -29,9 +29,9 @@
          val qKGroup: QKGroup = QKGroup.instance
      }
 
-     val id: NumberPath <Long> = run {
+     val id: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "GROUP_ID", true, 1, 1111)
-         val id = QPathFactory.create<NumberPath <Long>>(this, config)
+         val id = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(id, QColumnMetadataFactory.create(config))
          this.columnsMap.put("id", id)
          id
@@ -45,9 +45,9 @@
          name
      }
 
-     val adminId: NumberPath <Long> = run {
+     val adminId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "GA_ID", true, 3, 1111)
-         val adminId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val adminId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(adminId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("adminId", adminId)
          adminId

@@ -98,6 +98,7 @@ public class QExporter {
                 .replaceAll("\\( ", "(")
                 .replaceAll("< ", "<")
                 .replaceAll(" >", ">")
+                .replaceAll(" <", "<")
                 .replaceAll(">=", "> =")
                 .replaceAll(">\\{", "> {")
                 .replaceAll(" \\)", ")")

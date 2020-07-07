@@ -29,17 +29,17 @@
          val qKUserGroup: QKUserGroup = QKUserGroup.instance
      }
 
-     val groupId: NumberPath <Long> = run {
+     val groupId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "GROUP_ID", true, 3, -5)
-         val groupId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val groupId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(groupId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("groupId", groupId)
          groupId
      }
 
-     val userId: NumberPath <Long> = run {
+     val userId: NumberPath<Long> = run {
          val config = QPathConfig(Long::class.java, Long::class.java, "USER_ID", true, 4, -5)
-         val userId = QPathFactory.create<NumberPath <Long>>(this, config)
+         val userId = QPathFactory.create<NumberPath<Long>>(this, config)
          addMetadata(userId, QColumnMetadataFactory.create(config))
          this.columnsMap.put("userId", userId)
          userId
