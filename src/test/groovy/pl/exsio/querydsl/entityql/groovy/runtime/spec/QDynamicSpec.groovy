@@ -5,13 +5,13 @@ import com.querydsl.core.types.Path
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.QFactory
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata
-import pl.exsio.querydsl.entityql.entity.scanner.RuntimeQEntityScanner
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.UnderscoreToCamelStrategy
+import pl.exsio.querydsl.entityql.entity.scanner.QRuntimeTableScanner
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.UnderscoreToCamelStrategyQRuntimeNamingStrategy
 import pl.exsio.querydsl.entityql.ex.MissingIdException
 import pl.exsio.querydsl.entityql.ex.UnsupportedScannerException
 import pl.exsio.querydsl.entityql.groovy.runtime.it.RuntimeFixedTestBase
-import pl.exsio.querydsl.entityql.type.SimpleMap
-import pl.exsio.querydsl.entityql.type.SimpleMapProjections
+import pl.exsio.querydsl.entityql.type.QRuntimeMap
+import pl.exsio.querydsl.entityql.type.QRuntimeProjections
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
@@ -27,7 +27,7 @@ class QDynamicSpec extends RuntimeFixedTestBase {
 
     def "should throw exception when creating join metadata"() {
         given:
-        def qFactory = QFactory.get(TABLE_CITY, new RuntimeQEntityScanner(UnderscoreToCamelStrategy.getInstance()))
+        def qFactory = QFactory.get(TABLE_CITY, new QRuntimeTableScanner(UnderscoreToCamelStrategyQRuntimeNamingStrategy.getInstance()))
         qFactory.metadata.joinColumns << new QEntityJoinColumnMetadata(
                 String.class,
                 "countryId",
@@ -44,7 +44,7 @@ class QDynamicSpec extends RuntimeFixedTestBase {
 
     def "should correctly convert fieldName to column"() {
         given:
-        def strategy = UnderscoreToCamelStrategy.getInstance()
+        def strategy = UnderscoreToCamelStrategyQRuntimeNamingStrategy.getInstance()
 
         when:
         def actualResult = strategy.getFieldName(column)
@@ -62,7 +62,7 @@ class QDynamicSpec extends RuntimeFixedTestBase {
 
     def "should correctly convert column to fieldName"() {
         given:
-        def strategy = UnderscoreToCamelStrategy.getInstance()
+        def strategy = UnderscoreToCamelStrategyQRuntimeNamingStrategy.getInstance()
 
         when:
         def actualResult = strategy.getColumnName(field)
@@ -79,8 +79,8 @@ class QDynamicSpec extends RuntimeFixedTestBase {
 
     def "test for jacoco coverage"() {
         when:
-        def simpleMap = new SimpleMap(null)
-        def result = new SimpleMap(null).equals(new SimpleMap(null))
+        def simpleMap = new QRuntimeMap(null)
+        def result = new QRuntimeMap(null).equals(new QRuntimeMap(null))
         def result2 = simpleMap.equals(simpleMap)
         def result3 = !simpleMap.equals(1L)
 
@@ -93,7 +93,7 @@ class QDynamicSpec extends RuntimeFixedTestBase {
         Q<Tuple> orderItems = qEntity(TABLE_ORDER_ITEMS)
         Q<Tuple> orders = qEntity(TABLE_ORDERS)
 
-        def simpleMap = SimpleMapProjections.map(
+        def simpleMap = QRuntimeProjections.map(
                 orderItems.all(),
                 [orders.longNumber("userId")] as Path<?>[]
         )

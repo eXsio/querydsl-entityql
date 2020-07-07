@@ -2,36 +2,36 @@ package pl.exsio.querydsl.entityql.entity.scanner;
 
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityMetadata;
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.Column;
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.NamingStrategy;
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.Table;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeColumn;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeNamingStrategy;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeTable;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
 import java.util.List;
 
 /**
- * QEntityScanner implementation based on Spring Data JDBC.
+ * QObjectScanner implementation based on Runtime Tables.
  */
-public class RuntimeQEntityScanner implements TableScanner {
+public class QRuntimeTableScanner implements QObjectScanner<QRuntimeTable> {
 
-    private final NamingStrategy namingStrategy;
+    private final QRuntimeNamingStrategy namingStrategy;
 
-    public RuntimeQEntityScanner(NamingStrategy namingStrategy) {
+    public QRuntimeTableScanner(QRuntimeNamingStrategy namingStrategy) {
         this.namingStrategy = namingStrategy;
     }
 
     @Override
-    public QEntityMetadata scanEntity(Table source) {
+    public QEntityMetadata scanEntity(QRuntimeTable source) {
         QEntityMetadata metadata = new QEntityMetadata(source.getTableName(), source.getSchemaName());
         setColumns(metadata, source);
 
         return metadata;
     }
 
-    private void setColumns(QEntityMetadata metadata, Table source) {
-        List<Column> columns = source.getColumns();
+    private void setColumns(QEntityMetadata metadata, QRuntimeTable source) {
+        List<QRuntimeColumn> columns = source.getColumns();
         for (int i = 0; i < columns.size(); i++) {
-            Column column = columns.get(i);
+            QRuntimeColumn column = columns.get(i);
             addColumn(metadata, column, i);
         }
 
@@ -41,7 +41,7 @@ public class RuntimeQEntityScanner implements TableScanner {
     }
 
     private void addColumn(QEntityMetadata metadata,
-                           Column column,
+                           QRuntimeColumn column,
                            int index) {
 
         QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(

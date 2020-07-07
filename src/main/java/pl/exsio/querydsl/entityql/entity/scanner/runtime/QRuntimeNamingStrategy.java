@@ -1,6 +1,6 @@
 package pl.exsio.querydsl.entityql.entity.scanner.runtime;
 
-public interface NamingStrategy {
+public interface QRuntimeNamingStrategy {
 
     String getFieldName(String columnName);
 

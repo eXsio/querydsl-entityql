@@ -1,22 +1,24 @@
 package pl.exsio.querydsl.entityql.entity.scanner.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class SimpleTable implements Table {
+class SimpleQRuntimeTable implements QRuntimeTable {
 
     private String tableName;
     private String schemaName;
-    private List<Column> columns = new ArrayList<>();
+    private List<QRuntimeColumn> columns = new ArrayList<>();
 
-    public SimpleTable() {
-    }
-
-    public SimpleTable(String tableName, String schemaName, List<Column> columns) {
+    public SimpleQRuntimeTable(String tableName, String schemaName, List<QRuntimeColumn> columns) {
         this.tableName = tableName;
         this.schemaName = schemaName;
         this.columns = columns;
+    }
+
+    public SimpleQRuntimeTable(String tableName, String schemaName, QRuntimeColumn... columns) {
+        this(tableName, schemaName, Arrays.asList(columns));
     }
 
     @Override
@@ -38,11 +40,11 @@ public class SimpleTable implements Table {
     }
 
     @Override
-    public List<Column> getColumns() {
+    public List<QRuntimeColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<Column> columns) {
+    public void setColumns(List<QRuntimeColumn> columns) {
         this.columns = columns;
     }
 
@@ -50,7 +52,7 @@ public class SimpleTable implements Table {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleTable that = (SimpleTable) o;
+        SimpleQRuntimeTable that = (SimpleQRuntimeTable) o;
         return Objects.equals(tableName, that.tableName) &&
                 Objects.equals(schemaName, that.schemaName) &&
                 Objects.equals(columns, that.columns);

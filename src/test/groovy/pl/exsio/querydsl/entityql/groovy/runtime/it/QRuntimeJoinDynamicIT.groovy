@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.groovy.config.SpringContext
-import pl.exsio.querydsl.entityql.type.SimpleMapProjections
+import pl.exsio.querydsl.entityql.type.QRuntimeProjections
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
@@ -28,7 +28,7 @@ class QRuntimeJoinDynamicIT extends RuntimeFixedTestBase {
         when:
         List<Map<String, ?>> books = queryFactory.query()
                 .select(
-                        SimpleMapProjections.map(
+                        QRuntimeProjections.map(
                                 book.longNumber("bookId"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -59,7 +59,7 @@ class QRuntimeJoinDynamicIT extends RuntimeFixedTestBase {
         when:
         List<Map<String, ?>> books = queryFactory.query()
                 .select(
-                    SimpleMapProjections.map(book.columns("bookId", "name", "desc", "price") as List<Path<?>>)
+                    QRuntimeProjections.map(book.columns("bookId", "name", "desc", "price") as List<Path<?>>)
                 )
                 .from(book)
                 .innerJoin(orderItem).on(orderItem.longNumber("bookId").eq(book.longNumber("bookId")))

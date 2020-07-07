@@ -6,24 +6,24 @@ import com.querydsl.core.types.FactoryExpression;
 import com.querydsl.core.types.FactoryExpressionBase;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Visitor;
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.NamingStrategy;
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeNamingStrategy;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleMap extends FactoryExpressionBase<Map<String,?>> {
+public class QRuntimeMap extends FactoryExpressionBase<Map<String,?>> {
 
     private final ImmutableList<Path<?>> args;
-    private final NamingStrategy namingStrategy;
+    private final QRuntimeNamingStrategy namingStrategy;
 
-    public SimpleMap(NamingStrategy namingStrategy, Path<?>... args) {
+    public QRuntimeMap(QRuntimeNamingStrategy namingStrategy, Path<?>... args) {
         super((Class) Map.class);
         this.namingStrategy = namingStrategy;
         this.args = ImmutableList.copyOf(args);
     }
 
-    public SimpleMap(NamingStrategy namingStrategy, List<Path<?>> args) {
+    public QRuntimeMap(QRuntimeNamingStrategy namingStrategy, List<Path<?>> args) {
         super((Class) Map.class);
         this.namingStrategy = namingStrategy;
         this.args = ImmutableList.copyOf(args);

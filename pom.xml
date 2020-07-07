@@ -31,7 +31,7 @@
         <h2.version>1.4.200</h2.version>
         <spring-jdbc.version>5.2.2.RELEASE</spring-jdbc.version>
         <reflections.version>0.9.11</reflections.version>
-        <pebble.version>3.1.3</pebble.version>
+        <pebble.version>3.1.4</pebble.version>
         <junit.version>4.12</junit.version>
         <jmh.version>1.22</jmh.version>
         <commons-io.version>2.6</commons-io.version>
@@ -232,8 +232,8 @@
                 <version>${jacoco.maven.plugin.version}</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/*/SimpleTable.class</exclude>
-                        <exclude>**/*/SimpleColumn.class</exclude>
+                        <exclude>**/*/SimpleQRuntimeTable.class</exclude>
+                        <exclude>**/*/SimpleQRuntimeColumn.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

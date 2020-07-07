@@ -2,7 +2,8 @@ package pl.exsio.querydsl.entityql.groovy.runtime.it
 
 
 import org.springframework.beans.factory.annotation.Autowired
-import pl.exsio.querydsl.entityql.entity.scanner.runtime.Table
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeColumn
+import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeTable
 import schemacrawler.schema.Catalog
 import schemacrawler.schema.Column
 import schemacrawler.schema.Schema
@@ -18,7 +19,7 @@ abstract class RuntimeDBTestBase extends Specification {
     @Autowired
     DataSource dataSource
 
-    Map<String, Table> tables = [:]
+    Map<String, QRuntimeTable> tables = [:]
 
     /**
      * We cannot use setupSpec due we can't access @Shared fields
@@ -35,10 +36,10 @@ abstract class RuntimeDBTestBase extends Specification {
         convertTables(catalog, schema, tableFilter)
     }
 
-    List<Table> convertTables(Catalog catalog, Schema schema, String tableFilter) {
+    List<QRuntimeTable> convertTables(Catalog catalog, Schema schema, String tableFilter) {
         def tables = catalog.getTables(schema).findAll { it.getName() =~ tableFilter }
         tables.collect { table ->
-            Table.of(
+            QRuntimeTable.of(
                     table.getName(),
                     schema.getName(),
                     convertColumns(table.getColumns())
@@ -46,9 +47,9 @@ abstract class RuntimeDBTestBase extends Specification {
         }
     }
 
-    List<pl.exsio.querydsl.entityql.entity.scanner.runtime.Column> convertColumns(List<Column> columns) {
+    List<QRuntimeColumn> convertColumns(List<Column> columns) {
         columns.collect { column ->
-            pl.exsio.querydsl.entityql.entity.scanner.runtime.Column.of(
+            QRuntimeColumn.of(
                     column.getColumnDataType().getJavaSqlType().getDefaultMappedClass(),
                     column.getName(),
                     column.isNullable(),

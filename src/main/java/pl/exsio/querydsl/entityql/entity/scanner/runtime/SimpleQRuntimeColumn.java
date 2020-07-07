@@ -2,17 +2,14 @@ package pl.exsio.querydsl.entityql.entity.scanner.runtime;
 
 import java.util.Objects;
 
-public class SimpleColumn implements Column {
+class SimpleQRuntimeColumn implements QRuntimeColumn {
 
     private Class<?> type;
     private String columnName;
     private boolean nullable;
     private boolean primaryKey;
 
-    public SimpleColumn() {
-    }
-
-    public SimpleColumn(Class<?> type, String columnName, boolean nullable, boolean primaryKey) {
+    SimpleQRuntimeColumn(Class<?> type, String columnName, boolean nullable, boolean primaryKey) {
         this.type = type;
         this.columnName = columnName;
         this.nullable = nullable;
@@ -59,7 +56,7 @@ public class SimpleColumn implements Column {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleColumn that = (SimpleColumn) o;
+        SimpleQRuntimeColumn that = (SimpleQRuntimeColumn) o;
         return nullable == that.nullable &&
                 primaryKey == that.primaryKey &&
                 Objects.equals(type, that.type) &&

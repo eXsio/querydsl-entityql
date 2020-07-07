@@ -9,7 +9,7 @@ import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.groovy.config.SpringContext
 import pl.exsio.querydsl.entityql.groovy.config.enums.by_name.UserTypeByName
 import pl.exsio.querydsl.entityql.groovy.config.enums.by_ordinal.UserTypeByOrdinal
-import pl.exsio.querydsl.entityql.type.SimpleMapProjections
+import pl.exsio.querydsl.entityql.type.QRuntimeProjections
 
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
 
@@ -27,7 +27,7 @@ class QRuntimeSimpleSelectDynamicIT extends RuntimeFixedTestBase {
         when:
         List<Map<String, ?>> books = queryFactory.query()
                 .select(
-                        SimpleMapProjections.map(
+                        QRuntimeProjections.map(
                                 book.longNumber("bookId"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -53,7 +53,7 @@ class QRuntimeSimpleSelectDynamicIT extends RuntimeFixedTestBase {
         when:
         Map<String, ?> p = queryFactory.query()
                 .select(
-                        SimpleMapProjections.map(
+                        QRuntimeProjections.map(
                                 book.longNumber("bookId"),
                                 book.string("name"),
                                 book.string("desc"),
@@ -168,7 +168,7 @@ class QRuntimeSimpleSelectDynamicIT extends RuntimeFixedTestBase {
         when:
         Map<String, ?> userDto = queryFactory.query()
                 .select(
-                    SimpleMapProjections.map(
+                    QRuntimeProjections.map(
                             user.longNumber("userId"),
                             user.string("name"),
                             user.<UserTypeByName>enumerated("typeStr"),

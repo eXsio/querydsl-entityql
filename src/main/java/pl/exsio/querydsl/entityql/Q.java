@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  */
 public class Q<E> extends QBase<E> {
 
-    private final QObjectScanner scanner;
+    private final QObjectScanner<?> scanner;
 
     private final Map<String, QPath> rawColumns = new LinkedHashMap<>();
 
@@ -41,7 +41,7 @@ public class Q<E> extends QBase<E> {
 
     List<QEntityColumnMetadata> idColumns = new LinkedList<>();
 
-    Q(Class<E> type, String variable, String schema, String table, QObjectScanner scanner) {
+    Q(Class<E> type, String variable, String schema, String table, QObjectScanner<?> scanner) {
         super(type, variable, schema, table);
         this.scanner = scanner;
     }
@@ -131,7 +131,7 @@ public class Q<E> extends QBase<E> {
     void addPrimaryKey(List<QEntityColumnMetadata> ids) {
         idColumns = ids;
         List<String> pkColumnNames = ids.stream().map(QEntityColumnMetadata::getFieldName).collect(Collectors.toList());
-        Path[] pkPaths = this.rawColumns.entrySet().stream()
+        Path<?>[] pkPaths = this.rawColumns.entrySet().stream()
                 .filter(e -> pkColumnNames.contains(e.getKey()))
                 .map(e -> e.getValue().get())
                 .toArray(Path[]::new);

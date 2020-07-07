@@ -2,7 +2,7 @@ package pl.exsio.querydsl.entityql.entity.scanner.runtime;
 
 import com.google.common.base.CaseFormat;
 
-public class UnderscoreToCamelStrategy implements NamingStrategy {
+public class UnderscoreToCamelStrategyQRuntimeNamingStrategy implements QRuntimeNamingStrategy {
 
     @Override
     public String getFieldName(String columnName) {
@@ -14,13 +14,13 @@ public class UnderscoreToCamelStrategy implements NamingStrategy {
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName);
     }
 
-    public static UnderscoreToCamelStrategy getInstance() {
+    public static UnderscoreToCamelStrategyQRuntimeNamingStrategy getInstance() {
         return Holder.INSTANCE;
     }
 
     private static class Holder {
 
-        public static UnderscoreToCamelStrategy INSTANCE = new UnderscoreToCamelStrategy();
+        public static UnderscoreToCamelStrategyQRuntimeNamingStrategy INSTANCE = new UnderscoreToCamelStrategyQRuntimeNamingStrategy();
 
     }
 

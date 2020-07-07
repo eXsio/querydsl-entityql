@@ -1,6 +1,7 @@
 package pl.exsio.querydsl.entityql;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.attributes.methodaccess.NoOpMethodAccessValidator;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
 import com.mitchellbosecke.pebble.extension.Function;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
@@ -46,7 +47,7 @@ public class QExporter {
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .extension(new EntityQlExtension())
-            .allowUnsafeMethods(true)
+            .methodAccessValidator(new NoOpMethodAccessValidator())
             .newLineTrimming(false)
             .build();
 

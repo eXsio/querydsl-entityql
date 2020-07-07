@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration
 import pl.exsio.querydsl.entityql.Q
 import pl.exsio.querydsl.entityql.groovy.config.SpringContext
 import pl.exsio.querydsl.entityql.groovy.runtime.dto.Car
-import pl.exsio.querydsl.entityql.type.SimpleMapProjections
+import pl.exsio.querydsl.entityql.type.QRuntimeProjections
 
 import static com.querydsl.core.types.Projections.constructor
 import static pl.exsio.querydsl.entityql.EntityQL.qEntity
@@ -28,7 +28,7 @@ class QRuntimeDynamicDmlIT extends RuntimeDBTestBase {
         when:
         List<Map<String, ?>> cars = queryFactory.query()
                 .select(
-                    SimpleMapProjections.map(
+                    QRuntimeProjections.map(
                             car.all()
                     ))
                 .from(car)
@@ -36,7 +36,7 @@ class QRuntimeDynamicDmlIT extends RuntimeDBTestBase {
 
         then:
         cars.size() >= 4
-        cars*.name.containsAll(["Lightning McQueen", "Optimus Prime", "The Batmobile", "The Flintstones’ Flintmobile"])
+        cars*.name.containsAll(["Lightning McQueen", "Optimus Prime", "The Batmobile", "The Flintstones Flintmobile"])
     }
 
     def "should get all rows from table at runtime"() {
@@ -66,7 +66,7 @@ class QRuntimeDynamicDmlIT extends RuntimeDBTestBase {
         when:
         List<Map<String, ?>> cars = queryFactory.query()
                 .select(
-                    SimpleMapProjections.map(
+                    QRuntimeProjections.map(
                             car.all()
                     ))
                 .from(car)
