@@ -9,7 +9,9 @@ import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityCompositeJoinColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.scanner.QEntityScanner;
+import pl.exsio.querydsl.entityql.entity.scanner.QObjectScanner;
 import pl.exsio.querydsl.entityql.ex.InvalidArgumentException;
+import pl.exsio.querydsl.entityql.ex.UnsupportedScannerException;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
  */
 public class Q<E> extends QBase<E> {
 
-    private final QEntityScanner scanner;
+    private final QObjectScanner scanner;
 
     private final Map<String, QPath> rawColumns = new LinkedHashMap<>();
 
@@ -39,7 +41,7 @@ public class Q<E> extends QBase<E> {
 
     List<QEntityColumnMetadata> idColumns = new LinkedList<>();
 
-    Q(Class<E> type, String variable, String schema, String table, QEntityScanner scanner) {
+    Q(Class<E> type, String variable, String schema, String table, QObjectScanner scanner) {
         super(type, variable, schema, table);
         this.scanner = scanner;
     }
@@ -52,7 +54,9 @@ public class Q<E> extends QBase<E> {
     }
 
     void addJoinColumn(QEntityJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, false);
+        QEntityScanner qEntityScanner = qEntityScannerCheck("JoinColumn");
+
+        QJoinColumn qColumn = new QJoinColumn(this, column, qEntityScanner, false);
         if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single JoinColumn mapped to a Composite Primary Key: %s",
                     column.getFieldName())
@@ -73,7 +77,9 @@ public class Q<E> extends QBase<E> {
     }
 
     void addInverseJoinColumn(QEntityJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, true);
+        QEntityScanner qEntityScanner = qEntityScannerCheck("InverseJoinColumn");
+
+        QJoinColumn qColumn = new QJoinColumn(this, column, qEntityScanner, true);
         if (qColumn.getPaths().size() > 1) {
             throw new InvalidArgumentException(String.format("Single inverse JoinColumn mapped to a Composite Primary Key: %s",
                     column.getFieldName())
@@ -91,7 +97,9 @@ public class Q<E> extends QBase<E> {
     }
 
     void addCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, false);
+        QEntityScanner qEntityScanner = qEntityScannerCheck("CompositeJoinColumn");
+
+        QJoinColumn qColumn = new QJoinColumn(this, column, qEntityScanner, false);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
         this.rawJoinColumns.put(
@@ -102,7 +110,9 @@ public class Q<E> extends QBase<E> {
     }
 
     void addInverseCompositeJoinColumn(QEntityCompositeJoinColumnMetadata column) {
-        QJoinColumn qColumn = new QJoinColumn(this, column, scanner, true);
+        QEntityScanner qEntityScanner = qEntityScannerCheck("InverseCompositeJoinColumn");
+
+        QJoinColumn qColumn = new QJoinColumn(this, column, qEntityScanner, true);
         qColumn.getPaths().forEach((path, metadata) -> addMetadata(path.get(), metadata));
         ForeignKey<?> foreignKey = createInvForeignKey(getPaths(qColumn), qColumn.getForeignColumnNames());
         this.rawInverseJoinColumns.put(
@@ -194,4 +204,12 @@ public class Q<E> extends QBase<E> {
     public PrimaryKey<E> primaryKey() {
         return (PrimaryKey<E>) id;
     }
+
+    private QEntityScanner qEntityScannerCheck(String operation) {
+        if (!(scanner instanceof QEntityScanner)) {
+            throw new UnsupportedScannerException(scanner, operation);
+        }
+        return (QEntityScanner) scanner;
+    }
+
 }

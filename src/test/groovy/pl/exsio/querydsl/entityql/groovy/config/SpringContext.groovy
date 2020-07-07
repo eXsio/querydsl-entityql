@@ -23,39 +23,39 @@ import javax.sql.DataSource
 @ComponentScan("pl.exsio.querydsl.entityql.groovy")
 @EnableAspectJAutoProxy
 @EnableTransactionManagement
-public class SpringContext {
+class SpringContext {
 
     @Bean
     static DataSource dataSource() {
-        new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).setName(UUID.randomUUID().toString()).build();
+        new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).setName(UUID.randomUUID().toString()).build()
     }
 
     @Bean
     static LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean()
 
-        em.setDataSource(dataSource);
-        em.setPackagesToScan("pl.exsio.querydsl.entityql.groovy");
-        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setDataSource(dataSource)
+        em.setPackagesToScan("pl.exsio.querydsl.entityql.groovy")
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter())
 
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("hibernate.hbm2ddl.import_files", "data.sql");
-        em.setJpaProperties(properties);
+        Properties properties = new Properties()
+        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop")
+        properties.setProperty("hibernate.hbm2ddl.import_files", "data.sql,schema.sql")
+        em.setJpaProperties(properties)
 
-        return em;
+        return em
     }
 
     @Bean
     static PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(emf);
-        return transactionManager;
+        JpaTransactionManager transactionManager = new JpaTransactionManager()
+        transactionManager.setEntityManagerFactory(emf)
+        return transactionManager
     }
 
     @Bean
     SQLTemplates sqlTemplates() {
-        return new H2Templates(); //choose the implementation that matches your database engine
+        return new H2Templates() //choose the implementation that matches your database engine
     }
 
     @Bean
