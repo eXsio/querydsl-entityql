@@ -17,6 +17,7 @@ import java.util.Map;
  * For <code>SQLInsertClause.populate()</code> <br/>
  * Creates the mapping via <code>javax.persistence.Column</code> annotated fields in the object.<br/>
  * Field names don't have to match those in the RelationalPath.
+ *
  * @author jojoldu
  */
 public class EntityMapper implements Mapper<Object> {
