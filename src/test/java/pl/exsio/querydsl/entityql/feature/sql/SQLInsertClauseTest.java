@@ -5,12 +5,9 @@ import com.querydsl.sql.dml.BeanMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.DataIntegrityViolationException;
-import pl.exsio.querydsl.entityql.EntityQL;
-import pl.exsio.querydsl.entityql.Q;
 import pl.exsio.querydsl.entityql.dto.BookDto;
 import pl.exsio.querydsl.entityql.feature.EntityQLQueryFeature;
 import pl.exsio.querydsl.entityql.jpa.entity.JBook;
-import pl.exsio.querydsl.entityql.jpa.entity.generated.QJBook;
 import pl.exsio.querydsl.entityql.mapper.EntityMapper;
 
 import static com.querydsl.core.types.Projections.constructor;
