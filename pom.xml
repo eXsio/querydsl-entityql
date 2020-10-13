@@ -32,7 +32,7 @@
         <spring-jdbc.version>5.2.2.RELEASE</spring-jdbc.version>
         <reflections.version>0.9.11</reflections.version>
         <pebble.version>3.1.4</pebble.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <jmh.version>1.22</jmh.version>
         <commons-io.version>2.6</commons-io.version>
         <spring-data-jdbc.version>1.1.1.RELEASE</spring-data-jdbc.version>
