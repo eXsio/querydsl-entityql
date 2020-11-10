@@ -39,11 +39,11 @@ public class EntityMapper implements Mapper<Object> {
     @Override
     public Map<Path<?>, Object> createMap(RelationalPath<?> path, Object object) {
         try {
-            Map<String, Path<?>> columnToPath = new HashMap<String, Path<?>>();
+            Map<String, Path<?>> columnToPath = new HashMap<>();
             for (Path<?> column : path.getColumns()) {
                 columnToPath.put(ColumnMetadata.getName(column), column);
             }
-            Map<Path<?>, Object> values = new HashMap<Path<?>, Object>();
+            Map<Path<?>, Object> values = new HashMap<>();
             for (Field field : ReflectionUtils.getFields(object.getClass())) {
                 Column ann = field.getAnnotation(Column.class);
                 if (ann != null) {

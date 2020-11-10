@@ -31,7 +31,6 @@ public class SQLInsertClauseTest extends EntityQLQueryFeature {
         queryFactory.insert(qJBook)
                 .populate(target, BeanMapper.DEFAULT)
                 .execute();
-
     }
 
     @Test
