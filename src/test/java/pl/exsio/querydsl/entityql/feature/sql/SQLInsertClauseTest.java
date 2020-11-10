@@ -2,6 +2,7 @@ package pl.exsio.querydsl.entityql.feature.sql;
 
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.BeanMapper;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.DataIntegrityViolationException;

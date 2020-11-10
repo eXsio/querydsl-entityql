@@ -27,10 +27,6 @@ public class EntityMapper implements Mapper<Object> {
 
     private final boolean withNullBindings;
 
-    public EntityMapper() {
-        this(false);
-    }
-
     public EntityMapper(boolean withNullBindings) {
         this.withNullBindings = withNullBindings;
     }
