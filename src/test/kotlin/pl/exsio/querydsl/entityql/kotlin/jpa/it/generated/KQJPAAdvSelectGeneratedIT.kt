@@ -6,19 +6,12 @@ import com.querydsl.core.types.Projections.constructor
 import com.querydsl.core.types.dsl.Wildcard
 import com.querydsl.sql.SQLExpressions.select
 import com.querydsl.sql.SQLQueryFactory
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringRunner
-import pl.exsio.querydsl.entityql.EntityQL.qEntity
 import pl.exsio.querydsl.entityql.kotlin.config.KSpringContext
 import pl.exsio.querydsl.entityql.kotlin.config.dto.KOrderItemBookCountDto
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KBook
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KOrder
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KOrderItem
-import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KUser
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated.QKBook
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated.QKOrder
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated.QKOrderItem
@@ -26,7 +19,6 @@ import pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated.QKUser
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class KQJPAAdvSelectGeneratedIT {
@@ -42,15 +34,17 @@ class KQJPAAdvSelectGeneratedIT {
         //when:
 
         val result = queryFactory!!
-                .select(
-                        constructor(
-                                KOrderItemBookCountDto::class.java,
-                                orderItem.orderId,
-                                count(orderItem.bookId)))
-                .from(orderItem)
-                .groupBy(orderItem.orderId)
-                .orderBy(orderItem.orderId.asc())
-                .fetch();
+            .select(
+                constructor(
+                    KOrderItemBookCountDto::class.java,
+                    orderItem.orderId,
+                    count(orderItem.bookId)
+                )
+            )
+            .from(orderItem)
+            .groupBy(orderItem.orderId)
+            .orderBy(orderItem.orderId.asc())
+            .fetch();
 
         //then:
         assertEquals(result.size, 3)
@@ -72,15 +66,17 @@ class KQJPAAdvSelectGeneratedIT {
 
         //when:
         val result = queryFactory!!
-                .select(user.name)
-                .from(user)
-                .where(user.id.`in`(
-                        select(order.userId)
-                                .from(orderItem)
-                                .innerJoin(orderItem.book, book)
-                                .innerJoin(orderItem.order, order)
-                                .where(book.price.gt(BigDecimal("80")))
-                )).fetch()
+            .select(user.name)
+            .from(user)
+            .where(
+                user.id.`in`(
+                    select(order.userId)
+                        .from(orderItem)
+                        .innerJoin(orderItem.book, book)
+                        .innerJoin(orderItem.order, order)
+                        .where(book.price.gt(BigDecimal("80")))
+                )
+            ).fetch()
 
         //then:
         assertEquals(result.size, 2)
@@ -96,14 +92,14 @@ class KQJPAAdvSelectGeneratedIT {
 
         //when:
         val result = queryFactory!!
-                .select(count(Wildcard.all))
-                .from(
-                        select(order.userId)
-                                .from(orderItem)
-                                .innerJoin(orderItem.book, book)
-                                .innerJoin(orderItem.order, order)
-                                .where(book.price.gt(BigDecimal("80")))
-                ).fetchOne()
+            .select(count(Wildcard.all))
+            .from(
+                select(order.userId)
+                    .from(orderItem)
+                    .innerJoin(orderItem.book, book)
+                    .innerJoin(orderItem.order, order)
+                    .where(book.price.gt(BigDecimal("80")))
+            ).fetchOne()
 
         //then:
         assertEquals(result, 2L)

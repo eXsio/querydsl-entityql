@@ -45,14 +45,14 @@
      public QUploadedFile(String variable) {
          super(UploadedFile.class, variable, "", "UPLOADED_FILES")
          id: {
-             QPathConfig config = new QPathConfig(UUID.class, UUID.class, "FILE_ID", false, 1, 12)
+             QPathConfig config = new QPathConfig(UUID.class, UUID.class, "FILE_ID", true, 1, 12)
              this.id = QPathFactory.<QUuidPath>create(this, config)
              addMetadata(this.id, QColumnMetadataFactory.create(config))
              this.columnsMap.put("id", this.id)
          }
 
          data: {
-             QPathConfig config = new QPathConfig(byte[].class, Array.class, "DATA", false, 2, 2003)
+             QPathConfig config = new QPathConfig(byte[].class, Array.class, "DATA", true, 2, 2003)
              this.data = QPathFactory.<ArrayPath<byte[], Byte>>create(this, config)
              addMetadata(this.data, QColumnMetadataFactory.create(config))
              this.columnsMap.put("data", this.data)

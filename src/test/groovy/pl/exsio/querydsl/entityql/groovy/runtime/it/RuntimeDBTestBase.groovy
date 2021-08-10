@@ -9,7 +9,7 @@ import schemacrawler.schema.Column
 import schemacrawler.schema.Schema
 import schemacrawler.schemacrawler.SchemaCrawlerOptions
 import schemacrawler.schemacrawler.SchemaCrawlerOptionsBuilder
-import schemacrawler.utility.SchemaCrawlerUtility
+import schemacrawler.tools.utility.SchemaCrawlerUtility
 import spock.lang.Specification
 
 import javax.sql.DataSource
@@ -30,7 +30,7 @@ abstract class RuntimeDBTestBase extends Specification {
     }
 
     def exportMetadata(DataSource dataSource, String schemaFilter, String tableFilter) {
-        SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.builder().toOptions()
+        SchemaCrawlerOptions options = SchemaCrawlerOptionsBuilder.newSchemaCrawlerOptions()
         Catalog catalog = SchemaCrawlerUtility.getCatalog(dataSource.getConnection(), options)
         def schema = catalog.getSchemas().find { it.getName() =~ schemaFilter }
         convertTables(catalog, schema, tableFilter)

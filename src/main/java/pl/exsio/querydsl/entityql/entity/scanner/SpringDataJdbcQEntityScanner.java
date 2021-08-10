@@ -11,7 +11,6 @@ import pl.exsio.querydsl.entityql.entity.metadata.QEntityJoinColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityMetadata;
 import pl.exsio.querydsl.entityql.ex.MissingIdException;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +30,8 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
     @Override
     public QEntityMetadata scanEntity(Class<?> entityClass) {
         RelationalPersistentEntity<?> requiredPersistentEntity = context.getRequiredPersistentEntity(entityClass);
-        QEntityMetadata metadata = new QEntityMetadata(requiredPersistentEntity.getTableName(),
-                                                       context.getNamingStrategy().getSchema());
+        QEntityMetadata metadata = new QEntityMetadata(requiredPersistentEntity.getTableName().getReference(),
+                context.getNamingStrategy().getSchema());
         setColumns(metadata, requiredPersistentEntity);
         return metadata;
     }
@@ -72,10 +71,10 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                            Map<String, Integer> fieldNameToIndex) {
 
         QEntityColumnMetadata columnMetadata = new QEntityColumnMetadata(property.getType(),
-                                                                         property.getName(),
-                                                                         property.getColumnName(),
-                                                                         isNullable(property),
-                                                                         getIndex(property, fieldNameToIndex));
+                property.getName(),
+                property.getColumnName().getReference(),
+                true,
+                getIndex(property, fieldNameToIndex));
 
         metadata.addColumn(columnMetadata);
 
@@ -89,20 +88,16 @@ public class SpringDataJdbcQEntityScanner implements QEntityScanner {
                                Map<String, Integer> fieldNameToIndex) {
         RelationalPersistentEntity<?> persistentEntity = context.getPersistentEntity(property.getActualType());
         PersistentPropertyPathExtension path = new PersistentPropertyPathExtension(context, Objects.requireNonNull(persistentEntity));
-        String reverseColumnName = property.getReverseColumnName(path);
+        String reverseColumnName = property.getReverseColumnName(path).getReference();
         QEntityJoinColumnMetadata column = new QEntityJoinColumnMetadata(property.getActualType(),
-                                                                         property.getName(),
-                                                                         reverseColumnName,
-                                                                         isNullable(property),
-                                                                         getIndex(property, fieldNameToIndex));
+                property.getName(),
+                reverseColumnName,
+                true,
+                getIndex(property, fieldNameToIndex));
         metadata.addJoinColumn(column);
     }
 
     private Integer getIndex(RelationalPersistentProperty property, Map<String, Integer> fieldNameToIndex) {
         return fieldNameToIndex.get(property.getName());
-    }
-
-    private boolean isNullable(RelationalPersistentProperty property) {
-        return !property.isAnnotationPresent(Nonnull.class);
     }
 }

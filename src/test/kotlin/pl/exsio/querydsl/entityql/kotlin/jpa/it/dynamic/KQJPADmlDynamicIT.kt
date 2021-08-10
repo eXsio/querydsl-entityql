@@ -3,8 +3,8 @@ package pl.exsio.querydsl.entityql.kotlin.jpa.it.dynamic
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLExpressions.count
 import com.querydsl.sql.SQLQueryFactory
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -18,8 +18,8 @@ import java.math.BigDecimal
 import java.util.*
 import javax.transaction.Transactional
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
@@ -143,40 +143,46 @@ class KQJPADmlDynamicIT {
                 .fetchOne()
 
         //then:
-        uploadedFile != null
-        uploadedFile.id != null
-        uploadedFile.data != null
-        uploadedFile.data!!.size == data.size
+        assertNotNull(uploadedFile)
+        assertNotNull(uploadedFile.id != null)
+        assertNotNull(uploadedFile.data != null)
+        assertEquals(uploadedFile.data!!.size, data.size)
         Arrays.equals(uploadedFile.data, data)
     }
 
-    @Test(expected = InvalidArgumentException::class)
+    @Test
     fun shouldThrowExceptionWhenTryingToUseOddNumberOfParametersInSet() {
-        //given:
-        val book = qEntity(KBook::class.java)
+        assertThrows<InvalidArgumentException> {
+            //given:
+            val book = qEntity(KBook::class.java)
 
-        //when:
-        val update = queryFactory!!.update(book)
+            //when:
+            val update = queryFactory!!.update(book)
                 .where(book.longNumber("id").eq(9L))
 
-        book.set(update,
+            book.set(update,
                 "name", "updatedBook",
                 "price"
-        ).execute()
+            ).execute()
+        }
+
     }
 
-    @Test(expected = InvalidArgumentException::class)
+    @Test
     fun shouldThrowExceptionWhenTryingToUseNonStringKeyInDet() {
-        //given:
-        val book = qEntity(KBook::class.java)
+        assertThrows<InvalidArgumentException> {
+            //given:
+            val book = qEntity(KBook::class.java)
 
-        //when:
-        val update = queryFactory!!.update(book)
+            //when:
+            val update = queryFactory!!.update(book)
                 .where(book.longNumber("id").eq(9L))
 
-        book.set(update,
+            book.set(update,
                 "name", "updatedBook",
                 Object(), BigDecimal.ONE
-        ).execute()
+            ).execute()
+        }
+
     }
 }

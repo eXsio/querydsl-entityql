@@ -1,7 +1,7 @@
 package pl.exsio.querydsl.entityql.kotlin.jpa.spec
 
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import pl.exsio.querydsl.entityql.EntityQL.qEntity
 import pl.exsio.querydsl.entityql.QExporter
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.*
@@ -17,7 +17,7 @@ class KQExporterITJPASpec {
 
     val exporter = QExporter()
 
-    @Ignore
+    @Disabled
     @Test
     fun shouldExportIntegrationQClassesToStaticMetaModels() {
         exporter.export(qEntity(KBook::class.java), fileNamePattern, pkgName, destinationPath)

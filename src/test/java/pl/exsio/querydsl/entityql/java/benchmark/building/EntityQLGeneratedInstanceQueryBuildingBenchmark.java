@@ -2,7 +2,7 @@ package pl.exsio.querydsl.entityql.java.benchmark.building;
 
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
@@ -11,7 +11,7 @@ import pl.exsio.querydsl.entityql.java.dto.BookDto;
 import pl.exsio.querydsl.entityql.java.jpa.entity.generated.QJBook;
 
 import static com.querydsl.core.types.Projections.constructor;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EntityQLGeneratedInstanceQueryBuildingBenchmark extends EntityQLQueryExecutionBenchmark {
 

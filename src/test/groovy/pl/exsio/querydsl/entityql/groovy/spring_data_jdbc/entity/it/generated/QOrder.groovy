@@ -53,7 +53,7 @@
          }
 
          userId: {
-             QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", false, 2, -5)
+             QPathConfig config = new QPathConfig(Long.class, Long.class, "USER_ID", true, 2, -5)
              this.userId = QPathFactory.<NumberPath<Long>>create(this, config)
              addMetadata(this.userId, QColumnMetadataFactory.create(config))
              this.columnsMap.put("userId", this.userId)

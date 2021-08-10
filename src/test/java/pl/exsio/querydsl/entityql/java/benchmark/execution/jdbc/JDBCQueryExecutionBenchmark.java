@@ -1,6 +1,6 @@
 package pl.exsio.querydsl.entityql.java.benchmark.execution.jdbc;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JDBCQueryExecutionBenchmark extends QueryExecutionBenchmark {
 

@@ -3,8 +3,8 @@ package pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.it.dynamic
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLExpressions.count
 import com.querydsl.sql.SQLQueryFactory
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -23,7 +23,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
@@ -154,33 +153,39 @@ class KQSpringDataJDBCDmlDynamicIT {
         assertTrue(Arrays.equals(uploadedFile.data, data))
     }
 
-    @Test(expected = InvalidArgumentException::class)
+    @Test
     fun shouldThrowExceptionWhenTryingToUseOddNumberOfParametersInSet() {
-        //given:
-        val book = qEntity(KBook::class.java, scanner)
+        assertThrows<InvalidArgumentException> {
+            //given:
+            val book = qEntity(KBook::class.java, scanner)
 
-        //when:
-        val update = queryFactory!!.update(book)
+            //when:
+            val update = queryFactory!!.update(book)
                 .where(book.longNumber("id").eq(9L))
 
-        book.set(update,
+            book.set(update,
                 "name", "updatedBook",
                 "price"
-        ).execute()
+            ).execute()
+        }
+
     }
 
-    @Test(expected = InvalidArgumentException::class)
+    @Test
     fun shouldThrowExceptionWhenTryingToUseNonStringKeyInDet() {
-        //given:
-        val book = qEntity(KBook::class.java, scanner)
+        assertThrows<InvalidArgumentException> {
+            //given:
+            val book = qEntity(KBook::class.java, scanner)
 
-        //when:
-        val update = queryFactory!!.update(book)
+            //when:
+            val update = queryFactory!!.update(book)
                 .where(book.longNumber("id").eq(9L))
 
-        book.set(update,
+            book.set(update,
                 "name", "updatedBook",
                 Object(), BigDecimal.ONE
-        ).execute()
+            ).execute()
+        }
+
     }
 }

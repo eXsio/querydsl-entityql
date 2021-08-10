@@ -1,6 +1,5 @@
 package pl.exsio.querydsl.entityql;
 
-import com.google.common.collect.Lists;
 import com.querydsl.sql.ColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityColumnMetadata;
 import pl.exsio.querydsl.entityql.entity.metadata.QEntityCompositeJoinColumnMetadata;
@@ -28,7 +27,7 @@ class QJoinColumn {
 
     private final boolean inverse;
 
-    private final LinkedList<String> columnNames = Lists.newLinkedList();
+    private final LinkedList<String> columnNames = new LinkedList<>();
 
     private final Q<?> parent;
 
@@ -66,7 +65,7 @@ class QJoinColumn {
     }
 
     private List<QEntityColumnMetadata> getForeignColumns(QEntityJoinColumnMetadata column) {
-        Q<?> foreign = inverse ?  qEntityWithoutMappings(parent.getType(), scanner) : qEntityWithoutMappings(column.getFieldType(), scanner);
+        Q<?> foreign = inverse ? qEntityWithoutMappings(parent.getType(), scanner) : qEntityWithoutMappings(column.getFieldType(), scanner);
         List<QEntityColumnMetadata> result = foreign.idColumns;
         if (isCustomForeignColumn(column)) {
             result = new ArrayList<>();

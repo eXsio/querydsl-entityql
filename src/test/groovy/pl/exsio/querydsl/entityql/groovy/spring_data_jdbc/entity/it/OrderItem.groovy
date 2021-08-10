@@ -3,20 +3,18 @@ package pl.exsio.querydsl.entityql.groovy.spring_data_jdbc.entity.it
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 
-import javax.annotation.Nonnull
-
 public class OrderItem implements Serializable {
 
     @Id
     @Column("ORDER_ITEM_ID")
     private final Long id;
-    @Nonnull
+
     @Column("BOOK_ID")
     private final Book book;
-    @Nonnull
+
     @Column("ITEM_ORDER_ID")
     private final Order order;
-    @Nonnull
+
     @Column("QTY")
     private final Long quantity;
 

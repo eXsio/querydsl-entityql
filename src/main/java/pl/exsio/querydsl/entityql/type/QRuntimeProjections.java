@@ -1,16 +1,18 @@
 package pl.exsio.querydsl.entityql.type;
 
-import com.google.common.collect.ImmutableList;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeNamingStrategy;
 import pl.exsio.querydsl.entityql.entity.scanner.runtime.UnderscoreToCamelStrategyQRuntimeNamingStrategy;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class QRuntimeProjections {
 
-    private QRuntimeProjections() { }
+    private QRuntimeProjections() {
+    }
 
     /**
      * Create a simple Map typed projection for the given expressions, with string keys
@@ -20,7 +22,7 @@ public final class QRuntimeProjections {
      * Map<Path<?>, ?> map = query.select(
      *      SimpleMapProjections.map(user.firstName, user.lastName));
      * }</pre>
-     *
+     * <p>
      * Main difference with {@link com.querydsl.core.types.Projections#map(Expression[])} that is this method return simple hashmap with String keys.
      *
      * @param exprs arguments for the projection
@@ -35,12 +37,11 @@ public final class QRuntimeProjections {
     }
 
     public static QRuntimeMap map(Path<?>[]... exprs) {
-        ImmutableList.Builder<Path<?>> builder = ImmutableList.builder();
-        for (Path<?>[] expr: exprs) {
-            builder.add(expr);
+        List<Path<?>> exprsList = new ArrayList<>();
+        for (Path<?>[] expr : exprs) {
+            exprsList.addAll(Arrays.asList(expr));
         }
-
-        return new QRuntimeMap(UnderscoreToCamelStrategyQRuntimeNamingStrategy.getInstance(), builder.build());
+        return new QRuntimeMap(UnderscoreToCamelStrategyQRuntimeNamingStrategy.getInstance(), exprsList);
     }
 
     public static QRuntimeMap map(QRuntimeNamingStrategy namingStrategy, Path<?>... exprs) {
