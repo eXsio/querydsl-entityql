@@ -2,9 +2,8 @@ package pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.it.dynamic
 
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLQueryFactory
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -17,7 +16,6 @@ import pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.entity.*
 import pl.exsio.querydsl.entityql.kotlin.spring_data_jdbc.entity.KUpperCaseWithUnderscoresNamingStrategy
 import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class KQSpringDataJDBCJoinDynamicIT {

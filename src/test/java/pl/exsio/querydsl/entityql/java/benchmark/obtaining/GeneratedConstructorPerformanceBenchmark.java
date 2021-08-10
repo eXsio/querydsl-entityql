@@ -1,13 +1,13 @@
 package pl.exsio.querydsl.entityql.java.benchmark.obtaining;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.RunnerException;
 import pl.exsio.querydsl.entityql.java.benchmark.PerformanceBenchmark;
 import pl.exsio.querydsl.entityql.java.jpa.entity.generated.QJBook;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GeneratedConstructorPerformanceBenchmark implements PerformanceBenchmark {
 

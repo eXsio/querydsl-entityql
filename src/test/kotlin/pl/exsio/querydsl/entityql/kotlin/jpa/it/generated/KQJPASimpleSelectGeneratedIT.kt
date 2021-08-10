@@ -2,10 +2,9 @@ package pl.exsio.querydsl.entityql.kotlin.jpa.it.generated
 
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLQueryFactory
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -22,7 +21,6 @@ import pl.exsio.querydsl.entityql.kotlin.jpa.entity.generated.QKUser
 import java.util.Date
 import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class KQJPASimpleSelectGeneratedIT {

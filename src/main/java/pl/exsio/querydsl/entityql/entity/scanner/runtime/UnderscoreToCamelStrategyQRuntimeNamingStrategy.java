@@ -1,17 +1,18 @@
 package pl.exsio.querydsl.entityql.entity.scanner.runtime;
 
-import com.google.common.base.CaseFormat;
+import static pl.exsio.querydsl.entityql.util.NamingUtil.camelToUnderscore;
+import static pl.exsio.querydsl.entityql.util.NamingUtil.underscoreToCamel;
 
 public class UnderscoreToCamelStrategyQRuntimeNamingStrategy implements QRuntimeNamingStrategy {
 
     @Override
     public String getFieldName(String columnName) {
-        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, columnName);
+        return underscoreToCamel(columnName);
     }
 
     @Override
     public String getColumnName(String fieldName) {
-        return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, fieldName);
+        return camelToUnderscore(fieldName);
     }
 
     public static UnderscoreToCamelStrategyQRuntimeNamingStrategy getInstance() {

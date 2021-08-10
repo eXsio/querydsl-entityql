@@ -2,14 +2,12 @@ package pl.exsio.querydsl.entityql.kotlin.jpa.it.dynamic
 
 import com.querydsl.core.types.Projections.constructor
 import com.querydsl.sql.SQLQueryFactory
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringRunner
 import pl.exsio.querydsl.entityql.EntityQL.qEntity
 import pl.exsio.querydsl.entityql.kotlin.config.KSpringContext
 import pl.exsio.querydsl.entityql.kotlin.config.dto.KUserDto
@@ -17,10 +15,9 @@ import pl.exsio.querydsl.entityql.kotlin.config.enums.by_name.KUserTypeByName
 import pl.exsio.querydsl.entityql.kotlin.config.enums.by_ordinal.KUserTypeByOrdinal
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KBook
 import pl.exsio.querydsl.entityql.kotlin.jpa.entity.KUser
-import java.util.Date
+import java.util.*
 import kotlin.test.assertNotNull
 
-@RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [KSpringContext::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class KQJPASimpleSelectDynamicIT {
@@ -33,15 +30,16 @@ class KQJPASimpleSelectDynamicIT {
         // given:
         val book = qEntity(KBook::class.java)
         val books = queryFactory!!.query()
-                .select(
-                        constructor(
-                                KBook::class.java,
-                                book.longNumber("id"),
-                                book.string("name"),
-                                book.string("desc"),
-                                book.decimalNumber("price")
-                        ))
-                .from(book).fetch()
+            .select(
+                constructor(
+                    KBook::class.java,
+                    book.longNumber("id"),
+                    book.string("name"),
+                    book.string("desc"),
+                    book.decimalNumber("price")
+                )
+            )
+            .from(book).fetch()
 
         //then:
         assertEquals(books.size, 9)
@@ -60,16 +58,17 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val p = queryFactory!!.query()
-                .select(
-                        constructor(
-                                KBook::class.java,
-                                book.longNumber("id"),
-                                book.string("name"),
-                                book.string("desc"),
-                                book.decimalNumber("price")
-                        ))
-                .where(book.longNumber("id").eq(1L))
-                .from(book).fetchOne()
+            .select(
+                constructor(
+                    KBook::class.java,
+                    book.longNumber("id"),
+                    book.string("name"),
+                    book.string("desc"),
+                    book.decimalNumber("price")
+                )
+            )
+            .where(book.longNumber("id").eq(1L))
+            .from(book).fetchOne()
 
         //then:
         assertNotNull(p)
@@ -86,9 +85,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val userName = queryFactory!!.query()
-                .select(user.string("name"))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(user.string("name"))
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertEquals(userName, "U1")
@@ -101,9 +100,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val userName = queryFactory!!.query()
-                .select(user.string("name"))
-                .where(user.enumerated<KUserTypeByOrdinal>("typeOrd").eq(KUserTypeByOrdinal.ADMIN))
-                .from(user).fetchOne()
+            .select(user.string("name"))
+            .where(user.enumerated<KUserTypeByOrdinal>("typeOrd").eq(KUserTypeByOrdinal.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertEquals(userName, "U1")
@@ -116,9 +115,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val createdBy = queryFactory!!.query()
-                .select(user.column<String>("createdBy"))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(user.column<String>("createdBy"))
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertEquals(createdBy, "ADMIN")
@@ -131,9 +130,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val createdBy = queryFactory!!.query()
-                .select(user.column<Date>("createdAt"))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(user.column<Date>("createdAt"))
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertNotNull(createdBy)
@@ -146,9 +145,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val type = queryFactory!!.query()
-                .select(user.enumerated<KUserTypeByName>("typeStr"))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(user.enumerated<KUserTypeByName>("typeStr"))
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertEquals(type, KUserTypeByName.ADMIN)
@@ -161,9 +160,9 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val enabled = queryFactory!!.query()
-                .select(user.bool("enabled"))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(user.bool("enabled"))
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertTrue(enabled)
@@ -176,15 +175,17 @@ class KQJPASimpleSelectDynamicIT {
 
         //when:
         val userDto = queryFactory!!.query()
-                .select(
-                        constructor(
-                                KUserDto::class.java,
-                                user.longNumber("id"),
-                                user.string("name"),
-                                user.enumerated<KUserTypeByName>("typeStr"),
-                                user.bool("enabled")))
-                .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
-                .from(user).fetchOne()
+            .select(
+                constructor(
+                    KUserDto::class.java,
+                    user.longNumber("id"),
+                    user.string("name"),
+                    user.enumerated<KUserTypeByName>("typeStr"),
+                    user.bool("enabled")
+                )
+            )
+            .where(user.enumerated<KUserTypeByName>("typeStr").eq(KUserTypeByName.ADMIN))
+            .from(user).fetchOne()
 
         //then:
         assertNotNull(userDto)

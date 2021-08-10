@@ -1,3 +1,5 @@
+ - 3.2.0
+    - dependencies update
  - 3.1.0
     - added support for Runtime Schemas (ones that are unknown during compilation time)
  - 3.0.0

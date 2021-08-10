@@ -1,37 +1,38 @@
 package pl.exsio.querydsl.entityql.type;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 import com.querydsl.core.types.FactoryExpression;
 import com.querydsl.core.types.FactoryExpressionBase;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Visitor;
 import pl.exsio.querydsl.entityql.entity.scanner.runtime.QRuntimeNamingStrategy;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QRuntimeMap extends FactoryExpressionBase<Map<String,?>> {
+public class QRuntimeMap extends FactoryExpressionBase<Map<String, ?>> {
 
-    private final ImmutableList<Path<?>> args;
+    private final List<Path<?>> args;
     private final QRuntimeNamingStrategy namingStrategy;
 
     public QRuntimeMap(QRuntimeNamingStrategy namingStrategy, Path<?>... args) {
         super((Class) Map.class);
         this.namingStrategy = namingStrategy;
-        this.args = ImmutableList.copyOf(args);
+        this.args = new ArrayList<>();
+        this.args.addAll(Arrays.asList(args));
     }
 
     public QRuntimeMap(QRuntimeNamingStrategy namingStrategy, List<Path<?>> args) {
         super((Class) Map.class);
         this.namingStrategy = namingStrategy;
-        this.args = ImmutableList.copyOf(args);
+        this.args = new ArrayList<>();
+        this.args.addAll(args);
     }
 
-    @Nullable
     @Override
-    public <R, C> R accept(Visitor<R, C> v, @Nullable C context) {
+    public <R, C> R accept(Visitor<R, C> v, C context) {
         return v.visit(this, context);
     }
 
@@ -53,10 +54,9 @@ public class QRuntimeMap extends FactoryExpressionBase<Map<String,?>> {
         }
     }
 
-    @Nullable
     @Override
     public Map<String, ?> newInstance(Object... args) {
-        Map<String, Object> map = Maps.newHashMap();
+        Map<String, Object> map = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
             Path<?> key = this.args.get(i);
             String columnName = key.getMetadata().getName();

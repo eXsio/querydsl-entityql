@@ -6,7 +6,6 @@ import com.querydsl.core.types.Visitor;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.SimplePath;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.AnnotatedElement;
 
 /**
@@ -36,9 +35,8 @@ public class QObjectPath<T> extends SimpleExpression<T> implements Path<T> {
         return delegatePath.getAnnotatedElement();
     }
 
-    @Nullable
     @Override
-    public <R, C> R accept(Visitor<R, C> visitor, @Nullable C c) {
+    public <R, C> R accept(Visitor<R, C> visitor, C c) {
         return visitor.visit(delegatePath, c);
     }
 }

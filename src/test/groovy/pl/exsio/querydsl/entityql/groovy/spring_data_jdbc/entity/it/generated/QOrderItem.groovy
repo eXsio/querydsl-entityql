@@ -60,21 +60,21 @@
          }
 
          quantity: {
-             QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", false, 4, -5)
+             QPathConfig config = new QPathConfig(Long.class, Long.class, "QTY", true, 4, -5)
              this.quantity = QPathFactory.<NumberPath<Long>>create(this, config)
              addMetadata(this.quantity, QColumnMetadataFactory.create(config))
              this.columnsMap.put("quantity", this.quantity)
          }
 
          bookId: {
-             QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", false, 2, -5)
+             QPathConfig config = new QPathConfig(Long.class, Long.class, "BOOK_ID", true, 2, -5)
              this.bookId = QPathFactory.<NumberPath<Long>>create(this, config)
              addMetadata(this.bookId, QColumnMetadataFactory.create(config))
              this.columnsMap.put("bookId", this.bookId)
          }
 
          orderId: {
-             QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", false, 3, -5)
+             QPathConfig config = new QPathConfig(Long.class, Long.class, "ITEM_ORDER_ID", true, 3, -5)
              this.orderId = QPathFactory.<NumberPath<Long>>create(this, config)
              addMetadata(this.orderId, QColumnMetadataFactory.create(config))
              this.columnsMap.put("orderId", this.orderId)
